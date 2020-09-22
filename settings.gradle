@@ -1,2 +1,3 @@
 rootProject.name = 'hearthcapture'
-
+include 'domain'
+include 'use-cases'
