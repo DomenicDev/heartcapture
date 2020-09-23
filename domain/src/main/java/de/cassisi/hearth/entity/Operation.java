@@ -1,5 +1,7 @@
 package de.cassisi.hearth.entity;
 
+import de.cassisi.hearth.entity.ids.OperationId;
+
 import java.time.LocalDate;
 
 /**
