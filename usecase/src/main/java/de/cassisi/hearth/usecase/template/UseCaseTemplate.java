@@ -6,5 +6,4 @@ public interface UseCaseTemplate<InputData, OutputData> {
 
     void execute(InputData input, OutputHandler<OutputData> outputHandler);
 
-
 }
