@@ -1,11 +1,9 @@
-package de.cassisi.hearth.usecase.impl;
+package de.cassisi.hearth.usecase.interactor;
 
 import de.cassisi.hearth.entity.Operation;
 import de.cassisi.hearth.usecase.CreateOperation;
-import de.cassisi.hearth.usecase.dto.SessionCreateRequest;
 import de.cassisi.hearth.usecase.output.OutputHandler;
 import de.cassisi.hearth.usecase.port.CreateOperationRepository;
-import de.cassisi.hearth.usecase.validator.SessionCreateRequestValidator;
 
 import java.time.LocalDate;
 

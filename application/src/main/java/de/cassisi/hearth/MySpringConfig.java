@@ -2,7 +2,7 @@ package de.cassisi.hearth;
 
 import de.cassisi.hearth.port.CreateOperationJpaRepository;
 import de.cassisi.hearth.usecase.CreateOperation;
-import de.cassisi.hearth.usecase.impl.CreateOperationInteractor;
+import de.cassisi.hearth.usecase.interactor.CreateOperationInteractor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

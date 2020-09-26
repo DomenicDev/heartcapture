@@ -4,15 +4,15 @@ import java.time.LocalDateTime;
 
 public final class AnesthesiaData {
 
-    private final int depthOfAnesthesia;
     private final LocalDateTime timestamp;
+    private final double depthOfAnesthesia;
 
-    public AnesthesiaData(int depthOfAnesthesia, LocalDateTime timestamp) {
-        this.depthOfAnesthesia = depthOfAnesthesia;
+    public AnesthesiaData(LocalDateTime timestamp, double depthOfAnesthesia) {
         this.timestamp = timestamp;
+        this.depthOfAnesthesia = depthOfAnesthesia;
     }
 
-    public int getDepthOfAnesthesia() {
+    public double getDepthOfAnesthesia() {
         return depthOfAnesthesia;
     }
 
