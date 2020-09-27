@@ -10,4 +10,10 @@ public class SimpleOperationData {
     public String rommBr;
     // more to come
 
+
+    public SimpleOperationData(long id, LocalDate localDate, String rommBr) {
+        this.id = id;
+        this.localDate = localDate;
+        this.rommBr = rommBr;
+    }
 }

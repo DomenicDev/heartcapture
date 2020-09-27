@@ -4,12 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
-
+import java.util.Set;
 
 @AllArgsConstructor
 @Builder
@@ -28,5 +25,18 @@ public class OperationDB {
     private boolean anesthesiaDataAvailable;
     private boolean hlmDataAvailable;
     private boolean locked;
+
+    @OneToMany(mappedBy = "operation")
+    private Set<NirsDataDB> nirsData;
+
+    @OneToMany(mappedBy = "operation")
+    private Set<AnesthesiaDataDB> anesthesiaData;
+
+    @OneToMany(mappedBy = "operation")
+    private Set<InfusionDataDB> infusionData;
+
+    @OneToOne(optional = true)
+    @JoinColumn(name = "hlm_data_id", nullable = true, unique = true)
+    private HLMDataDB hlmData;
 
 }

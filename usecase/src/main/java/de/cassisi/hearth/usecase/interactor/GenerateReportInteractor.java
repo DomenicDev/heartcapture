@@ -17,6 +17,8 @@ public class GenerateReportInteractor implements GenerateReport {
     private GenerateReportRepository repository;
     private ReportFileGenerator fileGenerator;
 
+
+
     @Override
     public void execute(InputData input, OutputHandler<OutputData> outputHandler) {
         long operationId = input.operationId;

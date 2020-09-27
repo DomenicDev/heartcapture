@@ -1,6 +1,5 @@
 
 dependencies {
-    implementation project(':usecase')
     compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.21.Final'
     compileOnly 'org.projectlombok:lombok:1.18.12'
     annotationProcessor 'org.projectlombok:lombok:1.18.12'
