@@ -11,6 +11,9 @@ public class SimpleOperationData {
     // more to come
 
 
+    public SimpleOperationData() {
+    }
+
     public SimpleOperationData(long id, LocalDate localDate, String rommBr) {
         this.id = id;
         this.localDate = localDate;

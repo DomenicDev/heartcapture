@@ -19,6 +19,7 @@ public class InfusionDataDB {
     private Long id;
 
     private LocalDateTime timestamp;
+    @Embedded
     private List<SinglePerfusorData> infusionData;
 
     @ManyToOne

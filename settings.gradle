@@ -1,10 +1,13 @@
 rootProject.name = 'hearthcapture'
 include 'domain'
 include 'usecase'
-include 'application'
+include 'standalone'
 include 'config'
 include 'jpa-model'
 include 'spring-jpa-repository'
 
 project(":jpa-model").projectDir = file("adapter/model/jpa-model")
 project(":spring-jpa-repository").projectDir = file("adapter/repository/spring-jpa-repository")
+
+// APPLICATION
+project(":standalone").projectDir = file("application/standalone")
