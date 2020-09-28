@@ -6,8 +6,9 @@ import de.cassisi.hearth.repository.model.OperationDB;
 import de.cassisi.hearth.usecase.port.CreateOperationRepository;
 import de.cassisi.hearth.util.OperationConverter;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
-@Component
+@Repository
 public class CreateOperationJpaRepository implements CreateOperationRepository {
 
     private final OperationRepository operationRepository;

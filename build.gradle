@@ -1,14 +1,16 @@
 allprojects {
+    
+    apply plugin: 'jacoco'
+    
     repositories {
         mavenCentral()
     }
 }
 
-
-
 subprojects {
 
 
+    apply plugin: 'jacoco'
     apply plugin: 'java'
     group = 'de.cassisi'
     version = '1.0.0'
@@ -25,9 +27,12 @@ subprojects {
     }
 
     test {
+        finalizedBy jacocoTestReport // report is always generated after tests run
         useJUnitPlatform()
     }
-
-
+    
+    jacocoTestReport {
+        dependsOn test // tests are required to run before generating the report
+    }
 
 }

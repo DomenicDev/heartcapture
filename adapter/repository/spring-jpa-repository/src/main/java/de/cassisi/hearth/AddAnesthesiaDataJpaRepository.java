@@ -8,8 +8,9 @@ import de.cassisi.hearth.repository.model.OperationDB;
 import de.cassisi.hearth.usecase.exception.OperationNotFoundException;
 import de.cassisi.hearth.usecase.port.AddAnesthesiaDataRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
-@Component
+@Repository
 public class AddAnesthesiaDataJpaRepository implements AddAnesthesiaDataRepository {
 
     private AnesthesiaRepository anesthesiaRepository;

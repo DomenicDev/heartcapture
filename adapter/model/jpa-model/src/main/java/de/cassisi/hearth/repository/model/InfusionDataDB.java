@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,6 +33,11 @@ public class InfusionDataDB {
 
     public void addPerfusorData(PerfusorDataDB data) {
         this.infusionData.add(data);
+    }
+
+    public void addPerfusorData(PerfusorDataDB... data) {
+        if (data == null) return;
+        infusionData.addAll(Arrays.asList(data));
     }
 
     @Override

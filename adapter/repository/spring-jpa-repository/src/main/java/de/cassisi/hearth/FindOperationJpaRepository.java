@@ -5,9 +5,11 @@ import de.cassisi.hearth.repository.OperationRepository;
 import de.cassisi.hearth.repository.model.OperationDB;
 import de.cassisi.hearth.usecase.exception.OperationNotFoundException;
 import de.cassisi.hearth.usecase.port.FindOperationRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+@Repository
 public class FindOperationJpaRepository implements FindOperationRepository {
 
     private OperationRepository operationRepository;
