@@ -18,7 +18,7 @@ public class NirsDataDB {
     private double leftSaturation;
     private double rightSaturation;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "operationId", nullable = false)
     private OperationDB operation;
 

@@ -1,9 +1,11 @@
 package de.cassisi.hearth.usecase.interactor;
 
 import de.cassisi.hearth.entity.InfusionData;
+import de.cassisi.hearth.entity.PerfusorData;
 import de.cassisi.hearth.usecase.AddInfusionData;
 import de.cassisi.hearth.usecase.output.OutputHandler;
 import de.cassisi.hearth.usecase.port.AddInfusionDataRepository;
+import de.cassisi.hearth.usecase.validator.InputValidator;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -15,6 +17,10 @@ public class AddInfusionDataInteractor implements AddInfusionData {
 
     private AddInfusionDataRepository repository;
 
+    public AddInfusionDataInteractor(AddInfusionDataRepository repository) {
+        this.repository = repository;
+    }
+
     @Override
     public void execute(InputData input, OutputHandler<OutputData> outputHandler) {
         // extract input data
@@ -22,12 +28,16 @@ public class AddInfusionDataInteractor implements AddInfusionData {
         LocalDateTime timestamp = input.timestamp;
         List<PerfusorInput> perfusorInputList = input.infusionData;
 
-        // do some validation
-        // todo
+        // validate input
+        InputValidator.checkIdPositive(operationId);
+        InputValidator.checkTimestamp(timestamp);
+        InputValidator.checkPerfusorInput(perfusorInputList);
 
-        // create infusion data entity
-        List<InfusionData.PerfusorData> perfusorData = new ArrayList<>();
-        perfusorInputList.forEach(data -> perfusorData.add(new InfusionData.PerfusorData(data.name, data.rate)));
+        // convert input data to perfusor entity objects
+        List<PerfusorData> perfusorData = new ArrayList<>();
+        perfusorInputList.forEach(data -> perfusorData.add(new PerfusorData(data.name, data.rate)));
+
+        // create infusion entity object
         InfusionData infusionData = new InfusionData(timestamp, perfusorData);
 
         // save to repository
@@ -36,6 +46,6 @@ public class AddInfusionDataInteractor implements AddInfusionData {
         // callback output handler
         OutputData outputData = new OutputData();
         outputHandler.handle(outputData);
-
     }
+
 }

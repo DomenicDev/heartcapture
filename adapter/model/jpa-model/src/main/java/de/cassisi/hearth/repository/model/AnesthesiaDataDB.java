@@ -21,7 +21,9 @@ public class AnesthesiaDataDB {
     @NonNull
     private Double depthOfAnesthesia;
 
-    @ManyToOne
+    @ManyToOne(
+            fetch = FetchType.LAZY
+    )
     @JoinColumn(name = "operationId", nullable = false)
     private OperationDB operation;
 

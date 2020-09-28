@@ -1,4 +1,4 @@
-package de.cassisi.hearth.port;
+package de.cassisi.hearth;
 
 import de.cassisi.hearth.entity.AnesthesiaData;
 import de.cassisi.hearth.repository.AnesthesiaRepository;

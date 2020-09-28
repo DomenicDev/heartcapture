@@ -1,11 +1,10 @@
 package de.cassisi.hearth.usecase.validator;
 
-import de.cassisi.hearth.usecase.exception.IdMustBePositiveException;
-import de.cassisi.hearth.usecase.exception.InputValidationException;
-import de.cassisi.hearth.usecase.exception.InvalidDepthOfAnesthesiaException;
-import de.cassisi.hearth.usecase.exception.InvalidTimestampException;
+import de.cassisi.hearth.usecase.AddInfusionData;
+import de.cassisi.hearth.usecase.exception.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public final class InputValidator {
 
@@ -49,5 +48,16 @@ public final class InputValidator {
         if (timestamp == null) {
             throw new InvalidTimestampException(timestamp);
         }
+    }
+
+    public static void checkPerfusorInput(List<AddInfusionData.InputData.PerfusorInput> inputs) {
+        if (inputs == null) {
+            throw new InvalidPerfusorInputException();
+        }
+        inputs.forEach((data) -> {
+            if (data == null || data.rate < 0 || data.name.isEmpty()) {
+                throw new InvalidPerfusorInputException();
+            }
+        });
     }
 }

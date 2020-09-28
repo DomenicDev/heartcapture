@@ -1,17 +1,22 @@
 package de.cassisi.hearth.repository.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Embeddable;
-import javax.persistence.Entity;
+import javax.persistence.*;
 
-@Embeddable
+@Entity
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SinglePerfusorData {
+public class PerfusorDataDB {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String infusionName;
     private double rate;

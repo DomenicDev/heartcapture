@@ -1,6 +1,5 @@
 package de.cassisi.hearth;
 
-import de.cassisi.hearth.port.CreateOperationJpaRepository;
 import de.cassisi.hearth.usecase.CreateOperation;
 import de.cassisi.hearth.usecase.output.OutputHandler;
 import org.springframework.boot.CommandLineRunner;
@@ -40,7 +39,7 @@ public class ConsoleApplication implements CommandLineRunner {
 
 
 
-        createOperation.execute(inputData, new TestOutputHandler());
+   //     createOperation.execute(inputData, new TestOutputHandler());
 
     }
 
