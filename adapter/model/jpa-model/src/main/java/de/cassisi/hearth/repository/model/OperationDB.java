@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,14 +34,14 @@ public class OperationDB {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private Set<NirsDataDB> nirsData;
+    private final Set<NirsDataDB> nirsData = new HashSet<>();
 
     @OneToMany(
             mappedBy = "operation",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private Set<AnesthesiaDataDB> anesthesiaData;
+    private final Set<AnesthesiaDataDB> anesthesiaData = new HashSet<>();
 
     @OneToMany(
             mappedBy = "operation",
@@ -50,7 +49,7 @@ public class OperationDB {
             orphanRemoval = true,
             fetch = FetchType.LAZY
     )
-    private Set<InfusionDataDB> infusionData = new HashSet<>();
+    private final Set<InfusionDataDB> infusionData = new HashSet<>();
 
     @OneToOne
     @JoinColumn(name = "hlm_data_id", nullable = true, unique = true)
@@ -63,9 +62,6 @@ public class OperationDB {
     }
 
     public void addInfusionData(InfusionDataDB data) {
-        if (infusionData == null) {
-            infusionData = new HashSet<>();
-        }
         this.infusionData.add(data);
         data.setOperation(this);
     }
