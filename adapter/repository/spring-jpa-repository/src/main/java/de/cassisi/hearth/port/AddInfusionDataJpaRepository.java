@@ -1,4 +1,4 @@
-package de.cassisi.hearth;
+package de.cassisi.hearth.port;
 
 import de.cassisi.hearth.entity.InfusionData;
 import de.cassisi.hearth.repository.InfusionRepository;

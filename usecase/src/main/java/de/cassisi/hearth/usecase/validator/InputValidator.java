@@ -60,4 +60,10 @@ public final class InputValidator {
             }
         });
     }
+
+    public static void checkNirsSaturation(double saturation) {
+        if (saturation < 0) {
+            throw new InvalidNirsSaturationException(saturation);
+        }
+    }
 }

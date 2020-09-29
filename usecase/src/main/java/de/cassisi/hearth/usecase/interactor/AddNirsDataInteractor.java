@@ -4,6 +4,7 @@ import de.cassisi.hearth.entity.NIRSData;
 import de.cassisi.hearth.usecase.AddNirsData;
 import de.cassisi.hearth.usecase.output.OutputHandler;
 import de.cassisi.hearth.usecase.port.AddNirsDataRepository;
+import de.cassisi.hearth.usecase.validator.InputValidator;
 
 import java.time.LocalDateTime;
 
@@ -22,7 +23,12 @@ public class AddNirsDataInteractor implements AddNirsData {
         double left = input.leftSaturation;
         double right = input.rightSaturation;
         LocalDateTime timestamp = input.timestamp;
-        // validate input data (todo)
+
+        // validate input data
+        InputValidator.checkIdPositive(operationId);
+        InputValidator.checkTimestamp(timestamp);
+        InputValidator.checkNirsSaturation(left);
+        InputValidator.checkNirsSaturation(right);
 
         // repackage data
         NIRSData nirsData = new NIRSData(left, right, timestamp);

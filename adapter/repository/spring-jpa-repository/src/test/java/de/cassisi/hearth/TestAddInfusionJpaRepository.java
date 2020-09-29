@@ -2,6 +2,7 @@ package de.cassisi.hearth;
 
 import de.cassisi.hearth.entity.InfusionData;
 import de.cassisi.hearth.entity.PerfusorData;
+import de.cassisi.hearth.port.AddInfusionDataJpaRepository;
 import de.cassisi.hearth.repository.model.InfusionDataDB;
 import de.cassisi.hearth.repository.model.OperationDB;
 import org.junit.jupiter.api.Test;

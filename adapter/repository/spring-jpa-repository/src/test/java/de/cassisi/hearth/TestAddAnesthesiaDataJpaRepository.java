@@ -1,6 +1,7 @@
 package de.cassisi.hearth;
 
 import de.cassisi.hearth.entity.AnesthesiaData;
+import de.cassisi.hearth.port.AddAnesthesiaDataJpaRepository;
 import de.cassisi.hearth.repository.AnesthesiaRepository;
 import de.cassisi.hearth.repository.OperationRepository;
 import de.cassisi.hearth.repository.model.AnesthesiaDataDB;
