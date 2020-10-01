@@ -7,7 +7,6 @@ import de.cassisi.hearth.usecase.exception.OperationNotFoundException;
 import de.cassisi.hearth.usecase.port.FindOperationRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
 
 @Repository
 public class FindOperationJpaRepository implements FindOperationRepository {
@@ -20,13 +19,20 @@ public class FindOperationJpaRepository implements FindOperationRepository {
 
     @Override
     public Operation findOperationById(long id) {
-        Optional<OperationDB> optOperationDB = operationRepository.findById(id);
-        if (optOperationDB.isPresent()) {
-            OperationDB dvOperation = optOperationDB.get();
-            Operation operationEntity = null;
-            return operationEntity;
-        } else {
-            throw new OperationNotFoundException(id);
-        }
+        OperationDB dbOperation = operationRepository.findById(id).orElseThrow(() -> new OperationNotFoundException(id));
+        return convert(dbOperation);
+    }
+
+    private Operation convert(OperationDB operationDB) {
+        return new Operation(
+                operationDB.getId(),
+                operationDB.getDate(),
+                operationDB.getRoomNr(),
+                operationDB.isNirsDataAvailable(),
+                operationDB.isInfusionDataAvailable(),
+                operationDB.isAnesthesiaDataAvailable(),
+                operationDB.isHlmDataAvailable(),
+                operationDB.isLocked()
+        );
     }
 }
