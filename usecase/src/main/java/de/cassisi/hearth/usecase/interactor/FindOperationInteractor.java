@@ -5,6 +5,7 @@ import de.cassisi.hearth.usecase.FindOperation;
 import de.cassisi.hearth.usecase.dto.SimpleOperationData;
 import de.cassisi.hearth.usecase.output.OutputHandler;
 import de.cassisi.hearth.usecase.port.FindOperationRepository;
+import de.cassisi.hearth.usecase.validator.InputValidator;
 
 public class FindOperationInteractor implements FindOperation {
 
@@ -17,7 +18,9 @@ public class FindOperationInteractor implements FindOperation {
     @Override
     public void execute(InputData input, OutputHandler<OutputData> outputHandler) {
         long id = input.operationId;
-        // validate id todo
+
+        // validate input
+        InputValidator.checkIdPositive(id);
 
         // get operation data
         Operation operation = findOperationRepository.findOperationById(id);
