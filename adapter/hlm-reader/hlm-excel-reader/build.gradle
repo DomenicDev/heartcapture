@@ -1,0 +1,6 @@
+
+dependencies {
+    implementation project(':usecase')
+    compile 'com.github.ozlerhakan:poiji:3.0.0'
+}
+
