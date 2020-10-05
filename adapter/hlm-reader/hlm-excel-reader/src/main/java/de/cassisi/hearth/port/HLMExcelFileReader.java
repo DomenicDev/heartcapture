@@ -21,7 +21,7 @@ import java.util.*;
 
 public class HLMExcelFileReader implements HLMFileReader {
 
-    private static final HashSet FIRST_CELL_TABLE_INDICATOR = new HashSet<>(Arrays.asList("NR", "PROTNR", "PATID", "EKZNr"));
+    private static final HashSet<String> FIRST_CELL_TABLE_INDICATOR = new HashSet<>(Arrays.asList("NR", "PROTNR", "PATID", "EKZNr"));
     private static final String TEMPORARY_FILE_NAME = "SEPARATED_HLM_DATA_FILE.xlsx";
     private static final int THRESHOLD_HOURS_SAME_DAY = 16; // hours
 
@@ -40,7 +40,7 @@ public class HLMExcelFileReader implements HLMFileReader {
             List<InnerTable> innerTables = getInnerTables(dataSheet);
 
             // create own workbook and store each inner table in one sheet
-            File tableData = writeInnerTablesToFile(TEMPORARY_FILE_NAME, innerTables);
+            File tableData = writeInnerTablesToFile(innerTables);
 
             // we use custom settings when it comes to processing the excel data and converting them to POJOs
             PoijiOptions options = getDefaultPoijiOptions();
@@ -114,30 +114,6 @@ public class HLMExcelFileReader implements HLMFileReader {
         }
     }
 
-    private boolean isAtSameDay(LocalTime initialTime, LocalTime relativeTime) {
-        long hoursDifference =  Math.abs(initialTime.until(relativeTime, ChronoUnit.HOURS));
-        return ( hoursDifference < THRESHOLD_HOURS_SAME_DAY );
-    }
-
-    private LocalDateTime correctDate(LocalDateTime previousDateTime, LocalDateTime currentDateTime) {
-        LocalDate previousDate = previousDateTime.toLocalDate();
-        LocalTime previousTime = previousDateTime.toLocalTime();
-
-        LocalTime currentTime = currentDateTime.toLocalTime();
-
-        if (isSwitchToNextDay(previousTime, currentTime)) {
-            // midnight switch (e.g. 23:59 - 00:02), so we apply the next day
-            return LocalDateTime.of(previousDate.plusDays(1), currentTime);
-        } else {
-            // same day
-            return LocalDateTime.of(previousDate, currentTime);
-        }
-    }
-
-    private static boolean isSwitchToNextDay(LocalTime previousTime, LocalTime currentTime) {
-        return currentTime.isBefore(previousTime);
-    }
-
     private List<InnerTable> getInnerTables(Sheet sheet) {
         List<InnerTable> innerTables = new ArrayList<>();
         InnerTable foundTable = null;
@@ -176,7 +152,7 @@ public class HLMExcelFileReader implements HLMFileReader {
         return innerTables;
     }
 
-    private File writeInnerTablesToFile(String fileName, List<InnerTable> innerTables) {
+    private File writeInnerTablesToFile(List<InnerTable> innerTables) {
         XSSFWorkbook workbook = new XSSFWorkbook();
 
         //date formatter
@@ -211,12 +187,13 @@ public class HLMExcelFileReader implements HLMFileReader {
             }
         }
 
+        // write workbook to file
         try {
-            FileOutputStream fileOutputStream = new FileOutputStream(fileName);
+            FileOutputStream fileOutputStream = new FileOutputStream(HLMExcelFileReader.TEMPORARY_FILE_NAME);
             workbook.write(fileOutputStream);
             fileOutputStream.flush();
             fileOutputStream.close();
-            return new File(fileName);
+            return new File(HLMExcelFileReader.TEMPORARY_FILE_NAME);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -237,7 +214,7 @@ public class HLMExcelFileReader implements HLMFileReader {
     /**
      * Helper class for representing (inner) tables within the original excel sheet.
      */
-    private class InnerTable {
+    private static class InnerTable {
         private List<Row> rows = new ArrayList<>();
     }
 }
