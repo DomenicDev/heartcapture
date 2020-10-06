@@ -3,14 +3,15 @@ package de.cassisi.hearth.entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NonNull;
+
+import java.util.List;
 
 @Data
 @Builder
 @AllArgsConstructor
-public final class MachineData {
+public final class HlmOperationData {
 
-    private final String oxygenator;
-    private final String haemoFil;
-
+    @NonNull private List<String> operation;
 
 }

@@ -1,10 +1,24 @@
 package de.cassisi.hearth.entity;
 
-import de.cassisi.hearth.entity.ids.OperationId;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 
-public class HLMData {
+import java.util.List;
 
-    // todo...
-    private OperationId operationId;
+@Data
+@Builder
+@AllArgsConstructor
+public final class HLMData {
+
+    private final List<HLMEventData> eventList;
+    private final DiagnosisData diagnosisData;
+    private final List<HlmBloodSample> bloodSamples;
+    private final List<HlmParamData> paramData;
+
+    private final HlmOperationData operationData;
+    private final RiskFactorData riskFactorData;
+    private final PatientData patientData;
+    private final MachineData machineData;
 
 }

@@ -1,70 +1,50 @@
 package de.cassisi.hearth.entity;
 
-import java.time.LocalTime;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NonNull;
+
+import java.time.LocalDateTime;
+
+@Data
+@AllArgsConstructor
 public final class HLMEventData {
 
-    private final long nr;
-    private final long protNr;
-    private final LocalTime time;
-    private final String text;
-    private final int amount;
-    private final String unit;
-    private final int factor;
-    private final int amountML;
-    private final char free;
-    private final String type;
+    @NonNull private final LocalDateTime timestamp;
+    @NonNull private final EventType type;
+    private final Integer amount;
+    private final Unit unit;
+    private final Integer factor;
+    private final String free;
+    @NonNull private final Typ typ;
 
-    public HLMEventData(long nr, long protNr, LocalTime time, String text, int amount, String unit, int factor, int amountML, char free, String type) {
-        this.nr = nr;
-        this.protNr = protNr;
-        this.time = time;
-        this.text = text;
-        this.amount = amount;
-        this.unit = unit;
-        this.factor = factor;
-        this.amountML = amountML;
-        this.free = free;
-        this.type = type;
+    public enum EventType {
+        ACT,
+        BYPASS_BEGINN,
+        AORTA_ZU,
+        KARDIOPLEGIE,
+        NABI_8_4_PC,
+        JONOSTERIL,
+        AORTA_AUF,
+        REPERFUSION_BEGINN,
+        DEFIBRILLATION,
+        BYPASS_ENDE,
+        REPERFUSION_ENDE,
+        MASCHINENBLUT,
+        RESTBLUT_PERF,
+        UNKNOWN
     }
 
-    public long getNr() {
-        return nr;
+    public enum Unit {
+        ML,
+        SEC
     }
 
-    public long getProtNr() {
-        return protNr;
+    public enum Typ {
+        COM,
+        IN,
+        OUT
     }
 
-    public LocalTime getTime() {
-        return time;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public int getAmount() {
-        return amount;
-    }
-
-    public String getUnit() {
-        return unit;
-    }
-
-    public int getFactor() {
-        return factor;
-    }
-
-    public int getAmountML() {
-        return amountML;
-    }
-
-    public char getFree() {
-        return free;
-    }
-
-    public String getType() {
-        return type;
-    }
 }

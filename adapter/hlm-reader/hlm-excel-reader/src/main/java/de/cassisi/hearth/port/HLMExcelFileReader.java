@@ -2,8 +2,10 @@ package de.cassisi.hearth.port;
 
 import com.poiji.bind.Poiji;
 import com.poiji.option.PoijiOptions;
-import de.cassisi.hearth.entity.HLMData;
+import de.cassisi.hearth.entity.*;
 import de.cassisi.hearth.port.data.*;
+import de.cassisi.hearth.port.data.MachineExcelData;
+import de.cassisi.hearth.port.util.ExcelToEntityConverter;
 import de.cassisi.hearth.usecase.port.HLMFileReader;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -51,32 +53,52 @@ public class HLMExcelFileReader implements HLMFileReader {
             MetaExcelData metaData = Poiji.fromExcel(tableData, MetaExcelData.class, options).get(0);
             LocalDate operationDate = metaData.getOperationDate();
 
-            // hlm data
-            List<HLMParamsExcelData> hlmParamsData = Poiji.fromExcel(tableData, HLMParamsExcelData.class, options);
+            // load hlm data
+            List<HLMParamsExcelData> hlmParamsExcelData = Poiji.fromExcel(tableData, HLMParamsExcelData.class, options);
+            List<EventExcelData> eventExcelData = Poiji.fromExcel(tableData, EventExcelData.class, options);
+            List<BloodSampleExcelData> bloodSampleExcelData = Poiji.fromExcel(tableData, BloodSampleExcelData.class, options);
+            MachineExcelData machineExcelData = Poiji.fromExcel(tableData, MachineExcelData.class, options).get(0);
+            List<DiagnosisExcelData> diagnosisExcelData = Poiji.fromExcel(tableData, DiagnosisExcelData.class, options);
+            List<OperationExcelData> operationExcelData = Poiji.fromExcel(tableData, OperationExcelData.class, options);
+            PatientExcelData patientExcelData = Poiji.fromExcel(tableData, PatientExcelData.class, options).get(0);
+            PatientAdditionalExcelData patientAdditionalExcelData = Poiji.fromExcel(tableData, PatientAdditionalExcelData.class, options).get(0);
+            List<RiskFactorsExcelData> riskFactorsExcelData = Poiji.fromExcel(tableData, RiskFactorsExcelData.class, options);
 
             // we start by setting our initial timestamp by hand
-            HLMParamsExcelData initialEntry = hlmParamsData.get(0);
+            // regarding to staff the first row from params data matches the date from the meta data
+            HLMParamsExcelData initialEntry = hlmParamsExcelData.get(0);
             LocalDateTime initDateTime = LocalDateTime.of(operationDate, initialEntry.getTimestamp().toLocalTime());
             initialEntry.setTimestamp(initDateTime);
 
             // from now on every chronological data can be corrected
-            fixDateTime(hlmParamsData, initDateTime);
-
-            // event data
-            List<EventExcelData> eventData = Poiji.fromExcel(tableData, EventExcelData.class, options);
-            fixDateTime(eventData, initDateTime);
-
-            // blood sample data
-            List<BloodSampleExcelData> bloodSampleData = Poiji.fromExcel(tableData, BloodSampleExcelData.class, options);
-            fixDateTime(bloodSampleData, initDateTime);
+            fixDateTime(hlmParamsExcelData, initDateTime);
+            fixDateTime(eventExcelData, initDateTime);
+            fixDateTime(bloodSampleExcelData, initDateTime);
 
             // delete helper file
             tableData.delete();
 
             // create HLM Data object and return data
-            HLMData data = new HLMData();
-            // todo create and apply data to entity classes
-            return data;
+            List<HLMEventData> eventData = ExcelToEntityConverter.convertToEventData(eventExcelData);
+            List<HlmParamData> paramData = ExcelToEntityConverter.convertToParamData(hlmParamsExcelData);
+            List<HlmBloodSample> bloodSampleData = ExcelToEntityConverter.convertToBloodSampleData(bloodSampleExcelData);
+
+            DiagnosisData diagnosisData = ExcelToEntityConverter.convertToDiagnosisData(diagnosisExcelData);
+            HlmOperationData hlmOperationData = ExcelToEntityConverter.convertToOperationData(operationExcelData);
+            RiskFactorData riskFactorData = ExcelToEntityConverter.convertToRiskFactorData(riskFactorsExcelData);
+            PatientData patientData = ExcelToEntityConverter.convertToPatientData(patientExcelData, patientAdditionalExcelData);
+            MachineData machineData = ExcelToEntityConverter.convertToMachineData(machineExcelData);
+
+            return HLMData.builder()
+                    .eventList(eventData)
+                    .paramData(paramData)
+                    .diagnosisData(diagnosisData)
+                    .bloodSamples(bloodSampleData)
+                    .operationData(hlmOperationData)
+                    .riskFactorData(riskFactorData)
+                    .patientData(patientData)
+                    .machineData(machineData)
+                    .build();
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (Exception e) {

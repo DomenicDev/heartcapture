@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @ExcelSheet("Table#2")
-public class OxygenatorExcelData {
+public class MachineExcelData {
 
     @ExcelCellName("OXYGENATOR")
     private String oxygenator;

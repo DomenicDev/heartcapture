@@ -17,16 +17,16 @@ public class EventExcelData implements ChronologicalData {
     private String text;
 
     @ExcelCellName("MENGE")
-    private int amount;
+    private Integer amount;
 
     @ExcelCellName("EINHEIT")
     private String unit;
 
     @ExcelCellName("FAKTOR")
-    private int factor;
+    private Integer factor;
 
     @ExcelCellName("MENGE_ML")
-    private int amountMililiter;
+    private Integer amountMililiter;
 
     @ExcelCellName("FREI")
     private String free;
