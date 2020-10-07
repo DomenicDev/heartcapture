@@ -1,20 +1,88 @@
 package de.cassisi.hearth.repository.model;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class HLMDataDB {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(optional = false, mappedBy = "hlmData")
+    @OneToOne
     private OperationDB operation;
 
+    @OneToMany(
+            mappedBy = "hlmData",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private final List<HlmEventDataDB> hlmEventDataDBList = new ArrayList<>();
+
+
+    @OneToMany(
+            mappedBy = "hlmDataDB",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private final List<HlmBloodSampleDB> hlmBloodSampleDBList = new ArrayList<>();
+
+    @OneToMany(
+            mappedBy = "hlmDataDB",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private final List<HlmParamDataDB> hlmParamDataDBS = new ArrayList<>();
+
+    @ElementCollection
+    private final List<String> diagnosisData = new ArrayList<>();
+
+    @ElementCollection
+    private final List<String> previousOperationList = new ArrayList<>();
+
+    @ElementCollection
+    private final List<String> riskFactorList = new ArrayList<>();
+
+    @Embedded
+    private PatientDataDB patientDataDB;
+
+    @Embedded
+    private MachineDataDB machineDataDB;
+
+
+    // ---------------- HELPER METHODS ----------------- //
+
+    public void add(HlmEventDataDB hlmEventDataDB) {
+        this.hlmEventDataDBList.add(hlmEventDataDB);
+        hlmEventDataDB.setHlmData(this);
+    }
+
+    public void add(HlmBloodSampleDB hlmBloodSampleDB) {
+        this.hlmBloodSampleDBList.add(hlmBloodSampleDB);
+    }
+
+    public void add(HlmParamDataDB paramDataDB) {
+        this.hlmParamDataDBS.add(paramDataDB);
+        paramDataDB.setHlmDataDB(this);
+    }
+
+    public void addRisk(String risk) {
+        this.riskFactorList.add(risk);
+    }
+
+    public void addPreviousOperation(String operation) {
+        this.previousOperationList.add(operation);
+    }
+
+    public void addDiagnosis(String diagnosis) {
+        this.diagnosisData.add(diagnosis);
+    }
+
+    // ----------------------------------------------- //
 }

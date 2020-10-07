@@ -12,10 +12,10 @@ import java.util.List;
 public final class HLMData {
 
     private final List<HLMEventData> eventList;
-    private final DiagnosisData diagnosisData;
     private final List<HlmBloodSample> bloodSamples;
     private final List<HlmParamData> paramData;
 
+    private final DiagnosisData diagnosisData;
     private final HlmOperationData operationData;
     private final RiskFactorData riskFactorData;
     private final PatientData patientData;

@@ -9,7 +9,6 @@ allprojects {
 
 subprojects {
 
-
     apply plugin: 'jacoco'
     apply plugin: 'java'
     group = 'de.cassisi'
@@ -20,6 +19,8 @@ subprojects {
     dependencies {
         compileOnly 'org.projectlombok:lombok:1.18.12'
         annotationProcessor 'org.projectlombok:lombok:1.18.12'
+        compile group: 'org.modelmapper', name: 'modelmapper', version: '2.3.8'
+
 
         testCompile group: 'org.mockito', name: 'mockito-core', version: '3.5.13'
         testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.7.0'

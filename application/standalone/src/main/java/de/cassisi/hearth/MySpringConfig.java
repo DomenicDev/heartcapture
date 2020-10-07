@@ -1,14 +1,19 @@
 package de.cassisi.hearth;
 
 import de.cassisi.hearth.port.CreateOperationJpaRepository;
+import de.cassisi.hearth.port.HLMExcelFileReader;
 import de.cassisi.hearth.usecase.AddInfusionData;
 import de.cassisi.hearth.usecase.AddNirsData;
 import de.cassisi.hearth.usecase.CreateOperation;
+import de.cassisi.hearth.usecase.ReadHLMDataFile;
 import de.cassisi.hearth.usecase.interactor.AddInfusionDataInteractor;
 import de.cassisi.hearth.usecase.interactor.AddNirsDataInteractor;
 import de.cassisi.hearth.usecase.interactor.CreateOperationInteractor;
+import de.cassisi.hearth.usecase.interactor.ReadHLMDataFileInteractor;
 import de.cassisi.hearth.usecase.port.AddInfusionDataRepository;
 import de.cassisi.hearth.usecase.port.AddNirsDataRepository;
+import de.cassisi.hearth.usecase.port.HLMFileReader;
+import de.cassisi.hearth.usecase.port.ReadHLMDataFileRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -18,11 +23,14 @@ public class MySpringConfig {
     private final CreateOperationJpaRepository createOperationJpaRepository;
     private AddInfusionDataRepository addInfusionDataRepository;
     private AddNirsDataRepository addNirsDataRepository;
+    private ReadHLMDataFileRepository readHLMDataFileRepository;
+    private HLMFileReader hlmFileReader = new HLMExcelFileReader();
 
-    public MySpringConfig(CreateOperationJpaRepository createOperationJpaRepository, AddInfusionDataRepository addInfusionDataRepository, AddNirsDataRepository addNirsDataRepository) {
+    public MySpringConfig(CreateOperationJpaRepository createOperationJpaRepository, AddInfusionDataRepository addInfusionDataRepository, AddNirsDataRepository addNirsDataRepository, ReadHLMDataFileRepository readHLMDataFileRepository) {
         this.createOperationJpaRepository = createOperationJpaRepository;
         this.addInfusionDataRepository = addInfusionDataRepository;
         this.addNirsDataRepository = addNirsDataRepository;
+        this.readHLMDataFileRepository = readHLMDataFileRepository;
     }
 
 
@@ -39,5 +47,10 @@ public class MySpringConfig {
     @Bean
     public AddNirsData addNirsData() {
         return new AddNirsDataInteractor(addNirsDataRepository);
+    }
+
+    @Bean
+    public ReadHLMDataFile readHLMDataFile() {
+        return new ReadHLMDataFileInteractor(readHLMDataFileRepository, hlmFileReader);
     }
 }

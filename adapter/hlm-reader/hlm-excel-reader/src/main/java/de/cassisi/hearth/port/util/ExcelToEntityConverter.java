@@ -168,7 +168,7 @@ public final class ExcelToEntityConverter {
 
 
     private static PatientData.Sex convertSex(String sex) {
-        if ("männlich".equals(sex)) return PatientData.Sex.MALE;
+        if ("m\u00e4nnlich".equals(sex)) return PatientData.Sex.MALE;
         if ("weiblich".equals(sex)) return PatientData.Sex.FEMALE;
         return null;
     }

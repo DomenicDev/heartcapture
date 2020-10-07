@@ -49,8 +49,8 @@ public class OperationDB {
     )
     private final Set<InfusionDataDB> infusionData = new HashSet<>();
 
-    @OneToOne
-    @JoinColumn(name = "hlm_data_id", nullable = true, unique = true)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "operation")
+    //@JoinColumn(name = "hlm_data_id", nullable = true, unique = true)
     private HLMDataDB hlmData;
 
 
@@ -67,6 +67,13 @@ public class OperationDB {
     public void addAnesthesiaData(AnesthesiaDataDB data) {
         this.anesthesiaData.add(data);
         data.setOperation(this);
+    }
+
+    public void setHlmData(HLMDataDB hlmDataDB) {
+        this.hlmData = hlmDataDB;
+        if (hlmDataDB != null) {
+            hlmDataDB.setOperation(this);
+        }
     }
 
 }

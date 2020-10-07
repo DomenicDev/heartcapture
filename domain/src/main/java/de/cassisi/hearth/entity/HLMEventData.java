@@ -2,12 +2,14 @@ package de.cassisi.hearth.entity;
 
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
 
 import java.time.LocalDateTime;
 
 @Data
+@Builder
 @AllArgsConstructor
 public final class HLMEventData {
 
@@ -20,6 +22,7 @@ public final class HLMEventData {
     @NonNull private final Typ typ;
 
     public enum EventType {
+        UNKNOWN,
         ACT,
         BYPASS_BEGINN,
         AORTA_ZU,
@@ -33,7 +36,6 @@ public final class HLMEventData {
         REPERFUSION_ENDE,
         MASCHINENBLUT,
         RESTBLUT_PERF,
-        UNKNOWN
     }
 
     public enum Unit {

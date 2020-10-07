@@ -9,6 +9,6 @@ import java.util.List;
 @AllArgsConstructor
 public final class DiagnosisData {
 
-    private final List<String> diagnose;
+    private final List<String> diagnosisData;
 
 }

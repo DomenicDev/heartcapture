@@ -1,17 +1,27 @@
-package de.cassisi.hearth.entity;
+package de.cassisi.hearth.repository.model;
 
+import de.cassisi.hearth.entity.HlmBloodSample;
 import lombok.*;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Data
+@Entity
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public final class HlmBloodSample {
+public class HlmBloodSampleDB {
 
-    @NonNull private LocalDateTime timestamp;
-    @NonNull private Type typ;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    // data
+    private LocalDateTime timestamp;
+    @Enumerated(EnumType.STRING)
+    private HlmBloodSample.Type typ;
     private double hctOFL;
     private double hbOfl;
     private double phOfl;
@@ -26,17 +36,7 @@ public final class HlmBloodSample {
     private double ca;
     private double lactat;
 
-    public enum Type {
-
-        /**
-         * arterial data
-         */
-        ART,
-
-        /**
-         * venous data
-         */
-        VEN
-    }
+    @ManyToOne
+    private HLMDataDB hlmDataDB;
 
 }
