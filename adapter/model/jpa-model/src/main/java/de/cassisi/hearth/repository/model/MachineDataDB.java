@@ -14,5 +14,8 @@ public class MachineDataDB {
 
     private String oxygenator;
     private String haemoFil;
+    private String kanuelArt;
+    private String kanuelVen;
+    private String kanuelVen2;
 
 }

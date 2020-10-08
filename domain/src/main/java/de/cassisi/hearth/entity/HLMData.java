@@ -20,5 +20,6 @@ public final class HLMData {
     private final RiskFactorData riskFactorData;
     private final PatientData patientData;
     private final MachineData machineData;
+    private final PrimingComposition primingComposition;
 
 }

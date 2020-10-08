@@ -63,6 +63,8 @@ public class HLMExcelFileReader implements HLMFileReader {
             PatientExcelData patientExcelData = Poiji.fromExcel(tableData, PatientExcelData.class, options).get(0);
             PatientAdditionalExcelData patientAdditionalExcelData = Poiji.fromExcel(tableData, PatientAdditionalExcelData.class, options).get(0);
             List<RiskFactorsExcelData> riskFactorsExcelData = Poiji.fromExcel(tableData, RiskFactorsExcelData.class, options);
+            List<PrimingExcelData> primingExcelDataList = Poiji.fromExcel(tableData, PrimingExcelData.class, options);
+            PrimingExcelData primingExcelData = (primingExcelDataList.isEmpty()) ? null : primingExcelDataList.get(0);
 
             // we start by setting our initial timestamp by hand
             // regarding to staff the first row from params data matches the date from the meta data
@@ -88,6 +90,7 @@ public class HLMExcelFileReader implements HLMFileReader {
             RiskFactorData riskFactorData = ExcelToEntityConverter.convertToRiskFactorData(riskFactorsExcelData);
             PatientData patientData = ExcelToEntityConverter.convertToPatientData(patientExcelData, patientAdditionalExcelData);
             MachineData machineData = ExcelToEntityConverter.convertToMachineData(machineExcelData);
+            PrimingComposition primingComposition = ExcelToEntityConverter.convertToPrimingComposition(primingExcelData);
 
             return HLMData.builder()
                     .eventList(eventData)
@@ -98,6 +101,7 @@ public class HLMExcelFileReader implements HLMFileReader {
                     .riskFactorData(riskFactorData)
                     .patientData(patientData)
                     .machineData(machineData)
+                    .primingComposition(primingComposition)
                     .build();
         } catch (IOException e) {
             throw new RuntimeException(e);

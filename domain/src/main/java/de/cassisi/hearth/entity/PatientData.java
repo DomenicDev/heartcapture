@@ -15,13 +15,13 @@ public final class PatientData {
     private final Sex sex;
     private final int age;
 
-    private String bloodGroup;
-    private String bloodRef;
-    private int height; // in cm
-    private int weight;
-    private double bsa;
-    private double factor;
-    private double sollFluss;
+    private final String bloodGroup;
+    private final String bloodRef;
+    private final int height; // in cm
+    private final int weight;
+    private final double bsa;
+    private final double factor;
+    private final double sollFluss;
 
 
     public enum Sex {

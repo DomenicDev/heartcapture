@@ -62,6 +62,9 @@ public class ReadHLMDataFileJpaRepository implements ReadHLMDataFileRepository {
         // process machine data
         hlmDataDB.setMachineDataDB(DBConverter.convert(data.getMachineData()));
 
+        // process priming data
+        hlmDataDB.setPrimingCompositionDB(DBConverter.convert(data.getPrimingComposition()));
+
         operationDB.setHlmData(hlmDataDB);
 
         operationRepository.save(operationDB);

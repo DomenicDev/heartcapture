@@ -6,10 +6,13 @@ include 'config'
 include 'jpa-model'
 include 'spring-jpa-repository'
 include 'hlm-excel-reader'
+include 'excel-report-generator'
 
+// ADAPTER
 project(":jpa-model").projectDir = file("adapter/model/jpa-model")
 project(":spring-jpa-repository").projectDir = file("adapter/repository/spring-jpa-repository")
 project(":hlm-excel-reader").projectDir = file("adapter/hlm-reader/hlm-excel-reader")
+project(":excel-report-generator").projectDir = file("adapter/report-generator/excel-report-generator")
 
 // APPLICATION
 project(":standalone").projectDir = file("application/standalone")

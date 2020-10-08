@@ -55,6 +55,9 @@ public class HLMDataDB {
     @Embedded
     private MachineDataDB machineDataDB;
 
+    @Embedded
+    private PrimingCompositionDB primingCompositionDB;
+
 
     // ---------------- HELPER METHODS ----------------- //
 

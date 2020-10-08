@@ -14,4 +14,13 @@ public class MachineExcelData {
     @ExcelCellName("HAEMO_FIL")
     private String haemoFilter;
 
+    @ExcelCellName("KANUEL_ART")
+    private String kanuelArt;
+
+    @ExcelCellName("KANUEL_VEN")
+    private String kanuelVen;
+
+    @ExcelCellName("KANUEL_VEN2")
+    private String kanuelVen2;
+
 }

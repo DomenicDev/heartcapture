@@ -177,6 +177,54 @@ public final class ExcelToEntityConverter {
         return MachineData.builder()
                 .haemoFil(machineExcelData.getHaemoFilter())
                 .oxygenator(machineExcelData.getOxygenator())
+                .kanuelArt(machineExcelData.getKanuelArt())
+                .kanuelVen(machineExcelData.getKanuelVen())
+                .kanuelVen2(machineExcelData.getKanuelVen2())
                 .build();
+    }
+
+    public static PrimingComposition convertToPrimingComposition(PrimingExcelData excelData) {
+        if (excelData == null) {
+            // should not be the case
+            return new PrimingComposition(0, new ArrayList<>());
+        }
+        List<Priming> primingData = new ArrayList<>();
+        PrimingComposition primingComposition = new PrimingComposition(excelData.getTotalPriming(), primingData);
+        
+        if (isNotNullOrEmpty(excelData.getPriming1Text())) {
+            primingData.add(new Priming(excelData.getPriming1Text(), excelData.getPriming1amount(), excelData.getPriming1Unit()));            
+        }
+        if (isNotNullOrEmpty(excelData.getPriming2Text())) {
+            primingData.add(new Priming(excelData.getPriming2Text(), excelData.getPriming2amount(), excelData.getPriming2Unit()));
+        }
+        if (isNotNullOrEmpty(excelData.getPriming3Text() )) {
+            primingData.add(new Priming(excelData.getPriming3Text(), excelData.getPriming3amount(), excelData.getPriming3Unit()));
+        }
+        if (isNotNullOrEmpty(excelData.getPriming4Text())) {
+            primingData.add(new Priming(excelData.getPriming4Text(), excelData.getPriming4amount(), excelData.getPriming4Unit()));
+        }
+        if (isNotNullOrEmpty(excelData.getPriming5Text())) {
+            primingData.add(new Priming(excelData.getPriming5Text(), excelData.getPriming5amount(), excelData.getPriming5Unit()));
+        }
+        if (isNotNullOrEmpty(excelData.getPriming6Text())) {
+            primingData.add(new Priming(excelData.getPriming6Text(), excelData.getPriming6amount(), excelData.getPriming6Unit()));
+        }
+        if (isNotNullOrEmpty(excelData.getPriming7Text())) {
+            primingData.add(new Priming(excelData.getPriming7Text(), excelData.getPriming7amount(), excelData.getPriming7Unit()));
+        }        
+        if (isNotNullOrEmpty(excelData.getPriming8Text())) {
+            primingData.add(new Priming(excelData.getPriming8Text(), excelData.getPriming8amount(), excelData.getPriming8Unit()));
+        }
+        if (isNotNullOrEmpty(excelData.getPriming9Text())) {
+            primingData.add(new Priming(excelData.getPriming9Text(), excelData.getPriming9amount(), excelData.getPriming9Unit()));
+        }
+        if (isNotNullOrEmpty(excelData.getPriming10Text())) {
+            primingData.add(new Priming(excelData.getPriming10Text(), excelData.getPriming10amount(), excelData.getPriming10Unit()));
+        }
+        return primingComposition;
+    }
+
+    private static boolean isNotNullOrEmpty(String s) {
+        return s != null && !s.trim().isEmpty();
     }
 }
