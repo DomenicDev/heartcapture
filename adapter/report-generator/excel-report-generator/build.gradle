@@ -1,0 +1,5 @@
+
+dependencies {
+    implementation project(":usecase")
+    compile group: 'org.apache.poi', name: 'poi-ooxml', version: '4.1.2'
+}

@@ -13,7 +13,7 @@ public interface GenerateReport extends UseCaseTemplate<InputData, OutputData> {
     }
 
     class OutputData {
-        public File reportFile;
+        public byte[] reportFile;
     }
 
 }
