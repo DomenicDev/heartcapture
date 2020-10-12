@@ -1,0 +1,62 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.8'
+    id 'org.springframework.boot' version '2.3.4.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+}
+
+javafx {
+    version = "14"
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
+}
+
+
+mainClassName = 'de.cassisi.hearth.ApplicationLauncher'
+
+
+
+repositories {
+    mavenCentral()
+}
+
+
+
+dependencies {
+    compile project(':usecase')
+
+    compile group: 'com.google.guava', name: 'guava', version: '29.0-jre'
+    compile group: 'de.saxsys', name: 'mvvmfx', version: '1.8.0'
+
+    compile group: 'de.saxsys', name: 'mvvmfx-spring-boot', version: '1.8.0'
+
+
+    compile project(':spring-jpa-repository')
+    implementation project(':usecase')
+    implementation project(':hlm-excel-reader')
+    implementation project(':excel-report-generator')
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    runtimeOnly 'com.h2database:h2'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+
+    runtimeOnly "org.openjfx:javafx-graphics:$javafx.version:win"
+  //  runtimeOnly "org.openjfx:javafx-graphics:$javafx.version:linux"
+  //  runtimeOnly "org.openjfx:javafx-graphics:$javafx.version:mac"
+
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'de.cassisi.hearth.ApplicationLauncher'
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
+

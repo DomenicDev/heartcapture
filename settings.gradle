@@ -7,6 +7,7 @@ include 'jpa-model'
 include 'spring-jpa-repository'
 include 'hlm-excel-reader'
 include 'excel-report-generator'
+include 'fxapp'
 
 // ADAPTER
 project(":jpa-model").projectDir = file("adapter/model/jpa-model")
@@ -16,3 +17,4 @@ project(":excel-report-generator").projectDir = file("adapter/report-generator/e
 
 // APPLICATION
 project(":standalone").projectDir = file("application/standalone")
+project(":fxapp").projectDir = file("application/fxapp")
