@@ -18,6 +18,7 @@ public final class HlmBloodSample {
     private double pco2Ofl;
     private double po2Ofl;
     private double hco3Ofl;
+    private double tco2Ofl;
     private double bavtOfl;
     private double so2Ofl;
     private int glucose;

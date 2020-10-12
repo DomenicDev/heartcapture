@@ -37,6 +37,9 @@ public class BloodSampleExcelData implements ChronologicalData {
     @ExcelCellName("HCO3_OFL")
     private double hco3Ofl;
 
+    @ExcelCellName("TCO2_OFL")
+    private double tco2Ofl;
+
     @ExcelCellName("BAVT_OFL")
     private double bavtOfl;
 

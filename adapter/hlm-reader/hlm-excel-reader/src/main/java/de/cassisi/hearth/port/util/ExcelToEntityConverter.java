@@ -149,6 +149,7 @@ public final class ExcelToEntityConverter {
                 .pco2Ofl(data.getPco2Ofl())
                 .po2Ofl(data.getPo2Ofl())
                 .hco3Ofl(data.getHco3Ofl())
+                .tco2Ofl(data.getTco2Ofl())
                 .bavtOfl(data.getBavtOfl())
                 .so2Ofl(data.getSo2Ofl())
                 .glucose(data.getGlucose())

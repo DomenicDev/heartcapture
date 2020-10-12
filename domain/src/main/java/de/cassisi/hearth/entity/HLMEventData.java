@@ -36,6 +36,16 @@ public final class HLMEventData {
         REPERFUSION_ENDE,
         MASCHINENBLUT,
         RESTBLUT_PERF,
+        LEVELSTAND,
+        HEPARIN,
+        CS_EK,
+        FREMDBLUT,
+        HUMANALBUMIN_5,
+        HUMANALBUMIN_20,
+        HAEMOFILTRAT,
+        CELL_SAVER_ABGESAUGT,
+        HAEMOFILTRATION,
+        CYTOKIN_ADSORPTION,
     }
 
     public enum Unit {

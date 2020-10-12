@@ -8,6 +8,6 @@ import lombok.Getter;
 public final class PerfusorData {
 
     private final String name;
-    private final double rate;
+    private final int rate;
 
 }

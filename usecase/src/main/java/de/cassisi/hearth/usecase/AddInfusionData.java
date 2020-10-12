@@ -18,11 +18,11 @@ public interface AddInfusionData extends UseCaseTemplate<InputData, OutputData> 
 
         public static class PerfusorInput {
             public String name;
-            public double rate;
+            public int rate;
 
             public PerfusorInput() {
             }
-            public PerfusorInput(String name, double rate) {
+            public PerfusorInput(String name, int rate) {
                 this.name = name;
                 this.rate = rate;
             }
