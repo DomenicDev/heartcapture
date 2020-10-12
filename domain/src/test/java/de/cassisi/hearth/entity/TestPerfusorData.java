@@ -11,7 +11,7 @@ class TestPerfusorData {
     void testPerfusorData() {
         PerfusorData perfusorData = new PerfusorData("a", 2);
         assertEquals("a", perfusorData.getName());
-        assertNotEquals(2, perfusorData.getRate());
+        assertEquals(2, perfusorData.getRate());
     }
 
 }
