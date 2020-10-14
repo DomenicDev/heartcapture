@@ -2,9 +2,11 @@ package de.cassisi.hearth.port.data;
 
 import com.poiji.annotation.ExcelCellName;
 import com.poiji.annotation.ExcelSheet;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @ExcelSheet("Table#5")
 public class OperationExcelData {
 
