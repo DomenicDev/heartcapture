@@ -3,6 +3,9 @@ pipeline {
     tools {
         jdk 'jdk-12'
     }
+    options {
+        timestamps ()
+    }
     triggers {
         pollSCM('* * * * *') //polling for changes, once a minute
     }
