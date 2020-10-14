@@ -3,9 +3,12 @@ pipeline {
     stages {
         stage('Compile and Test') {
             steps {
-                echo 'Compiling sources'
-                sh 'pwd'
-                sh './gradlew clean test'
+                echo 'Cleaning Workspace'
+                sh 'chmod +x ./gradlew'
+                sh './gradlew clean'
+
+                echo 'Compile and Test'
+                sh './gradlew test'
             }
         }
 
