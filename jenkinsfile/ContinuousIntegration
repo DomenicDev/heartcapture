@@ -1,0 +1,12 @@
+pipeline {
+    agent any
+    stages {
+        stage('Checkout Git-Repository') {
+            steps {
+                echo 'Hello Jenkins'
+            }
+        }
+
+    }
+
+}
