@@ -1,9 +1,10 @@
 pipeline {
     agent any
     stages {
-        stage('Checkout Git-Repository') {
+        stage('Compile and Test') {
             steps {
-                echo 'Hello Jenkins'
+                echo 'Compiling sources'
+                sh '../gradlew clean test'
             }
         }
 
