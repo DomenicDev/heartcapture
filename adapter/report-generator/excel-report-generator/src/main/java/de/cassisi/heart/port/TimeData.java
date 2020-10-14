@@ -1,11 +1,13 @@
 package de.cassisi.heart.port;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 class TimeData implements Comparable<TimeData> {
 
     // TIMESTAMP
