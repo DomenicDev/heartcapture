@@ -6,7 +6,6 @@ pipeline {
     stages {
         stage('Compile and Test') {
             steps {
-                echo 'Using Java Version $JAVA_HOME'
                 sh 'chmod +x ./gradlew'
                 sh './gradlew clean test'
             }
