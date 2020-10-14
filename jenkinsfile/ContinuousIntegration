@@ -4,8 +4,10 @@ pipeline {
         stage('Compile and Test') {
             steps {
                 echo 'Cleaning Workspace'
+                sh 'echo $JAVA_HOME'
                 sh 'chmod +x ./gradlew'
                 sh './gradlew clean'
+
 
                 echo 'Compile and Test'
                 sh './gradlew test'
