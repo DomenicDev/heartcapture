@@ -2,13 +2,14 @@ package de.cassisi.hearth.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 
 import java.util.List;
 
-@Data
+@Getter
 @AllArgsConstructor
 public final class RiskFactorData {
 
-    private List<String> risks;
+    private final List<String> risks;
 
 }

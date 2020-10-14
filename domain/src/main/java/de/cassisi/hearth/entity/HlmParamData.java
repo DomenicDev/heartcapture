@@ -1,13 +1,10 @@
 package de.cassisi.hearth.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NonNull;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Data
+@Getter
 @Builder
 @AllArgsConstructor
 public final class HlmParamData {
