@@ -8,9 +8,6 @@ pipeline {
             steps {
                 echo 'Using Java Version $JAVA_HOME'
                 sh 'chmod +x ./gradlew'
-                sh './gradlew clean'
-
-                echo 'Compile and Test'
                 sh './gradlew clean test'
             }
         }
