@@ -4,8 +4,6 @@ import de.cassisi.heart.port.ExcelReportGenerator;
 import de.cassisi.hearth.entity.*;
 import org.junit.jupiter.api.Test;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -51,15 +49,7 @@ class TestExcelReportGenerator {
         List<AnesthesiaData> anesthesiaData = Arrays.asList(new AnesthesiaData(LocalDateTime.now(), 34), new AnesthesiaData(LocalDateTime.now().minusSeconds(-5), 55));
         List<NIRSData> nirsData = Arrays.asList(new NIRSData(32, 33, LocalDateTime.now()), new NIRSData(44, 56, LocalDateTime.now().plusSeconds(6)));
         List<InfusionData> infusionDataList = new ArrayList<>();
-        byte[] data = generator.generateReport(operation, hlmData, infusionDataList, anesthesiaData, nirsData);
-        try {
-            FileOutputStream fileOutputStream = new FileOutputStream("build/test-results/generated-excel-test_file.xlsx");
-            fileOutputStream.write(data);
-            fileOutputStream.flush();
-            fileOutputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        generator.generateReport(operation, hlmData, infusionDataList, anesthesiaData, nirsData);
     }
 
 }
