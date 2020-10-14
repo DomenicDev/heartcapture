@@ -5,7 +5,7 @@ pipeline {
             steps {
                 echo 'Compiling sources'
                 sh 'pwd'
-                sh './../gradlew clean test'
+                sh './gradlew clean test'
             }
         }
 
