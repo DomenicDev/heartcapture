@@ -4,7 +4,8 @@ pipeline {
         stage('Compile and Test') {
             steps {
                 echo 'Compiling sources'
-                sh '../gradlew clean test'
+                sh 'pwd'
+                sh './../gradlew clean test'
             }
         }
 
