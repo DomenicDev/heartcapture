@@ -1,23 +1,24 @@
 pipeline {
     agent any
+    tools {
+        jdk 'jdk-12'
+    }
     stages {
-
         stage('Compile and Test') {
-            tools {
-                jdk 'jdk-12'
-            }
             steps {
-                echo 'Cleaning Workspace'
-                sh 'echo $JAVA_HOME'
+                echo 'Using Java Version $JAVA_HOME'
                 sh 'chmod +x ./gradlew'
                 sh './gradlew clean'
 
-
                 echo 'Compile and Test'
-                sh './gradlew test'
+                sh './gradlew clean test'
             }
         }
-
+    }
+    post {
+        success {
+            jacoco()
+        }
     }
 
 }
