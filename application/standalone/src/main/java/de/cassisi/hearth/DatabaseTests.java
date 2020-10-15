@@ -1,10 +1,6 @@
 package de.cassisi.hearth;
 
-import de.cassisi.hearth.usecase.AddInfusionData;
-import de.cassisi.hearth.usecase.AddNirsData;
-import de.cassisi.hearth.usecase.CreateOperation;
-import de.cassisi.hearth.usecase.ReadHLMDataFile;
-import de.cassisi.hearth.usecase.output.OutputHandler;
+import de.cassisi.hearth.usecase.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -38,7 +34,7 @@ public class DatabaseTests implements CommandLineRunner {
         inputData.localDate = LocalDate.now();
         inputData.room = "Room 4";
 
-        createOperation.execute(inputData, outputData -> System.out.println(outputData.result));
+       // createOperation.execute(inputData, outputData -> System.out.println(outputData.result));
 
         // operation with id: 1 created...
 
@@ -53,6 +49,9 @@ public class DatabaseTests implements CommandLineRunner {
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
+
+
+
 
         // lets add infusion data to it
 

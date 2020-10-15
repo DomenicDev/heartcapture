@@ -1,15 +1,10 @@
 package de.cassisi.hearth;
 
+import de.cassisi.heart.port.ExcelReportGenerator;
 import de.cassisi.hearth.port.CreateOperationJpaRepository;
 import de.cassisi.hearth.port.HLMExcelFileReader;
-import de.cassisi.hearth.usecase.AddInfusionData;
-import de.cassisi.hearth.usecase.AddNirsData;
-import de.cassisi.hearth.usecase.CreateOperation;
-import de.cassisi.hearth.usecase.ReadHLMDataFile;
-import de.cassisi.hearth.usecase.interactor.AddInfusionDataInteractor;
-import de.cassisi.hearth.usecase.interactor.AddNirsDataInteractor;
-import de.cassisi.hearth.usecase.interactor.CreateOperationInteractor;
-import de.cassisi.hearth.usecase.interactor.ReadHLMDataFileInteractor;
+import de.cassisi.hearth.usecase.*;
+import de.cassisi.hearth.usecase.interactor.*;
 import de.cassisi.hearth.usecase.port.AddInfusionDataRepository;
 import de.cassisi.hearth.usecase.port.AddNirsDataRepository;
 import de.cassisi.hearth.usecase.port.HLMFileReader;
@@ -24,6 +19,7 @@ public class MySpringConfig {
     private AddInfusionDataRepository addInfusionDataRepository;
     private AddNirsDataRepository addNirsDataRepository;
     private ReadHLMDataFileRepository readHLMDataFileRepository;
+
     private HLMFileReader hlmFileReader = new HLMExcelFileReader();
 
     public MySpringConfig(CreateOperationJpaRepository createOperationJpaRepository, AddInfusionDataRepository addInfusionDataRepository, AddNirsDataRepository addNirsDataRepository, ReadHLMDataFileRepository readHLMDataFileRepository) {
@@ -52,5 +48,10 @@ public class MySpringConfig {
     @Bean
     public ReadHLMDataFile readHLMDataFile() {
         return new ReadHLMDataFileInteractor(readHLMDataFileRepository, hlmFileReader);
+    }
+
+    @Bean
+    public GenerateReport generateReport() {
+        return null;
     }
 }

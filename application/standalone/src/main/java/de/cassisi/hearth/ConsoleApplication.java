@@ -59,7 +59,7 @@ public class ConsoleApplication implements CommandLineRunner {
 
         @Override
         public void handle(CreateOperation.OutputData outputData) {
-            System.out.println(outputData.result);
+            System.out.println(outputData);
         }
     }
 }
