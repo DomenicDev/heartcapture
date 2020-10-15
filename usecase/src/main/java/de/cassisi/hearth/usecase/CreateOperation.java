@@ -14,7 +14,9 @@ public interface CreateOperation extends UseCaseTemplate<InputData, OutputData> 
     }
 
     class OutputData {
-        public String result;
+        public long id;
+        public LocalDate date;
+        public String room;
     }
 
 }

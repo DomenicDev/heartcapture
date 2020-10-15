@@ -1,6 +1,6 @@
 package de.cassisi.hearth.ui.presenter;
 
-import de.cassisi.hearth.ui.dashboard.MyViewModel;
+import de.cassisi.hearth.ui.dashboard.DashboardViewModel;
 import de.cassisi.hearth.usecase.AddNirsData;
 import de.cassisi.hearth.usecase.output.OutputHandler;
 import org.springframework.stereotype.Component;
@@ -8,15 +8,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class AddNirsDataPresenter implements OutputHandler<AddNirsData.OutputData> {
 
-    private MyViewModel myViewModel;
+    private DashboardViewModel dashboardViewModel;
 
-    public AddNirsDataPresenter(MyViewModel myViewModel) {
-        this.myViewModel = myViewModel;
+    public AddNirsDataPresenter(DashboardViewModel dashboardViewModel) {
+        this.dashboardViewModel = dashboardViewModel;
     }
 
     @Override
     public void handle(AddNirsData.OutputData outputData) {
         boolean saved = outputData.saved;
-        myViewModel.testMessage.setValue("new state: " + saved);
+        dashboardViewModel.testMessage.setValue("new state: " + saved);
     }
 }

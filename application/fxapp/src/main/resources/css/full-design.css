@@ -1,0 +1,60 @@
+/**
+COLOR PALETTE
+
+    #003049
+    44633F
+    30011E
+    BFC0C0
+    FAF0CA
+
+ */
+
+.button {
+
+}
+
+.sidebar {
+    -fx-background-color: #003049;
+}
+
+.sidebar-button {
+    -fx-background-color: none;
+    -fx-text-fill: white;
+    -fx-font-size: 24pt;
+}
+
+.sidebar-button:hover {
+    -fx-background-color: #ffffff0f;
+}
+
+.logo-container {
+    -fx-background-color: #003049;
+}
+
+.top-bar {
+    -fx-background-color: #003049;
+}
+
+.main-content {
+    -fx-background-color: #BFC0C0;
+}
+
+.button-home-quick-task {
+    -fx-background-color: #44633F;
+    -fx-text-fill: white;
+    -fx-font-size: 20pt;
+    -fx-font-family: "Arial Narrow";
+}
+
+.dashboard-title {
+    -fx-font-size: 16pt;
+    -fx-border-radius: 2px;
+}
+
+.section-title {
+    -fx-font-size: 16pt;
+}
+
+.live-capture-data-header {
+    -fx-font-size: 13pt;
+}

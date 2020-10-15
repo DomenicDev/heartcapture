@@ -30,6 +30,15 @@ dependencies {
 
     compile group: 'de.saxsys', name: 'mvvmfx-spring-boot', version: '1.8.0'
 
+    // GUI STUFF
+    compile group: 'org.kordamp.ikonli', name: 'ikonli-core', version: '11.5.0'
+    compile group: 'org.kordamp.ikonli', name: 'ikonli-javafx', version: '11.5.0'
+    compile group: 'org.kordamp.ikonli', name: 'ikonli-fontawesome-pack', version: '11.5.0'
+    compile group: 'com.dlsc.formsfx', name: 'formsfx-core', version: '11.4.1'
+
+
+
+
 
     compile project(':spring-jpa-repository')
     implementation project(':usecase')

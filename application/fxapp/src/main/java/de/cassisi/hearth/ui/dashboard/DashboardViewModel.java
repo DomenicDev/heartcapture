@@ -6,7 +6,7 @@ import javafx.beans.property.StringProperty;
 import org.springframework.stereotype.Component;
 
 @Component
-public final class MyViewModel implements ViewModel {
+public final class DashboardViewModel implements ViewModel {
 
     public StringProperty testMessage = new SimpleStringProperty();
 

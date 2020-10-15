@@ -37,7 +37,9 @@ public class CreateOperationInteractor implements CreateOperation {
 
         //generate output
         OutputData data = new OutputData();
-        data.result = "Successfully generated entity with id: " + savedOperation.getId() + "!";
+        data.id = savedOperation.getId();
+        data.date = savedOperation.getDate();
+        data.room = savedOperation.getRoomNr();
         outputHandler.handle(data);
     }
 }
