@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static de.cassisi.hearth.util.DBConverter.*;
+
 @Repository
 public class ReadHLMDataFileJpaRepository implements ReadHLMDataFileRepository {
 
@@ -34,36 +36,33 @@ public class ReadHLMDataFileJpaRepository implements ReadHLMDataFileRepository {
 
         // process event data
         List<HLMEventData> entityEventData = data.getEventList();
-        entityEventData.forEach(entity -> hlmDataDB.add(DBConverter.convert(entity)));
+        entityEventData.forEach(entity -> hlmDataDB.add(convert(entity)));
 
         // process blood samples
         List<HlmBloodSample> entityBloodSample = data.getBloodSamples();
-        entityBloodSample.forEach(entity -> hlmDataDB.add(DBConverter.convert(entity)));
+        entityBloodSample.forEach(entity -> hlmDataDB.add(convert(entity)));
 
         // process param data
         List<HlmParamData> hlmParamData = data.getParamData();
-        hlmParamData.forEach(entity -> hlmDataDB.add(DBConverter.convert(entity)));
+        hlmParamData.forEach(entity -> hlmDataDB.add(convert(entity)));
 
         // process diagnosis data
-        DiagnosisData diagnosisData = data.getDiagnosisData();
-        diagnosisData.getDiagnosisData().forEach(hlmDataDB::addDiagnosis);
+        hlmDataDB.setDiagnosisDataDB(convert(data.getDiagnosisData()));
 
         // process previous operation data
-        HlmOperationData hlmOperationData = data.getOperationData();
-        hlmOperationData.getOperation().forEach(hlmDataDB::addPreviousOperation);
+        hlmDataDB.setHlmOperationDataDB(convert(data.getOperationData()));
 
         // process risks
-        RiskFactorData riskFactorData = data.getRiskFactorData();
-        riskFactorData.getRisks().forEach(hlmDataDB::addRisk);
+        hlmDataDB.setRiskFactorDataDB(convert(data.getRiskFactorData()));
 
         // process patient data
-        hlmDataDB.setPatientDataDB(DBConverter.convert(data.getPatientData()));
+        hlmDataDB.setPatientDataDB(convert(data.getPatientData()));
 
         // process machine data
-        hlmDataDB.setMachineDataDB(DBConverter.convert(data.getMachineData()));
+        hlmDataDB.setMachineDataDB(convert(data.getMachineData()));
 
         // process priming data
-        hlmDataDB.setPrimingCompositionDB(DBConverter.convert(data.getPrimingComposition()));
+        hlmDataDB.setPrimingCompositionDB(convert(data.getPrimingComposition()));
 
         operationDB.setHlmData(hlmDataDB);
 

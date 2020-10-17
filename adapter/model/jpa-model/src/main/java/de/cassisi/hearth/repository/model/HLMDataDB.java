@@ -1,5 +1,6 @@
 package de.cassisi.hearth.repository.model;
 
+import de.cassisi.hearth.entity.HlmOperationData;
 import lombok.*;
 
 import javax.persistence.*;
@@ -40,20 +41,20 @@ public class HLMDataDB {
             orphanRemoval = true)
     private final List<HlmParamDataDB> hlmParamDataDBS = new ArrayList<>();
 
-    @ElementCollection
-    private final List<String> diagnosisData = new ArrayList<>();
-
-    @ElementCollection
-    private final List<String> previousOperationList = new ArrayList<>();
-
-    @ElementCollection
-    private final List<String> riskFactorList = new ArrayList<>();
+    @Embedded
+    private DiagnosisDataDB diagnosisDataDB = new DiagnosisDataDB();
 
     @Embedded
-    private PatientDataDB patientDataDB;
+    private HlmOperationDataDB hlmOperationDataDB = new HlmOperationDataDB();
 
     @Embedded
-    private MachineDataDB machineDataDB;
+    private RiskFactorDataDB riskFactorDataDB = new RiskFactorDataDB();
+
+    @Embedded
+    private PatientDataDB patientDataDB = new PatientDataDB();
+
+    @Embedded
+    private MachineDataDB machineDataDB = new MachineDataDB();
 
     @Embedded
     private PrimingCompositionDB primingCompositionDB;
@@ -75,17 +76,6 @@ public class HLMDataDB {
         paramDataDB.setHlmDataDB(this);
     }
 
-    public void addRisk(String risk) {
-        this.riskFactorList.add(risk);
-    }
-
-    public void addPreviousOperation(String operation) {
-        this.previousOperationList.add(operation);
-    }
-
-    public void addDiagnosis(String diagnosis) {
-        this.diagnosisData.add(diagnosis);
-    }
 
     // ----------------------------------------------- //
 }

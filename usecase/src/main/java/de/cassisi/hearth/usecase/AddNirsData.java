@@ -10,13 +10,15 @@ public interface AddNirsData extends UseCaseTemplate<InputData, OutputData> {
 
     class InputData {
         public long operationId;
-        public double leftSaturation;
-        public double rightSaturation;
+        public int leftSaturation;
+        public int rightSaturation;
         public LocalDateTime timestamp;
     }
 
     class OutputData {
         public boolean saved;
+        public int left;
+        public int right;
     }
 
 }

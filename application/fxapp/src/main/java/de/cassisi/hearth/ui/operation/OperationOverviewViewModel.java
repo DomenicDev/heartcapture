@@ -14,6 +14,15 @@ public class OperationOverviewViewModel implements ViewModel {
     private final StringProperty roomProperty = new SimpleStringProperty();
     private final StringProperty titleLabel = new SimpleStringProperty();
 
+    /*
+    LIVE RECORDING
+     */
+    private final IntegerProperty nirsLeftValue = new SimpleIntegerProperty();
+    private final IntegerProperty nirsRightValue = new SimpleIntegerProperty();
+
+    //***************************//
+    //      ACCESS METHODS       //
+
     public ObjectProperty<LocalDate> dateProperty() {
         return dateProperty;
     }
@@ -31,4 +40,11 @@ public class OperationOverviewViewModel implements ViewModel {
         return titleLabel;
     }
 
+    public IntegerProperty nirsLeftValue() {
+        return this.nirsLeftValue;
+    }
+
+    public IntegerProperty nirsRightValue() {
+        return this.nirsRightValue;
+    }
 }

@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Builder
+@ToString
 @AllArgsConstructor
 public final class HLMEventData {
 

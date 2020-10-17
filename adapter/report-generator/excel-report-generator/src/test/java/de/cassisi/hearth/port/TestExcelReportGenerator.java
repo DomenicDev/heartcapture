@@ -49,7 +49,9 @@ class TestExcelReportGenerator {
         List<AnesthesiaData> anesthesiaData = Arrays.asList(new AnesthesiaData(LocalDateTime.now(), 34), new AnesthesiaData(LocalDateTime.now().minusSeconds(-5), 55));
         List<NIRSData> nirsData = Arrays.asList(new NIRSData(32, 33, LocalDateTime.now()), new NIRSData(44, 56, LocalDateTime.now().plusSeconds(6)));
         List<InfusionData> infusionDataList = new ArrayList<>();
-        generator.generateReport(operation, hlmData, infusionDataList, anesthesiaData, nirsData);
+
+        ReportData reportData = new ReportData(operation, hlmData, nirsData, infusionDataList, anesthesiaData);
+        generator.generateReport(reportData);
     }
 
 }

@@ -6,16 +6,11 @@ import com.dlsc.formsfx.model.structure.Group;
 import com.dlsc.formsfx.view.renderer.FormRenderer;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
-import de.cassisi.hearth.ui.event.AddNirsDataEvent;
-import de.cassisi.hearth.ui.event.CreateOperationEvent;
-import de.cassisi.hearth.ui.event.OpenNewCreateOperationWindow;
-import de.cassisi.hearth.ui.event.ShowOperationView;
+import de.cassisi.hearth.ui.event.*;
 import de.cassisi.hearth.ui.interactor.UseCaseExecutor;
-import de.cassisi.hearth.ui.presenter.AddNirsDataPresenter;
-import de.cassisi.hearth.ui.presenter.CreateOperationPresenter;
+import de.cassisi.hearth.ui.presenter.*;
 import de.cassisi.hearth.ui.utils.EventBusProvider;
-import de.cassisi.hearth.usecase.AddNirsData;
-import de.cassisi.hearth.usecase.CreateOperation;
+import de.cassisi.hearth.usecase.*;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -35,13 +30,21 @@ public class GuiEventController {
     private final UseCaseExecutor useCaseExecutor;
     private final AddNirsDataPresenter addNirsDataPresenter;
     private final CreateOperationPresenter createOperationPresenter;
+    private final RefreshLatestOperationPresenter refreshLatestOperationPresenter;
+    private final OperationOverviewPresenter operationOverviewPresenter;
+    private final ReadHLMDataFilePresenter hlmDataFilePresenter;
+    private final GenerateReportPresenter generateReportPresenter;
 
     private final EventBus eventBus;
 
-    public GuiEventController(UseCaseExecutor useCaseExecutor, AddNirsDataPresenter addNirsDataPresenter, CreateOperationPresenter createOperationPresenter) {
+    public GuiEventController(UseCaseExecutor useCaseExecutor, AddNirsDataPresenter addNirsDataPresenter, CreateOperationPresenter createOperationPresenter, RefreshLatestOperationPresenter refreshLatestOperationPresenter1, OperationOverviewPresenter operationOverviewPresenter, ReadHLMDataFilePresenter hlmDataFilePresenter, GenerateReportPresenter generateReportPresenter) {
         this.useCaseExecutor = useCaseExecutor;
         this.addNirsDataPresenter = addNirsDataPresenter;
         this.createOperationPresenter = createOperationPresenter;
+        this.refreshLatestOperationPresenter = refreshLatestOperationPresenter1;
+        this.operationOverviewPresenter = operationOverviewPresenter;
+        this.hlmDataFilePresenter = hlmDataFilePresenter;
+        this.generateReportPresenter = generateReportPresenter;
 
         // register to event bus
         this.eventBus = EventBusProvider.getEventBus();
@@ -53,8 +56,8 @@ public class GuiEventController {
         AddNirsData.InputData inputData = new AddNirsData.InputData();
         inputData.timestamp = event.getTimestamp();
         inputData.leftSaturation = event.getLeft();
-        inputData.operationId = event.getOperationId();
         inputData.rightSaturation = event.getRight();
+        inputData.operationId = event.getOperationId();
         this.useCaseExecutor.addNirsData(inputData, addNirsDataPresenter);
     }
 
@@ -98,4 +101,38 @@ public class GuiEventController {
 
     }
 
+    @Subscribe
+    public void handle(RefreshLatestOperationDataEvent event) {
+        FindAllOperations.InputData inputData = new FindAllOperations.InputData();
+        inputData.limit = event.getLimit();
+        inputData.sortByLatest = event.isSortByLatest();
+        this.useCaseExecutor.findAllOperations(inputData, refreshLatestOperationPresenter);
+    }
+
+    @Subscribe
+    public void handle(OpenOperationOverviewEvent event) {
+        FindOperation.InputData inputData = new FindOperation.InputData();
+        inputData.operationId = event.getOperationId();
+        this.useCaseExecutor.findOperation(inputData, operationOverviewPresenter);
+        this.eventBus.post(new ShowOperationView());
+    }
+
+    @Subscribe
+    public void handle(AddHlmFileToOperationEvent event) {
+        ReadHLMDataFile.InputData inputData = new ReadHLMDataFile.InputData();
+        inputData.operationId = event.getOperationId();
+        inputData.hlmFile = event.getHlmFile();
+        this.useCaseExecutor.readHlmDataFile(inputData, hlmDataFilePresenter);
+    }
+
+    @Subscribe
+    public void handle(GenerateReportEvent event) {
+        GenerateReport.InputData inputData = new GenerateReport.InputData();
+        inputData.operationId = event.getOperationId();
+        getUseCaseExecutor().generateReportEvent(inputData, generateReportPresenter);
+    }
+
+    private UseCaseExecutor getUseCaseExecutor() {
+        return this.useCaseExecutor;
+    }
 }

@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
@@ -87,14 +86,14 @@
             <Label text="Hier kommt eine Beschreibung rein, die kurz die Live-Aufzeichnung erklärt." />
             <HBox spacing="15.0">
                <children>
-                  <Button mnemonicParsing="false" text="Live-Aufzeichnung starten" />
+                  <Button fx:id="startRecordingButton" mnemonicParsing="false" text="Live-Aufzeichnung starten" />
                   <Button mnemonicParsing="false" text="Live-Aufzeichnung beenden" />
                </children>
                <padding>
                   <Insets top="20.0" />
                </padding>
             </HBox>
-            <GridPane>
+            <GridPane maxHeight="200.0" minHeight="200.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -107,7 +106,7 @@
                   <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
                      <children>
                         <Label styleClass="live-capture-data-header" text="NIRS-Daten" />
-                        <Pane prefHeight="200.0" prefWidth="200.0" />
+                        <HBox fx:id="nirsContainer" />
                      </children>
                   </VBox>
                   <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
@@ -126,8 +125,8 @@
       </VBox>
       <VBox prefHeight="200.0" prefWidth="100.0">
          <children>
-            <Button mnemonicParsing="false" text="HLM-Daten einlesen" />
-            <Button mnemonicParsing="false" text="Datendokumentation generieren" />
+            <Button fx:id="readHLMFileButton" mnemonicParsing="false" text="HLM-Daten einlesen" />
+            <Button fx:id="generateReportButton" mnemonicParsing="false" text="Datendokumentation generieren" />
          </children>
       </VBox>
       <Label text="Label" />

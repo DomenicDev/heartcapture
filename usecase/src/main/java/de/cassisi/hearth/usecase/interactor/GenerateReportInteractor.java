@@ -26,14 +26,18 @@ public class GenerateReportInteractor implements GenerateReport {
         InputValidator.checkIdPositive(operationId);
 
         // gather data
+        ReportData reportData = repository.getReportData(operationId);
+        /*
         Operation operation = repository.findOperation(operationId);
         HLMData hlmData = repository.findHLMData(operationId);
         List<AnesthesiaData> anesthesiaData = repository.findAnesthesiaData(operationId);
         List<InfusionData> infusionData = repository.findInfusionData(operationId);
         List<NIRSData> nirsData = repository.findNirsData(operationId);
 
+         */
+
         // generate file
-        byte[] reportFile = fileGenerator.generateReport(operation, hlmData, infusionData, anesthesiaData, nirsData);
+        byte[] reportFile = fileGenerator.generateReport(reportData);
 
         // callback output handler
         OutputData outputData = new OutputData();

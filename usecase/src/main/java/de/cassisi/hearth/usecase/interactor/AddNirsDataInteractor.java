@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 public class AddNirsDataInteractor implements AddNirsData {
 
-    private AddNirsDataRepository repository;
+    private final AddNirsDataRepository repository;
 
     public AddNirsDataInteractor(AddNirsDataRepository repository) {
         this.repository = repository;
@@ -20,8 +20,8 @@ public class AddNirsDataInteractor implements AddNirsData {
     public void execute(InputData input, OutputHandler<OutputData> outputHandler) {
         // extract input data
         long operationId = input.operationId;
-        double left = input.leftSaturation;
-        double right = input.rightSaturation;
+        int left = input.leftSaturation;
+        int  right = input.rightSaturation;
         LocalDateTime timestamp = input.timestamp;
 
         // validate input data
@@ -39,6 +39,8 @@ public class AddNirsDataInteractor implements AddNirsData {
         // callback output handler
         OutputData outputData = new OutputData();
         outputData.saved = true;
+        outputData.left = left;
+        outputData.right = right;
         outputHandler.handle(outputData);
     }
 }

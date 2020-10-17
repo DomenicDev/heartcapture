@@ -17,6 +17,6 @@ public class PrimingCompositionDB {
     private double totalPriming;
 
     @ElementCollection
-    private final List<PrimingDataDB> primingDataDBList = new ArrayList<>();
+    private final List<PrimingDataDB> primingData = new ArrayList<>();
 
 }

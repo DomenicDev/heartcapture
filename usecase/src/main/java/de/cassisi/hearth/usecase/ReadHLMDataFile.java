@@ -1,5 +1,6 @@
 package de.cassisi.hearth.usecase;
 
+import de.cassisi.hearth.usecase.dto.SimpleOperationData;
 import de.cassisi.hearth.usecase.template.UseCaseTemplate;
 
 import java.io.File;
@@ -14,7 +15,7 @@ public interface ReadHLMDataFile extends UseCaseTemplate<InputData, OutputData> 
     }
 
     class OutputData {
-
+        public SimpleOperationData simpleOperationData;
     }
 
 }

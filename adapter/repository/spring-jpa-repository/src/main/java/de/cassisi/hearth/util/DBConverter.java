@@ -3,16 +3,26 @@ package de.cassisi.hearth.util;
 import de.cassisi.hearth.entity.*;
 import de.cassisi.hearth.repository.model.*;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.NamingConventions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Converts Entity object to the corresponding database objects.
  */
 public final class DBConverter {
 
-    private static ModelMapper mapper = new ModelMapper();
+    private static final ModelMapper mapper = new ModelMapper();
+    private static final  ModelMapper builderMapper = new ModelMapper();
+
+    static {
+        builderMapper.getConfiguration().setDestinationNamingConvention(NamingConventions.builder());
+        builderMapper.addConverter(context -> builderMapper.map(context.getSource(), Priming.PrimingBuilder.class).build(), PrimingDataDB.class, Priming.class);
+    }
+
+    // ************** ENTITY TO DB ****************** //
 
     public static HlmEventDataDB convert(HLMEventData data) {
         return mapper.map(data, HlmEventDataDB.class);
@@ -34,12 +44,166 @@ public final class DBConverter {
         return mapper.map(machineData, MachineDataDB.class);
     }
 
+    public static DiagnosisDataDB convert(DiagnosisData diagnosisData) {
+        DiagnosisDataDB diagnosisDataDB = new DiagnosisDataDB();
+        diagnosisDataDB.getDiagnosisData().addAll(diagnosisData.getDiagnosisData());
+        return diagnosisDataDB;
+    }
+
+    public static HlmOperationDataDB convert(HlmOperationData hlmOperationData) {
+        HlmOperationDataDB hlmOperationDataDB = new HlmOperationDataDB();
+        hlmOperationData.getOperation().addAll(hlmOperationData.getOperation());
+        return hlmOperationDataDB;
+    }
+
+    public static RiskFactorDataDB convert(RiskFactorData riskFactorData) {
+        RiskFactorDataDB riskFactorDataDB = new RiskFactorDataDB();
+        riskFactorData.getRisks().addAll(riskFactorData.getRisks());
+        return riskFactorDataDB;
+    }
+
     public static PrimingCompositionDB convert(PrimingComposition primingComposition) {
         PrimingCompositionDB db = new PrimingCompositionDB();
         db.setTotalPriming(primingComposition.getTotalPriming());
         List<PrimingDataDB> primingDataDBList = new ArrayList<>();
         primingComposition.getPrimingData().forEach(data -> primingDataDBList.add(mapper.map(data, PrimingDataDB.class)));
-        db.getPrimingDataDBList().addAll(primingDataDBList);
+        db.getPrimingData().addAll(primingDataDBList);
         return db;
+    }
+
+    //___________________________________________________//
+    // ******************* DB TO ENTITY **************** //
+
+    public static Operation convert(OperationDB operationDB) {
+        return new Operation(
+                operationDB.getId(),
+                operationDB.getDate(),
+                operationDB.getRoomNr(),
+                operationDB.isNirsDataAvailable(),
+                operationDB.isInfusionDataAvailable(),
+                operationDB.isAnesthesiaDataAvailable(),
+                operationDB.isHlmDataAvailable(),
+                operationDB.isLocked()
+        );
+    }
+
+    public static HLMData convert(HLMDataDB hlmDataDB) {
+        List<HLMEventData> eventData = convertEventData(hlmDataDB.getHlmEventDataDBList());
+        List<HlmBloodSample> bloodSamples = convertBloodSamples(hlmDataDB.getHlmBloodSampleDBList());
+        List<HlmParamData> paramData = convertParamData(hlmDataDB.getHlmParamDataDBS());
+
+        DiagnosisData diagnosisData = convert(hlmDataDB.getDiagnosisDataDB());
+        HlmOperationData hlmOperationData = convert(hlmDataDB.getHlmOperationDataDB());
+        RiskFactorData riskFactorData = convert(hlmDataDB.getRiskFactorDataDB());
+        PatientData patientData = convert(hlmDataDB.getPatientDataDB());
+        MachineData machineData = convert(hlmDataDB.getMachineDataDB());
+        PrimingComposition primingComposition = convert(hlmDataDB.getPrimingCompositionDB());
+
+        return HLMData.builder()
+                .eventList(eventData)
+                .bloodSamples(bloodSamples)
+                .paramData(paramData)
+                .diagnosisData(diagnosisData)
+                .operationData(hlmOperationData)
+                .riskFactorData(riskFactorData)
+                .patientData(patientData)
+                .machineData(machineData)
+                .primingComposition(primingComposition)
+                .build();
+    }
+
+    private static PrimingComposition convert(PrimingCompositionDB primingCompositionDB) {
+        return builderMapper.map(primingCompositionDB, PrimingComposition.PrimingCompositionBuilder.class).build();
+    }
+
+    private static MachineData convert(MachineDataDB machineDataDB) {
+        return builderMapper.map(machineDataDB, MachineData.MachineDataBuilder.class).build();
+    }
+
+    private static PatientData convert(PatientDataDB patientDataDB) {
+        return builderMapper.map(patientDataDB, PatientData.PatientDataBuilder.class).build();
+    }
+
+    private static RiskFactorData convert(RiskFactorDataDB riskFactorDataDB) {
+        return new RiskFactorData(riskFactorDataDB.getRiskFactors());
+    }
+
+    private static HlmOperationData convert(HlmOperationDataDB hlmOperationDataDB) {
+        return new HlmOperationData(hlmOperationDataDB.getPreviousOperations());
+    }
+
+    public static List<HlmBloodSample> convertBloodSamples(List<HlmBloodSampleDB> hlmBloodSampleDBList) {
+        List<HlmBloodSample> bloodSamples = new ArrayList<>();
+        hlmBloodSampleDBList.forEach(sample -> bloodSamples.add(convert(sample)));
+        return bloodSamples;
+    }
+
+    public static HlmBloodSample convert(HlmBloodSampleDB bloodSampleDB) {
+        return builderMapper.map(bloodSampleDB, HlmBloodSample.HlmBloodSampleBuilder.class).build();
+    }
+
+    public static HLMEventData convert(HlmEventDataDB eventDataDB) {
+        return builderMapper.map(eventDataDB, HLMEventData.HLMEventDataBuilder.class).build();
+    }
+
+    public static List<HLMEventData> convertEventData(List<HlmEventDataDB> hlmEventDataDBList) {
+        List<HLMEventData> eventDataList = new ArrayList<>();
+        hlmEventDataDBList.forEach(event -> eventDataList.add(convert(event)));
+        return eventDataList;
+    }
+
+    public static List<HlmParamData> convertParamData(List<HlmParamDataDB> paramDataDB) {
+        List<HlmParamData> paramData = new ArrayList<>();
+        paramDataDB.forEach(data -> paramData.add(convert(data)));
+        return paramData;
+    }
+
+    private static HlmParamData convert(HlmParamDataDB data) {
+        return builderMapper.map(data, HlmParamData.HlmParamDataBuilder.class).build();
+    }
+
+    public static DiagnosisData convert(DiagnosisDataDB diagnosisDataDB) {
+        return new DiagnosisData(diagnosisDataDB.getDiagnosisData());
+    }
+
+    public static List<NIRSData> convertNIRSData(Set<NirsDataDB> nirsDataDB) {
+        List<NIRSData> nirsData = new ArrayList<>();
+        nirsDataDB.forEach(data -> nirsData.add(convert(data)));
+        return nirsData;
+    }
+
+    private static NIRSData convert(NirsDataDB data) {
+        return new NIRSData(data.getLeftSaturation(), data.getRightSaturation(), data.getTimestamp());
+    }
+
+
+    public static List<InfusionData> convertInfusionData(Set<InfusionDataDB> infusionDataDB) {
+        List<InfusionData> infusionData = new ArrayList<>();
+        infusionDataDB.forEach(data -> infusionData.add(convert(data)));
+        return infusionData;
+    }
+
+    private static InfusionData convert(InfusionDataDB data) {
+        return new InfusionData(data.getTimestamp(), convertPerfusorData(data.getInfusionData()));
+    }
+
+    public static List<PerfusorData> convertPerfusorData(List<PerfusorDataDB> infusionData) {
+        List<PerfusorData> perfusorData = new ArrayList<>();
+        infusionData.forEach(data -> perfusorData.add(convert(data)));
+        return perfusorData;
+    }
+
+    public static PerfusorData convert(PerfusorDataDB data) {
+        return new PerfusorData(data.getInfusionName(), data.getRate());
+    }
+
+    public static List<AnesthesiaData> convertAnesthesiaData(Set<AnesthesiaDataDB> anesthesiaDataDB) {
+        List<AnesthesiaData> anesthesiaData = new ArrayList<>();
+        anesthesiaDataDB.forEach(data -> anesthesiaData.add(convert(data)));
+        return anesthesiaData;
+    }
+
+    public static AnesthesiaData convert(AnesthesiaDataDB data) {
+        return new AnesthesiaData(data.getTimestamp(), data.getDepthOfAnesthesia());
     }
 }

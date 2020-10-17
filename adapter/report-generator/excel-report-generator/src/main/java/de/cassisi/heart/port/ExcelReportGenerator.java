@@ -8,12 +8,13 @@ import org.apache.poi.xssf.usermodel.XSSFFormulaEvaluator;
 import org.modelmapper.ModelMapper;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
 
 public class ExcelReportGenerator implements ReportFileGenerator {
 
@@ -21,9 +22,15 @@ public class ExcelReportGenerator implements ReportFileGenerator {
     private CellStyle timeStyle;
 
     @Override
-    public byte[] generateReport(Operation operation, HLMData hlmData, List<InfusionData> infusionData, List<AnesthesiaData> anesthesiaData, List<NIRSData> nirsData) {
+    public byte[] generateReport(ReportData reportData) {
         try {
-            Workbook template = WorkbookFactory.create(new File(ExcelReportGenerator.class.getClassLoader().getResource("report_template.xlsx").toURI()));
+            Operation operation = reportData.getOperation();
+            HLMData hlmData = reportData.getHlmData();
+            List<InfusionData> infusionData = reportData.getInfusionData();
+            List<AnesthesiaData> anesthesiaData = reportData.getAnesthesiaData();
+            List<NIRSData> nirsData = reportData.getNirsData();
+
+            Workbook template = WorkbookFactory.create(Objects.requireNonNull(ExcelReportGenerator.class.getClassLoader().getResourceAsStream("report_template.xlsx")));
 
             CreationHelper createHelper = template.getCreationHelper();
             timeStyle = template.createCellStyle();
@@ -81,8 +88,6 @@ public class ExcelReportGenerator implements ReportFileGenerator {
 
             this.sheet = null; // reset
             return byteArrayOutputStream.toByteArray();
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

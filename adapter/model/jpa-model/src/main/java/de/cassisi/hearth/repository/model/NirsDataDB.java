@@ -17,13 +17,10 @@ public class NirsDataDB {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private LocalDateTime timestamp;
-    private double leftSaturation;
-    private double rightSaturation;
+    private int leftSaturation;
+    private int rightSaturation;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "operationId", nullable = false)
     private OperationDB operation;
-
-
 
 }

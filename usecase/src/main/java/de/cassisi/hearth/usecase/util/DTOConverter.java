@@ -6,11 +6,7 @@ import de.cassisi.hearth.usecase.dto.SimpleOperationData;
 public final class DTOConverter {
 
     public static SimpleOperationData toSimpleOperationData(Operation operation) {
-        SimpleOperationData simpleOperationData = new SimpleOperationData();
-        simpleOperationData.id = operation.getId();
-        simpleOperationData.localDate = operation.getDate();
-        simpleOperationData.rommBr = operation.getRoomNr();
-        return simpleOperationData;
+        return new SimpleOperationData(operation.getId(), operation.getDate(), operation.getRoomNr());
     }
 
 }

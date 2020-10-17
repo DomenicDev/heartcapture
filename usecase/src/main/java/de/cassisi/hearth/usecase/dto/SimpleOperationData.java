@@ -1,22 +1,23 @@
 package de.cassisi.hearth.usecase.dto;
 
+import lombok.Getter;
+
 import java.time.LocalDate;
 
-
+@Getter
 public class SimpleOperationData {
 
-    public long id;
-    public LocalDate localDate;
-    public String rommBr;
+    private final long id;
+    private final LocalDate date;
+    private final String room;
     // more to come
 
 
-    public SimpleOperationData() {
+    public SimpleOperationData(long id, LocalDate date, String room) {
+        this.id = id;
+        this.date = date;
+        this.room = room;
     }
 
-    public SimpleOperationData(long id, LocalDate localDate, String rommBr) {
-        this.id = id;
-        this.localDate = localDate;
-        this.rommBr = rommBr;
-    }
+
 }

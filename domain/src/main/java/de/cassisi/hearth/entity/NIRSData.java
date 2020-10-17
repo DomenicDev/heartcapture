@@ -4,21 +4,21 @@ import java.time.LocalDateTime;
 
 public final class NIRSData {
 
-    private final double leftSaturation;
-    private final double rightSaturation;
+    private final int leftSaturation;
+    private final int rightSaturation;
     private final LocalDateTime timestamp;
 
-    public NIRSData(double leftSaturation, double rightSaturation, LocalDateTime timestamp) {
+    public NIRSData(int leftSaturation, int rightSaturation, LocalDateTime timestamp) {
         this.leftSaturation = leftSaturation;
         this.rightSaturation = rightSaturation;
         this.timestamp = timestamp;
     }
 
-    public double getLeftSaturation() {
+    public int getLeftSaturation() {
         return leftSaturation;
     }
 
-    public double getRightSaturation() {
+    public int getRightSaturation() {
         return rightSaturation;
     }
 

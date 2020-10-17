@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface ReportFileGenerator {
 
-    byte[] generateReport(Operation operation, HLMData hlmData, List<InfusionData> infusionData, List<AnesthesiaData> anesthesiaData, List<NIRSData> nirsData);
+    byte[] generateReport(ReportData reportData);
 
 }

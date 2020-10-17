@@ -80,8 +80,8 @@ class TimeData implements Comparable<TimeData> {
     // ------------------------------
 
     // NIRS DATA
-    private Double leftSaturation;
-    private Double rightSaturation;
+    private Integer leftSaturation;
+    private Integer rightSaturation;
 
 
     // BIS
@@ -89,9 +89,9 @@ class TimeData implements Comparable<TimeData> {
 
 
     // PERFUSORS
-    private Integer perfusorArterenol;
-    private Integer perfusorVasopressin;
-    private Integer perfusorSufentanil;
+    private Double perfusorArterenol;
+    private Double perfusorVasopressin;
+    private Double perfusorSufentanil;
 
     //------------------------------------------
 
