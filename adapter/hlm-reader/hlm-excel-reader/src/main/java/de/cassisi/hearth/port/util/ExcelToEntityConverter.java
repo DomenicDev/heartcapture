@@ -64,10 +64,12 @@ public final class ExcelToEntityConverter {
         if (eventType == null) return EventType.UNKNOWN;
         if ("ACT".equals(eventType)) return EventType.ACT;
         if ("Bypass Beginn".equals(eventType)) return EventType.BYPASS_BEGINN;
-        if ("Aorta Zu".equals(eventType)) return EventType.AORTA_ZU;
         if ("Kardioplegie".equals(eventType)) return EventType.KARDIOPLEGIE;
         if ("Nabi 8,4%".equals(eventType)) return EventType.NABI_8_4_PC;
         if ("Jonosteril".equals(eventType)) return EventType.JONOSTERIL;
+        if ("Heparin".equals(eventType)) return EventType.HEPARIN;
+        if ("Haemofiltration".equals(eventType)) return EventType.HAEMOFILTRATION;
+        if ("Aorta Zu".equals(eventType)) return EventType.AORTA_ZU;
         if ("Aorta Auf".equals(eventType)) return EventType.AORTA_AUF;
         if ("Reperfusion Beginn".equals(eventType)) return EventType.REPERFUSION_BEGINN;
         if ("Defibrillation".equals(eventType)) return EventType.DEFIBRILLATION;
@@ -75,6 +77,12 @@ public final class ExcelToEntityConverter {
         if ("Reperfusion Ende".equals(eventType)) return EventType.REPERFUSION_ENDE;
         if ("Maschinenblut".equals(eventType)) return EventType.MASCHINENBLUT;
         if ("Restblut Perf,".equals(eventType)) return EventType.RESTBLUT_PERF;
+        if ("Level Alarm Ein".equals(eventType)) return EventType.LEVEL_ALARM_EIN;
+        if ("Level Alarm Aus".equals(eventType)) return EventType.LEVEL_ALARM_AUS;
+        if ("Reservoirvolumen".equals(eventType)) return EventType.RESERVOIRVOLUMEN;
+        if ("Cell-Saver abgesaugt".equals(eventType)) return EventType.CELL_SAVER_ABGESAUGT;
+        if ("CS-EK".equals(eventType)) return EventType.CS_EK;
+        if ("H\u00E4mofiltrat".equals(eventType)) return EventType.HAEMOFILTRAT;
         return EventType.UNKNOWN;
     }
 

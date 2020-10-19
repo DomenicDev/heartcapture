@@ -36,7 +36,6 @@ public final class HLMEventData {
         REPERFUSION_ENDE,
         MASCHINENBLUT,
         RESTBLUT_PERF,
-        LEVELSTAND,
         HEPARIN,
         CS_EK,
         FREMDBLUT,
@@ -46,6 +45,9 @@ public final class HLMEventData {
         CELL_SAVER_ABGESAUGT,
         HAEMOFILTRATION,
         CYTOKIN_ADSORPTION,
+        LEVEL_ALARM_AUS,
+        LEVEL_ALARM_EIN,
+        RESERVOIRVOLUMEN
     }
 
     public enum Unit {

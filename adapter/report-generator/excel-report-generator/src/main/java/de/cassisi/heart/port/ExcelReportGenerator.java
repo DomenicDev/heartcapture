@@ -212,9 +212,6 @@ public class ExcelReportGenerator implements ReportFileGenerator {
             if (EventType.REPERFUSION_ENDE.equals(event.getType())) {
                 timeData.setReperfusion(0);
             }
-            if (EventType.LEVELSTAND.equals(event.getType())) {
-                timeData.setLevelstand(String.valueOf(event.getAmount()));
-            }
             if (EventType.KARDIOPLEGIE.equals(event.getType())) {
                 timeData.setKardioplegie(event.getAmount());
             }
@@ -227,20 +224,23 @@ public class ExcelReportGenerator implements ReportFileGenerator {
             if (EventType.NABI_8_4_PC.equals(event.getType())) {
                 timeData.setNabi_8_4(event.getAmount());
             }
+            if (EventType.RESERVOIRVOLUMEN.equals(event.getType())) {
+                timeData.setLevelstand(event.getAmount());
+            }
             if (EventType.CS_EK.equals(event.getType())) {
-                timeData.setCs_ek("TODO -> CS-EK");
+                timeData.setCs_ek(event.getAmount());
             }
             if (EventType.FREMDBLUT.equals(event.getType())) {
-                timeData.setFremdblut("FREMDBLUT");
+                timeData.setFremdblut("TODO");
             }
             if (EventType.HUMANALBUMIN_5.equals(event.getType())) {
-                timeData.setHumanalbumin_5pc(String.valueOf(event.getAmount()));
+                timeData.setHumanalbumin_5pc("TODO");
             }
             if (EventType.HUMANALBUMIN_20.equals(event.getType())) {
-                timeData.setHumanalbumin_20pc(String.valueOf(event.getAmount()));
+                timeData.setHumanalbumin_20pc("TODO");
             }
             if (EventType.HAEMOFILTRAT.equals(event.getType())) {
-                timeData.setHaemofiltrat("haemofiltrat data ????");
+                timeData.setHaemofiltrat(event.getAmount());
             }
             if (EventType.RESTBLUT_PERF.equals(event.getType())) {
                 timeData.setRestblut_perf(event.getAmount());
@@ -249,10 +249,10 @@ public class ExcelReportGenerator implements ReportFileGenerator {
                 timeData.setMaschinenblut(event.getAmount());
             }
             if (EventType.CELL_SAVER_ABGESAUGT.equals(event.getType())) {
-                timeData.setCell_saver_abgesaugt("TODO!!!");
+                timeData.setCell_saver_abgesaugt(event.getAmount());
             }
             if (EventType.DEFIBRILLATION.equals(event.getType())) {
-                timeData.setDefibrillation("TODO!");
+                timeData.setDefibrillation("DEFIBRILLATION");
             }
             if (EventType.ACT.equals(event.getType())) {
                 timeData.setAct(event.getAmount());
