@@ -1,28 +1,20 @@
 package de.cassisi.hearth.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NonNull;
+
 import java.time.LocalDateTime;
 
+/**
+ * Represents one sample of NIRS data.
+ */
+@Getter
+@AllArgsConstructor
 public final class NIRSData {
 
+    @NonNull private final LocalDateTime timestamp;
     private final int leftSaturation;
     private final int rightSaturation;
-    private final LocalDateTime timestamp;
 
-    public NIRSData(int leftSaturation, int rightSaturation, LocalDateTime timestamp) {
-        this.leftSaturation = leftSaturation;
-        this.rightSaturation = rightSaturation;
-        this.timestamp = timestamp;
-    }
-
-    public int getLeftSaturation() {
-        return leftSaturation;
-    }
-
-    public int getRightSaturation() {
-        return rightSaturation;
-    }
-
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
 }

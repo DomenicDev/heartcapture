@@ -182,7 +182,7 @@ public final class DBConverter {
     }
 
     public static NIRSData convert(NirsDataDB data) {
-        return new NIRSData(data.getLeftSaturation(), data.getRightSaturation(), data.getTimestamp());
+        return new NIRSData(data.getTimestamp(), data.getLeftSaturation(), data.getRightSaturation());
     }
 
 

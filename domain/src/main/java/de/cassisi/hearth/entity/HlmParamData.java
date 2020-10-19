@@ -4,6 +4,10 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
+/**
+ * HlmParamData represents one specific sample from the data recording
+ * of the hearth lung machine.
+ */
 @Getter
 @Builder
 @AllArgsConstructor

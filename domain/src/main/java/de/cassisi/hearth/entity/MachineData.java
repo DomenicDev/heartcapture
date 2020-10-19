@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 
+/**
+ * Covers information about the used oxygenator, filter and cannulas.
+ */
 @Getter
 @Builder
 @AllArgsConstructor

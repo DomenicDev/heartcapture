@@ -394,7 +394,7 @@ class TestDBConverter {
     void convertInfusionData() {
         InfusionDataDB db = new InfusionDataDB(1L, LocalDateTime.now(), null);
         InfusionData entity = DBConverter.convert(db);
-        assertEquals(db.getTimestamp(), entity.getLocalDateTime());
+        assertEquals(db.getTimestamp(), entity.getTimestamp());
     }
 
     @Test

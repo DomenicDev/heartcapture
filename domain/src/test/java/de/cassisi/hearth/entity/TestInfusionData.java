@@ -17,7 +17,7 @@ class TestInfusionData {
 
         InfusionData infusionData = new InfusionData(now, perfusorData);
 
-        assertEquals(now, infusionData.getLocalDateTime());
+        assertEquals(now, infusionData.getTimestamp());
         assertEquals(perfusorData, infusionData.getPerfusorDataList());
     }
 

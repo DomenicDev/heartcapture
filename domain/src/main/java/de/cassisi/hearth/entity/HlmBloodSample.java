@@ -4,6 +4,9 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
+/**
+ * Immutable class that represents blood sample data which is captured during surgery.
+ */
 @Getter
 @Builder
 @NoArgsConstructor

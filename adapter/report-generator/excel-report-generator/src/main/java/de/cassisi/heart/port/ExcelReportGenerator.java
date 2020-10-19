@@ -216,7 +216,7 @@ public class ExcelReportGenerator implements ReportFileGenerator {
     private void convertInfusionData(List<InfusionData> infusionData, List<TimeData> timeDataList) {
         infusionData.forEach(data -> {
 
-            TimeData timeData = new TimeData(data.getLocalDateTime());
+            TimeData timeData = new TimeData(data.getTimestamp());
             boolean hasRelevantPerfusorData = false;
 
             // look for relevant perfusor data

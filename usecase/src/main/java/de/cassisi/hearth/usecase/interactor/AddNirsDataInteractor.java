@@ -31,7 +31,7 @@ public class AddNirsDataInteractor implements AddNirsData {
         InputValidator.checkNirsSaturation(right);
 
         // repackage data
-        NIRSData nirsData = new NIRSData(left, right, timestamp);
+        NIRSData nirsData = new NIRSData(timestamp, left, right);
 
         // save in repository
         repository.addNirsDataToOperation(operationId, nirsData);

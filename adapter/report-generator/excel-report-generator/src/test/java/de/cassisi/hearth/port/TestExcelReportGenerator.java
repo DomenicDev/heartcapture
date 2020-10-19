@@ -47,11 +47,16 @@ class TestExcelReportGenerator {
                 bloodSamples, paramData, null, null, null, patientData, new MachineData("oxy", "haemo", "kanuel-art", "kanuel-ven", "kanuel-ven-2"), new PrimingComposition(0, Arrays.asList(new Priming("a", 10, "ml"), new Priming("b", 20, "ml"))));
 
         List<AnesthesiaData> anesthesiaData = Arrays.asList(new AnesthesiaData(LocalDateTime.now(), 34), new AnesthesiaData(LocalDateTime.now().minusSeconds(-5), 55));
-        List<NIRSData> nirsData = Arrays.asList(new NIRSData(32, 33, LocalDateTime.now()), new NIRSData(44, 56, LocalDateTime.now().plusSeconds(6)));
+        List<NIRSData> nirsData = Arrays.asList(generateNIRSData(LocalDateTime.now(), 32, 33), generateNIRSData(LocalDateTime.now().plusSeconds(6), 44, 56));
         List<InfusionData> infusionDataList = new ArrayList<>();
 
         ReportData reportData = new ReportData(operation, hlmData, nirsData, infusionDataList, anesthesiaData);
         generator.generateReport(reportData);
+    }
+
+
+    private NIRSData generateNIRSData(LocalDateTime timestamp, int left, int right) {
+        return new NIRSData(timestamp, left, right);
     }
 
 }

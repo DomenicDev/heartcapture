@@ -9,7 +9,6 @@ import de.cassisi.hearth.repository.model.OperationDB;
 import de.cassisi.hearth.repository.model.PerfusorDataDB;
 import de.cassisi.hearth.usecase.exception.OperationNotFoundException;
 import de.cassisi.hearth.usecase.port.AddInfusionDataRepository;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,7 +50,7 @@ public class AddInfusionDataJpaRepository implements AddInfusionDataRepository {
 
         // convert to infusion database entity
         InfusionDataDB infusionDataDB = InfusionDataDB.builder()
-                .timestamp(infusionData.getLocalDateTime())
+                .timestamp(infusionData.getTimestamp())
                 .operation(operationDB)
                 .build();
 

@@ -5,9 +5,11 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
+/**
+ * Representation of one user defined event during surgery.
+ */
 @Getter
 @Builder
-@ToString
 @AllArgsConstructor
 public final class HLMEventData {
 
