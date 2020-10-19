@@ -9,3 +9,7 @@ dependencies {
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
 }
+
+test {
+    useJUnitPlatform()
+}
