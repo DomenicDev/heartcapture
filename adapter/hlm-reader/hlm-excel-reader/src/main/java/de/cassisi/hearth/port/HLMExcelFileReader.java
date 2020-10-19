@@ -77,8 +77,6 @@ public class HLMExcelFileReader implements HLMFileReader {
             fixDateTime(eventExcelData, initDateTime);
             fixDateTime(bloodSampleExcelData, initDateTime);
 
-            // delete helper file
-            tableData.delete();
 
             // create HLM Data object and return data
             List<HLMEventData> eventData = ExcelToEntityConverter.convertToEventData(eventExcelData);
@@ -92,6 +90,11 @@ public class HLMExcelFileReader implements HLMFileReader {
             MachineData machineData = ExcelToEntityConverter.convertToMachineData(machineExcelData);
             PrimingComposition primingComposition = ExcelToEntityConverter.convertToPrimingComposition(primingExcelData);
 
+            // close input stream and delete helper file
+            originalWorkbook.close();
+            tableData.delete();
+
+
             return HLMData.builder()
                     .eventList(eventData)
                     .paramData(paramData)
@@ -103,8 +106,6 @@ public class HLMExcelFileReader implements HLMFileReader {
                     .machineData(machineData)
                     .primingComposition(primingComposition)
                     .build();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -241,6 +242,6 @@ public class HLMExcelFileReader implements HLMFileReader {
      * Helper class for representing (inner) tables within the original excel sheet.
      */
     private static class InnerTable {
-        private List<Row> rows = new ArrayList<>();
+        private final List<Row> rows = new ArrayList<>();
     }
 }
