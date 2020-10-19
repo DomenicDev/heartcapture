@@ -1,10 +1,7 @@
 package de.cassisi.hearth;
 
 import de.cassisi.heart.port.ExcelReportGenerator;
-import de.cassisi.hearth.port.CreateOperationJpaRepository;
-import de.cassisi.hearth.port.FindAllOperationsJpaRepository;
-import de.cassisi.hearth.port.FindOperationJpaRepository;
-import de.cassisi.hearth.port.HLMExcelFileReader;
+import de.cassisi.hearth.port.*;
 import de.cassisi.hearth.usecase.*;
 import de.cassisi.hearth.usecase.interactor.*;
 import de.cassisi.hearth.usecase.port.*;
@@ -17,6 +14,7 @@ public class MySpringConfig {
     private final CreateOperationJpaRepository createOperationJpaRepository;
     private final AddInfusionDataRepository addInfusionDataRepository;
     private final AddNirsDataRepository addNirsDataRepository;
+    private final AddAnesthesiaDataJpaRepository addAnesthesiaDataJpaRepository;
     private final ReadHLMDataFileRepository readHLMDataFileRepository;
     private final FindAllOperationsJpaRepository findAllOperationsJpaRepository;
     private final FindOperationJpaRepository findOperationJpaRepository;
@@ -25,7 +23,7 @@ public class MySpringConfig {
     private final HLMFileReader hlmFileReader = new HLMExcelFileReader();
     private final ReportFileGenerator reportFileGenerator = new ExcelReportGenerator();
 
-    public MySpringConfig(CreateOperationJpaRepository createOperationJpaRepository, AddInfusionDataRepository addInfusionDataRepository, AddNirsDataRepository addNirsDataRepository, ReadHLMDataFileRepository readHLMDataFileRepository, FindAllOperationsJpaRepository findAllOperationsJpaRepository, FindOperationJpaRepository findOperationJpaRepository, GenerateReportRepository generateReportRepository) {
+    public MySpringConfig(CreateOperationJpaRepository createOperationJpaRepository, AddInfusionDataRepository addInfusionDataRepository, AddNirsDataRepository addNirsDataRepository, ReadHLMDataFileRepository readHLMDataFileRepository, FindAllOperationsJpaRepository findAllOperationsJpaRepository, FindOperationJpaRepository findOperationJpaRepository, GenerateReportRepository generateReportRepository, AddAnesthesiaDataJpaRepository addAnesthesiaDataJpaRepository) {
         this.createOperationJpaRepository = createOperationJpaRepository;
         this.addInfusionDataRepository = addInfusionDataRepository;
         this.addNirsDataRepository = addNirsDataRepository;
@@ -33,6 +31,7 @@ public class MySpringConfig {
         this.findAllOperationsJpaRepository = findAllOperationsJpaRepository;
         this.findOperationJpaRepository = findOperationJpaRepository;
         this.generateReportRepository = generateReportRepository;
+        this.addAnesthesiaDataJpaRepository = addAnesthesiaDataJpaRepository;
     }
 
     @Bean
@@ -58,6 +57,11 @@ public class MySpringConfig {
     @Bean
     public AddNirsData addNirsData() {
         return new AddNirsDataInteractor(addNirsDataRepository);
+    }
+
+    @Bean
+    public AddAnesthesiaData addAnesthesiaData() {
+        return new AddAnesthesiaDataInteractor(addAnesthesiaDataJpaRepository);
     }
 
     @Bean

@@ -1,6 +1,5 @@
 package de.cassisi.hearth.repository.model;
 
-import de.cassisi.hearth.entity.HlmOperationData;
 import lombok.*;
 
 import javax.persistence.*;
@@ -69,6 +68,7 @@ public class HLMDataDB {
 
     public void add(HlmBloodSampleDB hlmBloodSampleDB) {
         this.hlmBloodSampleDBList.add(hlmBloodSampleDB);
+        hlmBloodSampleDB.setHlmDataDB(this);
     }
 
     public void add(HlmParamDataDB paramDataDB) {

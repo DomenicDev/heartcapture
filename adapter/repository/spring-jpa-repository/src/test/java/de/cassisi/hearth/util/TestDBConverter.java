@@ -324,6 +324,8 @@ class TestDBConverter {
         PrimingComposition entity = DBConverter.convert(db);
         assertEquals(primingComposition.getTotalPriming(), entity.getTotalPriming());
         assertEquals(primingComposition.getPrimingData().size(), entity.getPrimingData().size());
+        assertEquals(primings.get(0), entity.getPrimingData().get(0));
+        assertEquals(primings.get(1), entity.getPrimingData().get(1));
     }
 
 

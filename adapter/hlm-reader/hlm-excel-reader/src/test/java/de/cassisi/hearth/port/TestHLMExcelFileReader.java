@@ -1,5 +1,6 @@
 package de.cassisi.hearth.port;
 
+import de.cassisi.hearth.entity.HLMData;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -12,7 +13,8 @@ class TestHLMExcelFileReader {
     void testSameDay() throws URISyntaxException {
         HLMExcelFileReader reader = new HLMExcelFileReader();
         File excelFile = new File(Objects.requireNonNull(TestHLMExcelFileReader.class.getClassLoader().getResource("hlm_test_data_1.xlsx")).toURI());
-        reader.readHLMFile(excelFile);
+        HLMData hlmData = reader.readHLMFile(excelFile);
+        System.out.println(hlmData);
     }
 
     @Test

@@ -1,9 +1,6 @@
 package de.cassisi.hearth;
 
-import de.cassisi.hearth.usecase.CreateOperation;
-import de.cassisi.hearth.usecase.FindOperation;
-import de.cassisi.hearth.usecase.GenerateReport;
-import de.cassisi.hearth.usecase.ReadHLMDataFile;
+import de.cassisi.hearth.usecase.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,7 +9,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Random;
 
 @SpringBootTest
 public class IntegrationTest {
@@ -25,11 +24,15 @@ public class IntegrationTest {
     private ReadHLMDataFile readHLMDataFile;
     @Autowired
     private GenerateReport generateReport;
+    @Autowired
+    private AddAnesthesiaData addAnesthesiaData;
+    @Autowired
+    private AddNirsData addNirsData;
 
     private long operationId;
 
     @Test
-    void test() throws Exception {
+    void generateTestReport() throws Exception {
         // CREATE OPERATION
         CreateOperation.InputData inputData = new CreateOperation.InputData();
         inputData.localDate = LocalDate.now();
@@ -40,6 +43,26 @@ public class IntegrationTest {
         FindOperation.InputData findInputData = new FindOperation.InputData();
         findInputData.operationId = operationId;
         findOperation.execute(findInputData, System.out::println);
+
+        // ADD BIS DATA
+        Random random = new Random();
+        LocalDateTime now = LocalDateTime.of(1999, 1, 1, 13, 37);
+        for (int i = 0; i < 100; i++) {
+            AddAnesthesiaData.InputData anesthesiaInput = new AddAnesthesiaData.InputData();
+            anesthesiaInput.depthOfAnesthesia = random.nextInt(80);
+            anesthesiaInput.operationId = operationId;
+            anesthesiaInput.timestamp = now.plusSeconds(i * 5);
+            addAnesthesiaData.execute(anesthesiaInput, outputData -> {});
+        }
+        for (int i = 0; i < 150; i++) {
+            AddNirsData.InputData nirsInput = new AddNirsData.InputData();
+            nirsInput.operationId = operationId;
+            nirsInput.rightSaturation = random.nextInt(80) + 20;
+            nirsInput.leftSaturation = random.nextInt(80) + 20;
+            nirsInput.timestamp = now.plusSeconds(6 * i);
+            addNirsData.execute(nirsInput, outputData -> {});
+        }
+
 
         // READ HLM DATA FILE
         ReadHLMDataFile.InputData readInput = new ReadHLMDataFile.InputData();

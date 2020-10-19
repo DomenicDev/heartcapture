@@ -2,10 +2,12 @@ package de.cassisi.hearth.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 @Getter
 @Builder
+@EqualsAndHashCode
 @AllArgsConstructor
 public final class Priming {
 

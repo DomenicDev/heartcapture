@@ -56,9 +56,9 @@ class TimeData implements Comparable<TimeData> {
     //-----------------------------------
 
     // EVENTS
-    private String bypass;
-    private String aorta;
-    private String reperfusion;
+    private Integer bypass;
+    private Integer aorta;
+    private Integer reperfusion;
     private String levelstand;
     private Integer kardioplegie;
     private Integer jonosteril;

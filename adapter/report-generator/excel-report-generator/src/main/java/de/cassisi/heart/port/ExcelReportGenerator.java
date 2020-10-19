@@ -76,6 +76,9 @@ public class ExcelReportGenerator implements ReportFileGenerator {
             Arrays.sort(timeDataArray);
             List<TimeData> sortedList = Arrays.asList(timeDataArray);
 
+            // edit data after sorting
+            postEditTimeData(sortedList);
+
             // write sorted list to excel file
             writeToCells(sortedList);
 
@@ -90,6 +93,60 @@ public class ExcelReportGenerator implements ReportFileGenerator {
             return byteArrayOutputStream.toByteArray();
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private void postEditTimeData(List<TimeData> timeDataList) {
+        completeBypassRange(timeDataList);
+        completeAorta(timeDataList);
+        completeReperfusion(timeDataList);
+    }
+
+    private void completeBypassRange(List<TimeData> timeDataList) {
+        boolean started = false;
+        for (TimeData timeData : timeDataList) {
+            Integer val = timeData.getBypass();
+            if (val != null) {
+                if (val.equals(1)) {
+                    started = true;
+                } else if (val.equals(0)) {
+                    started = false;
+                }
+            } else {
+                timeData.setBypass(started ? 1: 0);
+            }
+        }
+    }
+
+    private void completeAorta(List<TimeData> timeDataList) {
+        boolean closed = false;
+        for (TimeData timeData : timeDataList) {
+            Integer val = timeData.getAorta();
+            if (val != null) {
+                if (val == 1) {
+                    closed = true;
+                } else if (val == 0) {
+                    closed = false;
+                }
+            } else {
+                timeData.setAorta(closed ? 1 : 0);
+            }
+        }
+    }
+
+    private void completeReperfusion(List<TimeData> timeDataList) {
+        boolean running = false;
+        for (TimeData timeData : timeDataList) {
+            Integer val = timeData.getReperfusion();
+            if (val != null) {
+                if (val.equals(1)) {
+                    running = true;
+                } else if (val.equals(0)) {
+                    running = false;
+                }
+            } else {
+                timeData.setReperfusion(running ? 1 : 0);
+            }
         }
     }
 
@@ -138,22 +195,22 @@ public class ExcelReportGenerator implements ReportFileGenerator {
 
             TimeData timeData = new TimeData(event.getTimestamp());
             if (EventType.BYPASS_ENDE.equals(event.getType())) {
-                timeData.setBypass("Ende");
+                timeData.setBypass(0);
             }
             if (EventType.BYPASS_BEGINN.equals(event.getType())) {
-                timeData.setBypass("Beginn");
+                timeData.setBypass(1);
             }
             if (EventType.AORTA_AUF.equals(event.getType())) {
-                timeData.setAorta("AUF");
+                timeData.setAorta(0);
             }
             if (EventType.AORTA_ZU.equals(event.getType())) {
-                timeData.setAorta("ZU");
+                timeData.setAorta(1);
             }
             if (EventType.REPERFUSION_BEGINN.equals(event.getType())) {
-                timeData.setReperfusion("BEGINN");
+                timeData.setReperfusion(1);
             }
             if (EventType.REPERFUSION_ENDE.equals(event.getType())) {
-                timeData.setReperfusion("ENDE");
+                timeData.setReperfusion(0);
             }
             if (EventType.LEVELSTAND.equals(event.getType())) {
                 timeData.setLevelstand(String.valueOf(event.getAmount()));
@@ -356,6 +413,7 @@ public class ExcelReportGenerator implements ReportFileGenerator {
     }
 
     private void addPrimingComposition(PrimingComposition primingComposition) {
+        setCellValue(151, 1, primingComposition.getTotalPriming());
         int currentRow = 152;
         for (Priming p : primingComposition.getPrimingData()) {
             setCellValue(currentRow, 0, p.getText());

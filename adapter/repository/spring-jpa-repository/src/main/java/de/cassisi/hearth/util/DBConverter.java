@@ -20,7 +20,7 @@ public final class DBConverter {
 
     static {
         builderMapper.getConfiguration().setDestinationNamingConvention(NamingConventions.builder());
-        builderMapper.addConverter(context -> convert(context.getSource()), PrimingDataDB.class, Priming.class);
+        builderMapper.addConverter(context -> builderMapper.map(context.getSource(), Priming.PrimingBuilder.class).build(), PrimingDataDB.class, Priming.class);
     }
 
     // ************** ENTITY TO DB ****************** //
