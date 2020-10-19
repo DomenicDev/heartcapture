@@ -36,12 +36,14 @@ public class HlmEventDataDB {
     @ManyToOne(fetch = FetchType.LAZY)
     private HLMDataDB hlmData;
 
+    private Integer factor;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         HlmEventDataDB that = (HlmEventDataDB) o;
-        return id == that.id;
+        return id.equals(that.id);
     }
 
     @Override

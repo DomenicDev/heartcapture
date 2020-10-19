@@ -1,14 +1,16 @@
 package de.cassisi.hearth.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 
+import java.util.Collections;
 import java.util.List;
 
-@Data
-@AllArgsConstructor
+@Getter
 public final class DiagnosisData {
 
     private final List<String> diagnosisData;
 
+    public DiagnosisData(List<String> diagnosisData) {
+        this.diagnosisData = Collections.unmodifiableList(diagnosisData);
+    }
 }

@@ -6,6 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.NamingConventions;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -19,7 +20,7 @@ public final class DBConverter {
 
     static {
         builderMapper.getConfiguration().setDestinationNamingConvention(NamingConventions.builder());
-        builderMapper.addConverter(context -> builderMapper.map(context.getSource(), Priming.PrimingBuilder.class).build(), PrimingDataDB.class, Priming.class);
+        builderMapper.addConverter(context -> convert(context.getSource()), PrimingDataDB.class, Priming.class);
     }
 
     // ************** ENTITY TO DB ****************** //
@@ -52,13 +53,13 @@ public final class DBConverter {
 
     public static HlmOperationDataDB convert(HlmOperationData hlmOperationData) {
         HlmOperationDataDB hlmOperationDataDB = new HlmOperationDataDB();
-        hlmOperationData.getOperation().addAll(hlmOperationData.getOperation());
+        hlmOperationDataDB.getPreviousOperations().addAll(hlmOperationData.getOperation());
         return hlmOperationDataDB;
     }
 
     public static RiskFactorDataDB convert(RiskFactorData riskFactorData) {
         RiskFactorDataDB riskFactorDataDB = new RiskFactorDataDB();
-        riskFactorData.getRisks().addAll(riskFactorData.getRisks());
+        riskFactorDataDB.getRiskFactors().addAll(riskFactorData.getRisks());
         return riskFactorDataDB;
     }
 
@@ -66,9 +67,13 @@ public final class DBConverter {
         PrimingCompositionDB db = new PrimingCompositionDB();
         db.setTotalPriming(primingComposition.getTotalPriming());
         List<PrimingDataDB> primingDataDBList = new ArrayList<>();
-        primingComposition.getPrimingData().forEach(data -> primingDataDBList.add(mapper.map(data, PrimingDataDB.class)));
+        primingComposition.getPrimingData().forEach(data -> primingDataDBList.add(convert(data)));
         db.getPrimingData().addAll(primingDataDBList);
         return db;
+    }
+
+    public static PrimingDataDB convert(Priming priming) {
+        return mapper.map(priming, PrimingDataDB.class);
     }
 
     //___________________________________________________//
@@ -112,23 +117,27 @@ public final class DBConverter {
                 .build();
     }
 
-    private static PrimingComposition convert(PrimingCompositionDB primingCompositionDB) {
+    public static PrimingComposition convert(PrimingCompositionDB primingCompositionDB) {
         return builderMapper.map(primingCompositionDB, PrimingComposition.PrimingCompositionBuilder.class).build();
     }
 
-    private static MachineData convert(MachineDataDB machineDataDB) {
+    public static Priming convert(PrimingDataDB primingDataDB) {
+        return mapper.map(primingDataDB, Priming.PrimingBuilder.class).build();
+    }
+
+    public static MachineData convert(MachineDataDB machineDataDB) {
         return builderMapper.map(machineDataDB, MachineData.MachineDataBuilder.class).build();
     }
 
-    private static PatientData convert(PatientDataDB patientDataDB) {
+    public static PatientData convert(PatientDataDB patientDataDB) {
         return builderMapper.map(patientDataDB, PatientData.PatientDataBuilder.class).build();
     }
 
-    private static RiskFactorData convert(RiskFactorDataDB riskFactorDataDB) {
+    public static RiskFactorData convert(RiskFactorDataDB riskFactorDataDB) {
         return new RiskFactorData(riskFactorDataDB.getRiskFactors());
     }
 
-    private static HlmOperationData convert(HlmOperationDataDB hlmOperationDataDB) {
+    public static HlmOperationData convert(HlmOperationDataDB hlmOperationDataDB) {
         return new HlmOperationData(hlmOperationDataDB.getPreviousOperations());
     }
 
@@ -158,7 +167,7 @@ public final class DBConverter {
         return paramData;
     }
 
-    private static HlmParamData convert(HlmParamDataDB data) {
+    public static HlmParamData convert(HlmParamDataDB data) {
         return builderMapper.map(data, HlmParamData.HlmParamDataBuilder.class).build();
     }
 
@@ -172,7 +181,7 @@ public final class DBConverter {
         return nirsData;
     }
 
-    private static NIRSData convert(NirsDataDB data) {
+    public static NIRSData convert(NirsDataDB data) {
         return new NIRSData(data.getLeftSaturation(), data.getRightSaturation(), data.getTimestamp());
     }
 
@@ -183,7 +192,7 @@ public final class DBConverter {
         return infusionData;
     }
 
-    private static InfusionData convert(InfusionDataDB data) {
+    public static InfusionData convert(InfusionDataDB data) {
         return new InfusionData(data.getTimestamp(), convertPerfusorData(data.getInfusionData()));
     }
 
@@ -197,7 +206,7 @@ public final class DBConverter {
         return new PerfusorData(data.getInfusionName(), data.getRate());
     }
 
-    public static List<AnesthesiaData> convertAnesthesiaData(Set<AnesthesiaDataDB> anesthesiaDataDB) {
+    public static List<AnesthesiaData> convertAnesthesiaData(Collection<AnesthesiaDataDB> anesthesiaDataDB) {
         List<AnesthesiaData> anesthesiaData = new ArrayList<>();
         anesthesiaDataDB.forEach(data -> anesthesiaData.add(convert(data)));
         return anesthesiaData;
@@ -206,4 +215,6 @@ public final class DBConverter {
     public static AnesthesiaData convert(AnesthesiaDataDB data) {
         return new AnesthesiaData(data.getTimestamp(), data.getDepthOfAnesthesia());
     }
+
+
 }

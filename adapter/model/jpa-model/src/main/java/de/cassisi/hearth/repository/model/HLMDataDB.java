@@ -42,19 +42,19 @@ public class HLMDataDB {
     private final List<HlmParamDataDB> hlmParamDataDBS = new ArrayList<>();
 
     @Embedded
-    private DiagnosisDataDB diagnosisDataDB = new DiagnosisDataDB();
+    private  DiagnosisDataDB diagnosisDataDB;
 
     @Embedded
-    private HlmOperationDataDB hlmOperationDataDB = new HlmOperationDataDB();
+    private HlmOperationDataDB hlmOperationDataDB;
 
     @Embedded
-    private RiskFactorDataDB riskFactorDataDB = new RiskFactorDataDB();
+    private RiskFactorDataDB riskFactorDataDB;;
 
     @Embedded
-    private PatientDataDB patientDataDB = new PatientDataDB();
+    private PatientDataDB patientDataDB;
 
     @Embedded
-    private MachineDataDB machineDataDB = new MachineDataDB();
+    private MachineDataDB machineDataDB;
 
     @Embedded
     private PrimingCompositionDB primingCompositionDB;
