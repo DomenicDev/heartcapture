@@ -14,13 +14,25 @@ COLOR PALETTE
 }
 
 .sidebar {
-    -fx-background-color: #003049;
+    -fx-background-color: #0a4593;
+}
+
+.main-content-title {
+    -fx-font-size: 18pt;
+    -fx-font-weight: bold;
+
+}
+
+.main-content-top-bar {
+   /* -fx-background-color: #93580a*/
 }
 
 .sidebar-button {
     -fx-background-color: none;
     -fx-text-fill: white;
-    -fx-font-size: 24pt;
+    -fx-font-size: 17pt;
+    -fx-padding: 22 15;
+    -fx-font-weight: lighter;
 }
 
 .sidebar-button:hover {
@@ -28,15 +40,19 @@ COLOR PALETTE
 }
 
 .logo-container {
-    -fx-background-color: #003049;
+    -fx-background-color: #580a93;
 }
 
 .top-bar {
-    -fx-background-color: #003049;
+ /*   -fx-background-color: #5c2200;*/
+}
+
+.center-main {
+    -fx-background-color: #e3f1fb;
 }
 
 .main-content {
-    -fx-background-color: #BFC0C0;
+
 }
 
 .button-home-quick-task {
@@ -57,4 +73,24 @@ COLOR PALETTE
 
 .live-capture-data-header {
     -fx-font-size: 13pt;
+}
+
+.container {
+    -fx-padding: 10px;
+    -fx-background-insets: 0px;
+    -fx-border-radius: 3;
+    -fx-background-color: white;
+    -fx-background-radius: 0pt;
+
+    -fx-effect: dropshadow(two-pass-box, #050505dd, 10, 0, 0, 1);
+}
+
+.add-button {
+    -fx-background-color: #93580a;
+    -fx-text-fill: white;
+    -fx-font-size: 12pt;
+}
+
+.root {
+    -fx-background-color: #e3f1fb;
 }

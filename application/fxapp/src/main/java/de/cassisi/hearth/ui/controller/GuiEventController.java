@@ -8,6 +8,7 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import de.cassisi.hearth.ui.event.*;
 import de.cassisi.hearth.ui.interactor.UseCaseExecutor;
+import de.cassisi.hearth.ui.navigator.Navigator;
 import de.cassisi.hearth.ui.presenter.*;
 import de.cassisi.hearth.ui.utils.EventBusProvider;
 import de.cassisi.hearth.usecase.*;
@@ -23,28 +24,36 @@ import javafx.stage.Stage;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.stream.Collectors;
 
 @Component
 public class GuiEventController {
 
     private final UseCaseExecutor useCaseExecutor;
     private final AddNirsDataPresenter addNirsDataPresenter;
+    private final AddAnesthesiaDataPresenter addAnesthesiaDataPresenter;
+    private final AddInfusionDataPresenter addInfusionDataPresenter;
     private final CreateOperationPresenter createOperationPresenter;
     private final RefreshLatestOperationPresenter refreshLatestOperationPresenter;
     private final OperationOverviewPresenter operationOverviewPresenter;
     private final ReadHLMDataFilePresenter hlmDataFilePresenter;
     private final GenerateReportPresenter generateReportPresenter;
 
+    private final Navigator navigator;
+
     private final EventBus eventBus;
 
-    public GuiEventController(UseCaseExecutor useCaseExecutor, AddNirsDataPresenter addNirsDataPresenter, CreateOperationPresenter createOperationPresenter, RefreshLatestOperationPresenter refreshLatestOperationPresenter1, OperationOverviewPresenter operationOverviewPresenter, ReadHLMDataFilePresenter hlmDataFilePresenter, GenerateReportPresenter generateReportPresenter) {
+    public GuiEventController(UseCaseExecutor useCaseExecutor, AddNirsDataPresenter addNirsDataPresenter, AddAnesthesiaDataPresenter addAnesthesiaDataPresenter, AddInfusionDataPresenter addInfusionDataPresenter, CreateOperationPresenter createOperationPresenter, RefreshLatestOperationPresenter refreshLatestOperationPresenter1, OperationOverviewPresenter operationOverviewPresenter, ReadHLMDataFilePresenter hlmDataFilePresenter, GenerateReportPresenter generateReportPresenter, Navigator navigator) {
         this.useCaseExecutor = useCaseExecutor;
         this.addNirsDataPresenter = addNirsDataPresenter;
+        this.addAnesthesiaDataPresenter = addAnesthesiaDataPresenter;
+        this.addInfusionDataPresenter = addInfusionDataPresenter;
         this.createOperationPresenter = createOperationPresenter;
         this.refreshLatestOperationPresenter = refreshLatestOperationPresenter1;
         this.operationOverviewPresenter = operationOverviewPresenter;
         this.hlmDataFilePresenter = hlmDataFilePresenter;
         this.generateReportPresenter = generateReportPresenter;
+        this.navigator = navigator;
 
         // register to event bus
         this.eventBus = EventBusProvider.getEventBus();
@@ -59,6 +68,24 @@ public class GuiEventController {
         inputData.rightSaturation = event.getRight();
         inputData.operationId = event.getOperationId();
         this.useCaseExecutor.addNirsData(inputData, addNirsDataPresenter);
+    }
+
+    @Subscribe
+    public void handle(AddAnesthesiaDataEvent event) {
+        AddAnesthesiaData.InputData inputData = new AddAnesthesiaData.InputData();
+        inputData.timestamp = event.getTimestamp();
+        inputData.depthOfAnesthesia = event.getDepthOfAnesthesia();
+        inputData.operationId = event.getOperationId();
+        getUseCaseExecutor().addAnesthesiaData(inputData, addAnesthesiaDataPresenter);
+    }
+
+    @Subscribe
+    public void handle(AddInfusionDataEvent event) {
+        AddInfusionData.InputData inputData = new AddInfusionData.InputData();
+        inputData.operationId = event.getOperationId();
+        inputData.timestamp = event.getTimestamp();
+        inputData.infusionData = event.getPerfusions().stream().map(data -> new AddInfusionData.InputData.PerfusorInput(data.name, data.rate)).collect(Collectors.toList());
+        getUseCaseExecutor().addInfusionData(inputData, addInfusionDataPresenter);
     }
 
     @Subscribe
@@ -114,7 +141,7 @@ public class GuiEventController {
         FindOperation.InputData inputData = new FindOperation.InputData();
         inputData.operationId = event.getOperationId();
         this.useCaseExecutor.findOperation(inputData, operationOverviewPresenter);
-        this.eventBus.post(new ShowOperationView());
+        this.navigator.showOperation();
     }
 
     @Subscribe

@@ -1,6 +1,7 @@
 package de.cassisi.hearth.ui;
 
 import de.cassisi.hearth.ui.dashboard.DashboardView;
+import de.cassisi.hearth.ui.main.MainView;
 import de.saxsys.mvvmfx.FluentViewLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -15,7 +16,7 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
 
     @Override
     public void onApplicationEvent(StageReadyEvent event) {
-        Parent root = FluentViewLoader.fxmlView(DashboardView.class).load().getView();
+        Parent root = FluentViewLoader.fxmlView(MainView.class).load().getView();
 
         Stage stage = event.getStage();
         stage.setTitle("My Window");

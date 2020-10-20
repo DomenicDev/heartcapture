@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 public class AddAnesthesiaDataInteractor implements AddAnesthesiaData {
 
-    private AddAnesthesiaDataRepository repository;
+    private final AddAnesthesiaDataRepository repository;
 
     public AddAnesthesiaDataInteractor(AddAnesthesiaDataRepository repository) {
         this.repository = repository;
@@ -34,6 +34,9 @@ public class AddAnesthesiaDataInteractor implements AddAnesthesiaData {
 
         // callback output handler
         OutputData data = new OutputData();
+        data.operationId = operationId;
+        data.depthOfAnesthesia = depthOfAnesthesia;
+        data.timestamp = timestamp;
         outputHandler.handle(data);
     }
 }

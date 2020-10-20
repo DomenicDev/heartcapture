@@ -10,6 +10,7 @@ import de.cassisi.hearth.usecase.validator.InputValidator;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static de.cassisi.hearth.usecase.AddInfusionData.InputData.*;
 
@@ -45,6 +46,7 @@ public class AddInfusionDataInteractor implements AddInfusionData {
 
         // callback output handler
         OutputData outputData = new OutputData();
+        outputData.data = perfusorData.stream().map(data -> new AddInfusionData.OutputData.PerfusorData(data.getName(), (int) data.getRate())).collect(Collectors.toList());
         outputHandler.handle(outputData);
     }
 

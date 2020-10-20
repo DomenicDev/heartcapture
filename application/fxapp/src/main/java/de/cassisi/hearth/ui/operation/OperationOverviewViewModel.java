@@ -1,7 +1,11 @@
 package de.cassisi.hearth.ui.operation;
 
+import de.cassisi.hearth.ui.data.PerfusionUIData;
 import de.saxsys.mvvmfx.ViewModel;
 import javafx.beans.property.*;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -13,12 +17,14 @@ public class OperationOverviewViewModel implements ViewModel {
     private final ObjectProperty<LocalDate> dateProperty = new SimpleObjectProperty<>();
     private final StringProperty roomProperty = new SimpleStringProperty();
     private final StringProperty titleLabel = new SimpleStringProperty();
+    private final ObjectProperty<ObservableList<PerfusionUIData>> perfusionData = new SimpleObjectProperty<>();
 
     /*
     LIVE RECORDING
      */
     private final IntegerProperty nirsLeftValue = new SimpleIntegerProperty();
     private final IntegerProperty nirsRightValue = new SimpleIntegerProperty();
+    private final DoubleProperty bisProperty = new SimpleDoubleProperty();
 
     //***************************//
     //      ACCESS METHODS       //
@@ -46,5 +52,13 @@ public class OperationOverviewViewModel implements ViewModel {
 
     public IntegerProperty nirsRightValue() {
         return this.nirsRightValue;
+    }
+
+    public DoubleProperty bisValue() {
+        return this.bisProperty;
+    }
+
+    public ObjectProperty<ObservableList<PerfusionUIData>> infusionList() {
+        return this.perfusionData;
     }
 }

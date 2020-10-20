@@ -31,6 +31,18 @@ public interface AddInfusionData extends UseCaseTemplate<InputData, OutputData> 
 
     class OutputData {
 
+        public List<PerfusorData> data = new ArrayList<>();
+
+        public static class PerfusorData {
+            public String name;
+            public int rate;
+
+            public PerfusorData(String name, int rate) {
+                this.name = name;
+                this.rate = rate;
+            }
+        }
+
     }
 
 }

@@ -39,7 +39,8 @@ dependencies {
     compile group: 'org.kordamp.ikonli', name: 'ikonli-fontawesome-pack', version: '11.5.0'
     compile group: 'com.dlsc.formsfx', name: 'formsfx-core', version: '11.4.1'
     compile group: 'eu.hansolo', name: 'Medusa', version: '11.5'
-
+    compile group: 'com.jfoenix', name: 'jfoenix', version: '9.0.10'
+    compile group: 'com.dlsc.gemsfx', name: 'gemsfx', version: '1.9.0'
 
 
 

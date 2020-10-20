@@ -1,6 +1,10 @@
 package de.cassisi.hearth.ui.recorder;
 
-public class NIRSSimulation extends AbstractRecorder<NIRSSimulation.NIRSData> implements Runnable {
+import de.cassisi.hearth.ui.recorder.data.NIRSData;
+
+import java.time.LocalDateTime;
+
+public class NIRSSimulation extends AbstractRecorder<NIRSData> implements Runnable {
 
     private final Thread thread = new Thread(this);
     private boolean active;
@@ -8,6 +12,7 @@ public class NIRSSimulation extends AbstractRecorder<NIRSSimulation.NIRSData> im
     @Override
     public void start() {
         this.active = true;
+        this.thread.setDaemon(true);
         this.thread.start();
     }
 
@@ -20,9 +25,9 @@ public class NIRSSimulation extends AbstractRecorder<NIRSSimulation.NIRSData> im
     public void run() {
         while (active) {
 
-            NIRSData nirsData = new NIRSData();
-            nirsData.left = (int) (Math.random() * 30);
-            nirsData.right = (int) (Math.random() * 30);
+            int left = (int) (Math.random() * 30);
+            int right = (int) (Math.random() * 30);
+            NIRSData nirsData = new NIRSData(LocalDateTime.now(), left, right);
             post(nirsData);
 
             try {
@@ -34,11 +39,5 @@ public class NIRSSimulation extends AbstractRecorder<NIRSSimulation.NIRSData> im
         }
     }
 
-    public static class NIRSData {
-
-        public int left;
-        public int right;
-
-    }
 
 }

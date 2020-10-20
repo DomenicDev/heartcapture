@@ -2,6 +2,7 @@ package de.cassisi.hearth.ui.dashboard;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
+import com.jfoenix.controls.JFXTreeTableView;
 import de.cassisi.hearth.ui.data.LatestOperationTableData;
 import de.cassisi.hearth.ui.event.*;
 import de.cassisi.hearth.ui.operation.OperationOverview;
@@ -13,10 +14,7 @@ import de.saxsys.mvvmfx.InjectViewModel;
 import de.saxsys.mvvmfx.ViewTuple;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Window;
@@ -24,7 +22,6 @@ import org.springframework.stereotype.Component;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
 @Component
@@ -34,18 +31,6 @@ public class DashboardView implements FxmlView<DashboardViewModel>, Initializabl
 
     @InjectViewModel
     private DashboardViewModel viewModel;
-
-    @FXML
-    private Button clickButton;
-
-    @FXML
-    private Button createOperationButton;
-
-    @FXML
-    private Label testLabel;
-
-    @FXML
-    private Button createOperation;
 
     @FXML
     private TableView<LatestOperationTableData> latestOperationTable;
@@ -59,19 +44,32 @@ public class DashboardView implements FxmlView<DashboardViewModel>, Initializabl
     @FXML
     private VBox mainContent;
 
-    private ViewTuple<OperationOverview, OperationOverviewViewModel> operationOverviewTuple;
-
+    @FXML
+    private Button createOperation;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.eventBus.register(this);
 
-        operationOverviewTuple = FluentViewLoader.fxmlView(OperationOverview.class).load();
-
-        clickButton.setOnAction((event) -> eventBus.post(new AddNirsDataEvent(LocalDateTime.now(), 2, 3, 1L)));
         createOperation.setOnAction(event -> eventBus.post(new OpenNewCreateOperationWindow(getWindow())));
-        createOperationButton.setOnAction(event -> eventBus.post(new CreateOperationEvent(LocalDate.now(), "Raum 7")));
-        testLabel.textProperty().bind(viewModel.testMessage);
+
+        // init table
+        initLatestOperationTable();
+
+        // init table data
+        this.eventBus.post(new RefreshLatestOperationDataEvent(true, 20));
+    }
+
+    private Window getWindow() {
+        return mainContent.getScene().getWindow();
+    }
+
+    private void initLatestOperationTable() {
+        latestOperationTable.setEditable(false);
+
+        opNrCol.setReorderable(false);
+        opDateCol.setReorderable(false);
+        opRoomCol.setReorderable(false);
 
         // init table
         opNrCol.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -86,19 +84,6 @@ public class DashboardView implements FxmlView<DashboardViewModel>, Initializabl
                 }
             }
         });
-
-        // init table data
-        this.eventBus.post(new RefreshLatestOperationDataEvent(true, 20));
-    }
-
-    private Window getWindow() {
-        return clickButton.getScene().getWindow();
-    }
-
-    @Subscribe
-    public void handle(ShowOperationView event) {
-        mainContent.getChildren().clear();
-        mainContent.getChildren().add(operationOverviewTuple.getView());
     }
 
 }

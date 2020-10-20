@@ -8,6 +8,10 @@ public interface UseCaseExecutor {
 
     void addNirsData(AddNirsData.InputData inputData, OutputHandler<AddNirsData.OutputData> outputHandler);
 
+    void addAnesthesiaData(AddAnesthesiaData.InputData inputData, OutputHandler<AddAnesthesiaData.OutputData> outputHandler);
+
+    void addInfusionData(AddInfusionData.InputData inputData, OutputHandler<AddInfusionData.OutputData> outputHandler);
+
     void createOperation(CreateOperation.InputData inputData, OutputHandler<CreateOperation.OutputData> outputHandler);
 
     void findAllOperations(FindAllOperations.InputData inputData, OutputHandler<FindAllOperations.OutputData> outputHandler);

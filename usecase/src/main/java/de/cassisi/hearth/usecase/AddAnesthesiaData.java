@@ -15,7 +15,9 @@ public interface AddAnesthesiaData extends UseCaseTemplate<InputData, OutputData
     }
 
     class OutputData {
-
+        public long operationId;
+        public LocalDateTime timestamp;
+        public double depthOfAnesthesia;
     }
 
 }
