@@ -1,15 +1,13 @@
 package de.cassisi.hearth.ui.presenter;
 
 import de.cassisi.hearth.ui.operation.OperationOverviewViewModel;
-import de.cassisi.hearth.usecase.FindOperation;
 import de.cassisi.hearth.usecase.dto.SimpleOperationData;
-import de.cassisi.hearth.usecase.output.OutputHandler;
 import org.springframework.stereotype.Component;
 
-import static de.cassisi.hearth.usecase.FindOperation.*;
+import static de.cassisi.hearth.usecase.FindOperation.OutputData;
 
 @Component
-public class OperationOverviewPresenter implements OutputHandler<OutputData> {
+public class OperationOverviewPresenter extends FXPresenter<OutputData> {
 
     private final OperationOverviewViewModel viewModel;
 
@@ -18,11 +16,12 @@ public class OperationOverviewPresenter implements OutputHandler<OutputData> {
     }
 
     @Override
-    public void handle(OutputData outputData) {
+    public void runOnUI(OutputData outputData) {
         SimpleOperationData data = outputData.operationData;
         viewModel.idProperty().setValue(data.getId());
         viewModel.roomProperty().setValue(data.getRoom());
         viewModel.dateProperty().setValue(data.getDate());
         viewModel.titleLabel().setValue("Operation #" + data.getId());
     }
+
 }

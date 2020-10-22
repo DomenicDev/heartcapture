@@ -5,6 +5,9 @@ import de.cassisi.hearth.usecase.*;
 import de.cassisi.hearth.usecase.output.OutputHandler;
 import org.springframework.stereotype.Component;
 
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedDeque;
+
 @Component
 public class DefaultExecutor implements UseCaseExecutor {
 
@@ -17,6 +20,8 @@ public class DefaultExecutor implements UseCaseExecutor {
     private final ReadHLMDataFile readHLMDataFile;
     private final GenerateReport generateReport;
 
+    private final Executor executor = new Executor();
+
     public DefaultExecutor(AddNirsData addNirsData, AddAnesthesiaData addAnesthesiaData, AddInfusionData addInfusionData, CreateOperation createOperation, FindAllOperations findAllOperations, FindOperation findOperation, ReadHLMDataFile readHLMDataFile, GenerateReport generateReport) {
         this.addNirsData = addNirsData;
         this.addAnesthesiaData = addAnesthesiaData;
@@ -26,46 +31,93 @@ public class DefaultExecutor implements UseCaseExecutor {
         this.findOperation = findOperation;
         this.readHLMDataFile = readHLMDataFile;
         this.generateReport = generateReport;
+
+        this.executor.start();
     }
 
     @Override
     public void addNirsData(AddNirsData.InputData inputData, OutputHandler<AddNirsData.OutputData> outputHandler) {
-        addNirsData.execute(inputData, outputHandler);
+        add(() -> addNirsData.execute(inputData, outputHandler));
     }
 
     @Override
     public void addAnesthesiaData(AddAnesthesiaData.InputData inputData, OutputHandler<AddAnesthesiaData.OutputData> outputHandler) {
-        addAnesthesiaData.execute(inputData, outputHandler);
+        add(() -> addAnesthesiaData.execute(inputData, outputHandler));
     }
 
     @Override
     public void addInfusionData(AddInfusionData.InputData inputData, OutputHandler<AddInfusionData.OutputData> outputHandler) {
-        addInfusionData.execute(inputData, outputHandler);
+        add(() -> addInfusionData.execute(inputData, outputHandler));
     }
 
     @Override
     public void createOperation(CreateOperation.InputData inputData, OutputHandler<CreateOperation.OutputData> outputHandler) {
-        createOperation.execute(inputData, outputHandler);
+        add(() -> createOperation.execute(inputData, outputHandler));
     }
 
     @Override
     public void findAllOperations(FindAllOperations.InputData inputData, OutputHandler<FindAllOperations.OutputData> outputHandler) {
-        findAllOperations.execute(inputData,outputHandler);
+        add(() -> findAllOperations.execute(inputData,outputHandler));
     }
 
     @Override
     public void findOperation(FindOperation.InputData inputData, OperationOverviewPresenter operationOverviewPresenter) {
-        findOperation.execute(inputData, operationOverviewPresenter);
+        add(() -> findOperation.execute(inputData, operationOverviewPresenter));
     }
 
     @Override
     public void readHlmDataFile(ReadHLMDataFile.InputData inputData, OutputHandler<ReadHLMDataFile.OutputData> outputHandler) {
-        readHLMDataFile.execute(inputData, outputHandler);
+        add(() -> readHLMDataFile.execute(inputData, outputHandler));
     }
 
     @Override
     public void generateReportEvent(GenerateReport.InputData inputData, OutputHandler<GenerateReport.OutputData> outputHandler) {
-        generateReport.execute(inputData, outputHandler);
+        add(() -> generateReport.execute(inputData, outputHandler));
     }
 
+    private void add(Job job) {
+        this.executor.add(job);
+    }
+
+
+    private static class Executor implements Runnable {
+
+        private final Queue<Job> jobs = new ConcurrentLinkedDeque<>();
+        private final Thread executorThread = new Thread(this);
+        private boolean active = false;
+
+        Executor() {
+            this.executorThread.setName("UseCase Executor");
+            this.executorThread.setDaemon(true);
+        }
+
+        void add(Job job) {
+            this.jobs.add(job);
+        }
+
+        void start() {
+            this.active = true;
+            this.executorThread.start();
+        }
+
+        void stop() {
+            this.active = false;
+        }
+
+        @Override
+        public void run() {
+            while (active) {
+                Job job = jobs.poll();
+                if (job != null) {
+                    job.execute();
+                }
+            }
+        }
+    }
+
+    private interface Job {
+
+        void execute();
+
+    }
 }

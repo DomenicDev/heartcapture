@@ -2,11 +2,10 @@ package de.cassisi.hearth.ui.presenter;
 
 import de.cassisi.hearth.ui.operation.OperationOverviewViewModel;
 import de.cassisi.hearth.usecase.AddAnesthesiaData;
-import de.cassisi.hearth.usecase.output.OutputHandler;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AddAnesthesiaDataPresenter implements OutputHandler<AddAnesthesiaData.OutputData> {
+public class AddAnesthesiaDataPresenter extends FXPresenter<AddAnesthesiaData.OutputData> {
 
     private final OperationOverviewViewModel viewModel;
 
@@ -15,7 +14,7 @@ public class AddAnesthesiaDataPresenter implements OutputHandler<AddAnesthesiaDa
     }
 
     @Override
-    public void handle(AddAnesthesiaData.OutputData outputData) {
+    public void runOnUI(AddAnesthesiaData.OutputData outputData) {
         viewModel.bisValue().set(outputData.depthOfAnesthesia);
     }
 

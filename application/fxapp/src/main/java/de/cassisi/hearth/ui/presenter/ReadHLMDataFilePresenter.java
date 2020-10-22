@@ -2,13 +2,12 @@ package de.cassisi.hearth.ui.presenter;
 
 import de.cassisi.hearth.ui.operation.OperationOverviewViewModel;
 import de.cassisi.hearth.usecase.dto.SimpleOperationData;
-import de.cassisi.hearth.usecase.output.OutputHandler;
 import org.springframework.stereotype.Component;
 
 import static de.cassisi.hearth.usecase.ReadHLMDataFile.OutputData;
 
 @Component
-public class ReadHLMDataFilePresenter implements OutputHandler<OutputData> {
+public class ReadHLMDataFilePresenter extends FXPresenter<OutputData> {
 
     private OperationOverviewViewModel viewModel;
 
@@ -17,9 +16,10 @@ public class ReadHLMDataFilePresenter implements OutputHandler<OutputData> {
     }
 
     @Override
-    public void handle(OutputData outputData) {
+    public void runOnUI(OutputData outputData) {
         SimpleOperationData simpleOperationData = outputData.simpleOperationData;
         // todo...
         System.out.println("presenter");
     }
+
 }

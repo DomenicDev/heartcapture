@@ -2,11 +2,10 @@ package de.cassisi.hearth.ui.presenter;
 
 import de.cassisi.hearth.ui.operation.OperationOverviewViewModel;
 import de.cassisi.hearth.usecase.AddNirsData;
-import de.cassisi.hearth.usecase.output.OutputHandler;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AddNirsDataPresenter implements OutputHandler<AddNirsData.OutputData> {
+public class AddNirsDataPresenter extends FXPresenter<AddNirsData.OutputData> {
 
     private final OperationOverviewViewModel viewModel;
 
@@ -15,7 +14,7 @@ public class AddNirsDataPresenter implements OutputHandler<AddNirsData.OutputDat
     }
 
     @Override
-    public void handle(AddNirsData.OutputData outputData) {
+    public void runOnUI(AddNirsData.OutputData outputData) {
         boolean saved = outputData.saved;
 
         if (saved) {
@@ -23,4 +22,5 @@ public class AddNirsDataPresenter implements OutputHandler<AddNirsData.OutputDat
             viewModel.nirsRightValue().setValue(outputData.right);
         }
     }
+
 }
