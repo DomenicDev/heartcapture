@@ -49,7 +49,7 @@ public class ExcelReportGenerator implements ReportFileGenerator {
             setCellValue(6, 1, hlmData.getPatientData().getHeight());
             setCellValue(7, 1, hlmData.getPatientData().getWeight());
             setCellValue(12, 1, hlmData.getPatientData().getBloodGroup());
-            setCellValue(12, 1, hlmData.getPatientData().getBloodRef());
+            setCellValue(13, 1, hlmData.getPatientData().getBloodRef());
 
             // -- OPERATION -- //
             // HLM SETUP
