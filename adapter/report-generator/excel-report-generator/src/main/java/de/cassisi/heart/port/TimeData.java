@@ -97,7 +97,7 @@ class TimeData implements Comparable<TimeData> {
 
     // UNKNOWN
     private Double kod;
-    private String do2;
+    private Double do2;
 
     
 

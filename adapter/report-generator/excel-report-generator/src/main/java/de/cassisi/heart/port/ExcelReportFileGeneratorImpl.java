@@ -9,8 +9,8 @@ public class ExcelReportFileGeneratorImpl implements ReportFileGenerator {
     @Override
     public byte[] generateReport(ReportData reportData) {
         try {
-            ExcelReportGenerator generator = new ExcelReportGenerator();
-            return generator.generate(reportData);
+            ExcelReportGenerator generator = new ExcelReportGenerator(reportData);
+            return generator.generate();
         } catch (RuntimeException e) {
             throw new ReportGenerationException(e);
         }

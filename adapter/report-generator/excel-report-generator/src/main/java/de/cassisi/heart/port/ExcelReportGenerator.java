@@ -16,6 +16,7 @@ public class ExcelReportGenerator {
 
     private final Map<LocalDateTime, TimeData> timestampTimeDataMap = new HashMap<>();
     private final List<TimeData> timeDataList = new LinkedList<>();
+    private final ReportData reportData;
 
     private Sheet sheet;
     private CellStyle timeStyle;
@@ -24,12 +25,15 @@ public class ExcelReportGenerator {
     private static final String VASOPRESSIN = "Vasopressin";
     private static final String SUFENTANIL = "Sufentanil";
 
+    public ExcelReportGenerator(ReportData reportData) {
+        this.reportData = reportData;
+    }
+
     /**
      * Generates an excel report document based on the specified report data.
-     * @param reportData the report data to generate the report from
      * @return an byte[] containing the whole workbook (could be used to write to file)
      */
-    public byte[] generate(ReportData reportData) {
+    public byte[] generate() {
         try {
             Operation operation = reportData.getOperation();
             HLMData hlmData = reportData.getHlmData();
@@ -126,6 +130,58 @@ public class ExcelReportGenerator {
         completeBypassRange(timeDataList);
         completeAorta(timeDataList);
         completeReperfusion(timeDataList);
+        computeDO2(timeDataList);
+    }
+
+    private void computeDO2(List<TimeData> sortedTimeData) {
+        for (TimeData timeData : sortedTimeData) {
+            // check if this TimeData object contains a blood sample
+            BloodSampleData bloodSampleArt = timeData.getBloodDataArt();
+            if (bloodSampleArt.getHbOfl() != null) {
+
+                double bsa = reportData.getHlmData().getPatientData().getBsa();
+                double hbOfl = bloodSampleArt.getHbOfl();
+                double po2Ofl = bloodSampleArt.getPo2Ofl();
+                double so2Ofl = bloodSampleArt.getSo2Ofl();
+
+                // we must look for the latest art flow value
+                int index = sortedTimeData.indexOf(timeData);
+                Double artFlow = searchBackwards(TimeData::getArtFlow, sortedTimeData, index);
+
+                // compute value and update time data object
+                if (artFlow != null) {
+                    double do2 = 10 * (artFlow/bsa) * ( (hbOfl * 1.34 * so2Ofl) + ( 0.003 * po2Ofl )) / 100.0;
+                    timeData.setDo2(do2);
+                }
+            }
+        }
+    }
+
+    /**
+     * This method allows to search backwards for a specific value within the specified list.
+     * Note that this list has to be sorted!
+     *
+     * @param callback the method call to obtain the value you are searching for
+     * @param sortedList the list to be searched
+     * @param startIndex the index to start the search from
+     * @param <T> the type of the returned value
+     * @return the first found value that is not null. If no value is found, null is returned.
+     */
+    private <T> T searchBackwards(SearchCallback<T> callback, List<TimeData> sortedList, int startIndex) {
+        for (int i = startIndex; i > 0; i--) {
+            TimeData data = sortedList.get(i);
+            T result = callback.get(data);
+            if (result != null) {
+                return result;
+            }
+        }
+        return null;
+    }
+
+    interface SearchCallback<T> {
+
+        T get(TimeData timeData);
+
     }
 
     private void completeBypassRange(List<TimeData> timeDataList) {
