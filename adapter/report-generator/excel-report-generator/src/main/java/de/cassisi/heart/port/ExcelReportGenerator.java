@@ -97,7 +97,6 @@ public class ExcelReportGenerator {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             template.write(byteArrayOutputStream);
 
-            this.sheet = null; // reset
             return byteArrayOutputStream.toByteArray();
         } catch (IOException e) {
             throw new RuntimeException(e);
