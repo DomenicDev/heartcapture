@@ -15,7 +15,6 @@ import java.util.*;
 public class ExcelReportGenerator {
 
     private final Map<LocalDateTime, TimeData> timestampTimeDataMap = new HashMap<>();
-    private final List<TimeData> timeDataList = new LinkedList<>();
     private final ReportData reportData;
 
     private Sheet sheet;
@@ -80,7 +79,7 @@ public class ExcelReportGenerator {
             convertTemporalHLMData(hlmData);
 
             // Sort TimeData by timestamp
-            TimeData[] timeDataArray = timeDataList.toArray(new TimeData[0]);
+            TimeData[] timeDataArray = timestampTimeDataMap.values().toArray(new TimeData[0]);
             Arrays.sort(timeDataArray);
             List<TimeData> sortedList = Arrays.asList(timeDataArray);
 
@@ -115,9 +114,6 @@ public class ExcelReportGenerator {
 
             // put into map for later reuse
             timestampTimeDataMap.put(truncatedTimestamp, timeData);
-
-            // add to global TimeData list
-            timeDataList.add(timeData);
         }
 
         // return specific TimeData object for this timestamp
@@ -130,6 +126,35 @@ public class ExcelReportGenerator {
         completeAorta(timeDataList);
         completeReperfusion(timeDataList);
         computeDO2(timeDataList);
+        completeHaemofiltration(timeDataList);
+    }
+
+    private void completeHaemofiltration(List<TimeData> sortedTimeData) {
+        boolean filtrationRunning = false;
+        for (TimeData timeData : sortedTimeData) {
+            Integer val = timeData.getHaemofiltration();
+
+            // set value to 1 to indicate that filtration is running
+            if (val == null && filtrationRunning) {
+                timeData.setHaemofiltration(1);
+            }
+            
+            // set value to 0 to indicate that filtration is not running
+            if (val == null && !filtrationRunning) {
+                timeData.setHaemofiltration(0);
+            }
+
+            // if value "1" is already set, that indicates the start of the filtration process
+            if (val != null && val == 1) {
+                filtrationRunning = true;
+            }
+
+            // the filtration process stops when we find an filtration value
+            if (timeData.getHaemofiltrat() != null) {
+                filtrationRunning = false;
+                timeData.setHaemofiltration(1);
+            }
+        }
     }
 
     private void computeDO2(List<TimeData> sortedTimeData) {
@@ -259,8 +284,10 @@ public class ExcelReportGenerator {
     }
 
     /**
-     * TODO: WIP
-     * @param eventList
+     * Reads the specified event data and creates TimeData objects for each relevant event.
+     * This method will either set the 'amount' value (e.g. in ml) for an event or
+     * an indication value (e.g. '1') to mark the begin or end of a process that covers multiple time data objects.
+     * @param eventList the event data list
      */
     private void convertEventData(List<HLMEventData> eventList) {
         eventList.forEach(event -> {
@@ -269,75 +296,77 @@ public class ExcelReportGenerator {
                 return;
             }
 
-            TimeData timeData = createOrGetTimeData(event.getTimestamp());
             if (HLMEventData.EventType.BYPASS_ENDE.equals(event.getType())) {
-                timeData.setBypass(0);
+                createOrGetTimeData(event.getTimestamp()).setBypass(0);
             }
             if (HLMEventData.EventType.BYPASS_BEGINN.equals(event.getType())) {
-                timeData.setBypass(1);
+                createOrGetTimeData(event.getTimestamp()).setBypass(1);
             }
             if (HLMEventData.EventType.AORTA_AUF.equals(event.getType())) {
-                timeData.setAorta(0);
+                createOrGetTimeData(event.getTimestamp()).setAorta(0);
             }
             if (HLMEventData.EventType.AORTA_ZU.equals(event.getType())) {
-                timeData.setAorta(1);
+                createOrGetTimeData(event.getTimestamp()).setAorta(1);
             }
             if (HLMEventData.EventType.REPERFUSION_BEGINN.equals(event.getType())) {
-                timeData.setReperfusion(1);
+                createOrGetTimeData(event.getTimestamp()).setReperfusion(1);
             }
             if (HLMEventData.EventType.REPERFUSION_ENDE.equals(event.getType())) {
-                timeData.setReperfusion(0);
+                createOrGetTimeData(event.getTimestamp()).setReperfusion(0);
             }
             if (HLMEventData.EventType.KARDIOPLEGIE.equals(event.getType())) {
-                timeData.setKardioplegie(event.getAmount());
+                createOrGetTimeData(event.getTimestamp()).setKardioplegie(event.getAmount());
             }
             if (HLMEventData.EventType.JONOSTERIL.equals(event.getType())) {
-                timeData.setJonosteril(event.getAmount());
+                createOrGetTimeData(event.getTimestamp()).setJonosteril(event.getAmount());
             }
             if (HLMEventData.EventType.HEPARIN.equals(event.getType())) {
-                timeData.setHeparin(event.getAmount());
+                createOrGetTimeData(event.getTimestamp()).setHeparin(event.getAmount());
             }
             if (HLMEventData.EventType.NABI_8_4_PC.equals(event.getType())) {
-                timeData.setNabi_8_4(event.getAmount());
+                createOrGetTimeData(event.getTimestamp()).setNabi_8_4(event.getAmount());
             }
             if (HLMEventData.EventType.RESERVOIRVOLUMEN.equals(event.getType())) {
-                timeData.setLevelstand(event.getAmount());
+                createOrGetTimeData(event.getTimestamp()).setLevelstand(event.getAmount());
             }
             if (HLMEventData.EventType.CS_EK.equals(event.getType())) {
-                timeData.setCs_ek(event.getAmount());
+                createOrGetTimeData(event.getTimestamp()).setCs_ek(event.getAmount());
             }
             if (HLMEventData.EventType.FREMDBLUT.equals(event.getType())) {
-                timeData.setFremdblut("TODO");
+                createOrGetTimeData(event.getTimestamp()).setFremdblut(event.getAmount());
             }
             if (HLMEventData.EventType.HUMANALBUMIN_5.equals(event.getType())) {
-                timeData.setHumanalbumin_5pc("TODO");
+                createOrGetTimeData(event.getTimestamp()).setHumanalbumin_5pc(event.getAmount());
             }
             if (HLMEventData.EventType.HUMANALBUMIN_20.equals(event.getType())) {
-                timeData.setHumanalbumin_20pc("TODO");
+                createOrGetTimeData(event.getTimestamp()).setHumanalbumin_20pc(event.getAmount());
             }
             if (HLMEventData.EventType.HAEMOFILTRAT.equals(event.getType())) {
-                timeData.setHaemofiltrat(event.getAmount());
+                createOrGetTimeData(event.getTimestamp()).setHaemofiltrat(event.getAmount());
             }
             if (HLMEventData.EventType.RESTBLUT_PERF.equals(event.getType())) {
-                timeData.setRestblut_perf(event.getAmount());
+                createOrGetTimeData(event.getTimestamp()).setRestblut_perf(event.getAmount());
             }
             if (HLMEventData.EventType.MASCHINENBLUT.equals(event.getType())) {
-                timeData.setMaschinenblut(event.getAmount());
+                createOrGetTimeData(event.getTimestamp()).setMaschinenblut(event.getAmount());
             }
             if (HLMEventData.EventType.CELL_SAVER_ABGESAUGT.equals(event.getType())) {
-                timeData.setCell_saver_abgesaugt(event.getAmount());
+                createOrGetTimeData(event.getTimestamp()).setCell_saver_abgesaugt(event.getAmount());
             }
             if (HLMEventData.EventType.DEFIBRILLATION.equals(event.getType())) {
-                timeData.setDefibrillation("DEFIBRILLATION");
+                createOrGetTimeData(event.getTimestamp()).setDefibrillation(1);
             }
             if (HLMEventData.EventType.ACT.equals(event.getType())) {
-                timeData.setAct(event.getAmount());
+                createOrGetTimeData(event.getTimestamp()).setAct(event.getAmount());
             }
             if (HLMEventData.EventType.HAEMOFILTRATION.equals(event.getType())) {
-                timeData.setHaemofiltration("TODO!");
+                createOrGetTimeData(event.getTimestamp()).setHaemofiltration(1);
             }
             if (HLMEventData.EventType.CYTOKIN_ADSORPTION.equals(event.getType())) {
-                timeData.setCytokin_adsorption("TODO!");
+                createOrGetTimeData(event.getTimestamp()).setCytokin_adsorption("TODO!");
+            }
+            if (HLMEventData.EventType.KOD.equals(event.getType())) {
+                createOrGetTimeData(event.getTimestamp()).setKod(event.getAmount());
             }
         });
     }

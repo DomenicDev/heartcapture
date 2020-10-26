@@ -83,6 +83,10 @@ public final class ExcelToEntityConverter {
         if ("Cell-Saver abgesaugt".equals(eventType)) return EventType.CELL_SAVER_ABGESAUGT;
         if ("CS-EK".equals(eventType)) return EventType.CS_EK;
         if ("H\u00E4mofiltrat".equals(eventType)) return EventType.HAEMOFILTRAT;
+        if ("KOD".equals(eventType)) return EventType.KOD;
+        if ("Fremdblut".equals(eventType)) return EventType.FREMDBLUT;
+        if ("Human Alb, 5%".equals(eventType)) return EventType.HUMANALBUMIN_5;
+        if ("Human Alb, 20%".equals(eventType)) return EventType.HUMANALBUMIN_20;
         return EventType.UNKNOWN;
     }
 

@@ -47,7 +47,8 @@ public final class HLMEventData {
         CYTOKIN_ADSORPTION,
         LEVEL_ALARM_AUS,
         LEVEL_ALARM_EIN,
-        RESERVOIRVOLUMEN
+        RESERVOIRVOLUMEN,
+        KOD
     }
 
     public enum Unit {

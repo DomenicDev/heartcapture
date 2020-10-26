@@ -65,17 +65,18 @@ class TimeData implements Comparable<TimeData> {
     private Integer heparin;
     private Integer nabi_8_4;
     private Integer cs_ek;
-    private String fremdblut;
-    private String humanalbumin_5pc;
-    private String humanalbumin_20pc;
+    private Integer fremdblut;
+    private Integer humanalbumin_5pc;
+    private Integer humanalbumin_20pc;
     private Integer haemofiltrat;
     private Integer restblut_perf;
     private Integer maschinenblut;
     private Integer cell_saver_abgesaugt;
-    private String defibrillation;
+    private Integer defibrillation;
     private Integer act;
-    private String haemofiltration;
+    private Integer haemofiltration;
     private String cytokin_adsorption;
+    private Integer kod;
 
     // ------------------------------
 
@@ -95,8 +96,6 @@ class TimeData implements Comparable<TimeData> {
 
     //------------------------------------------
 
-    // UNKNOWN
-    private Double kod;
     private Double do2;
 
     
