@@ -1,6 +1,6 @@
 package de.cassisi.hearth.port;
 
-import de.cassisi.heart.port.ExcelReportGenerator;
+import de.cassisi.heart.port.ExcelReportFileGeneratorImpl;
 import de.cassisi.hearth.entity.*;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +14,7 @@ class TestExcelReportGenerator {
 
     @Test
     void test() {
-        ExcelReportGenerator generator = new ExcelReportGenerator();
+        ExcelReportFileGeneratorImpl generator = new ExcelReportFileGeneratorImpl();
 
         Operation operation = new Operation(1L, LocalDate.now(), "Room 7",
                 false,

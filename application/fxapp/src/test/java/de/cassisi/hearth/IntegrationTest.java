@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
 
@@ -26,6 +27,8 @@ public class IntegrationTest {
     private GenerateReport generateReport;
     @Autowired
     private AddAnesthesiaData addAnesthesiaData;
+    @Autowired
+    private AddInfusionData addInfusionData;
     @Autowired
     private AddNirsData addNirsData;
 
@@ -61,6 +64,17 @@ public class IntegrationTest {
             nirsInput.leftSaturation = random.nextInt(80) + 20;
             nirsInput.timestamp = now.plusSeconds(6 * i);
             addNirsData.execute(nirsInput, outputData -> {});
+        }
+        for (int i = 0; i < 100; i++) {
+            AddInfusionData.InputData infusionInput = new AddInfusionData.InputData();
+            infusionInput.timestamp = now.plusMinutes(2).plusSeconds(i * 5);
+            infusionInput.operationId = operationId;
+            infusionInput.infusionData = Arrays.asList(
+                    new AddInfusionData.InputData.PerfusorInput("Arterenol", (int) (Math.random() * 10)),
+                    new AddInfusionData.InputData.PerfusorInput("Vasopressin", (int) (Math.random() * 10)),
+                    new AddInfusionData.InputData.PerfusorInput("Sufentanil", (int) (Math.random() * 10))
+            );
+            addInfusionData.execute(infusionInput, outputData -> {});
         }
 
 

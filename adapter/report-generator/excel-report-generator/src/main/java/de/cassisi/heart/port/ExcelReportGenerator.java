@@ -1,8 +1,6 @@
 package de.cassisi.heart.port;
 
 import de.cassisi.hearth.entity.*;
-import de.cassisi.hearth.entity.HLMEventData.EventType;
-import de.cassisi.hearth.usecase.port.ReportFileGenerator;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFFormulaEvaluator;
 import org.modelmapper.ModelMapper;
@@ -11,18 +9,27 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 
-public class ExcelReportGenerator implements ReportFileGenerator {
+public class ExcelReportGenerator {
+
+    private final Map<LocalDateTime, TimeData> timestampTimeDataMap = new HashMap<>();
+    private final List<TimeData> timeDataList = new LinkedList<>();
 
     private Sheet sheet;
     private CellStyle timeStyle;
 
-    @Override
-    public byte[] generateReport(ReportData reportData) {
+    private static final String ARTERENOL = "Arterenol";
+    private static final String VASOPRESSIN = "Vasopressin";
+    private static final String SUFENTANIL = "Sufentanil";
+
+    /**
+     * Generates an excel report document based on the specified report data.
+     * @param reportData the report data to generate the report from
+     * @return an byte[] containing the whole workbook (could be used to write to file)
+     */
+    public byte[] generate(ReportData reportData) {
         try {
             Operation operation = reportData.getOperation();
             HLMData hlmData = reportData.getHlmData();
@@ -30,7 +37,7 @@ public class ExcelReportGenerator implements ReportFileGenerator {
             List<AnesthesiaData> anesthesiaData = reportData.getAnesthesiaData();
             List<NIRSData> nirsData = reportData.getNirsData();
 
-            Workbook template = WorkbookFactory.create(Objects.requireNonNull(ExcelReportGenerator.class.getClassLoader().getResourceAsStream("report_template.xlsx")));
+            Workbook template = WorkbookFactory.create(Objects.requireNonNull(ExcelReportFileGeneratorImpl.class.getClassLoader().getResourceAsStream("report_template.xlsx")));
 
             CreationHelper createHelper = template.getCreationHelper();
             timeStyle = template.createCellStyle();
@@ -62,14 +69,11 @@ public class ExcelReportGenerator implements ReportFileGenerator {
             // PRIMING COMPOSITION
             addPrimingComposition(hlmData.getPrimingComposition());
 
-            // TIME DATA
-            List<TimeData> timeDataList = new LinkedList<>();
-
             // convert to TimeData objects and add them to the list
-            convertNirsData(nirsData, timeDataList);
-            convertAnesthesiaData(anesthesiaData, timeDataList);
-            convertInfusionData(infusionData, timeDataList);
-            convertTemporalHLMData(hlmData, timeDataList);
+            convertNirsData(nirsData);
+            convertAnesthesiaData(anesthesiaData);
+            convertInfusionData(infusionData);
+            convertTemporalHLMData(hlmData);
 
             // Sort TimeData by timestamp
             TimeData[] timeDataArray = timeDataList.toArray(new TimeData[0]);
@@ -95,6 +99,28 @@ public class ExcelReportGenerator implements ReportFileGenerator {
             throw new RuntimeException(e);
         }
     }
+
+    private TimeData createOrGetTimeData(LocalDateTime timestamp) {
+        // we truncate the specified timestamp to seconds which is good (precise) enough
+        // this way we avoid duplicate timestamps in the excel sheet if two timestamps differ by nanos only
+        LocalDateTime truncatedTimestamp = timestamp.truncatedTo(ChronoUnit.SECONDS);
+
+        // create new time data if there is none for the specific timestamp yet
+        if (!timestampTimeDataMap.containsKey(truncatedTimestamp)) {
+            // create TimeData instance for this timestamp
+            TimeData timeData = new TimeData(truncatedTimestamp);
+
+            // put into map for later reuse
+            timestampTimeDataMap.put(truncatedTimestamp, timeData);
+
+            // add to global TimeData list
+            timeDataList.add(timeData);
+        }
+
+        // return specific TimeData object for this timestamp
+        return timestampTimeDataMap.get(truncatedTimestamp);
+    }
+
 
     private void postEditTimeData(List<TimeData> timeDataList) {
         completeBypassRange(timeDataList);
@@ -150,15 +176,15 @@ public class ExcelReportGenerator implements ReportFileGenerator {
         }
     }
 
-    private void convertTemporalHLMData(HLMData hlmData, List<TimeData> timeDataList) {
-        convertEventData(hlmData.getEventList(), timeDataList);
-        convertParamData(hlmData.getParamData(), timeDataList);
-        convertBloodSample(hlmData.getBloodSamples(), timeDataList);
+    private void convertTemporalHLMData(HLMData hlmData) {
+        convertEventData(hlmData.getEventList());
+        convertParamData(hlmData.getParamData());
+        convertBloodSample(hlmData.getBloodSamples());
     }
 
-    private void convertBloodSample(List<HlmBloodSample> bloodSamples, List<TimeData> timeDataList) {
+    private void convertBloodSample(List<HlmBloodSample> bloodSamples) {
         bloodSamples.forEach(data -> {
-            TimeData timeData = new TimeData(data.getTimestamp());
+            TimeData timeData = createOrGetTimeData(data.getTimestamp());
             ModelMapper mapper = new ModelMapper();
             if (data.getTyp().equals(HlmBloodSample.Type.ART)) {
                 BloodSampleData artData = mapper.map(data, BloodSampleData.class);
@@ -166,142 +192,141 @@ public class ExcelReportGenerator implements ReportFileGenerator {
             } else if (HlmBloodSample.Type.VEN.equals(data.getTyp())) {
                 timeData.setBloodDataVen(mapper.map(data, BloodSampleData.class));
             }
-
-            timeDataList.add(timeData);
-
         });
     }
 
-    private void convertParamData(List<HlmParamData> paramData, List<TimeData> timeDataList) {
+    private void convertParamData(List<HlmParamData> paramData) {
         paramData.forEach(data -> {
-            TimeData timeData = new TimeData(data.getTimestamp());
+            TimeData timeData = createOrGetTimeData(data.getTimestamp());
             ModelMapper mapper = new ModelMapper();
             mapper.map(data, timeData);
-            timeDataList.add(timeData);
         });
     }
 
     /**
      * TODO: WIP
      * @param eventList
-     * @param timeDataList
      */
-    private void convertEventData(List<HLMEventData> eventList, List<TimeData> timeDataList) {
+    private void convertEventData(List<HLMEventData> eventList) {
         eventList.forEach(event -> {
 
-            if (event.getType() == null || EventType.UNKNOWN == event.getType()) {
+            if (event.getType() == null || HLMEventData.EventType.UNKNOWN == event.getType()) {
                 return;
             }
 
-            TimeData timeData = new TimeData(event.getTimestamp());
-            if (EventType.BYPASS_ENDE.equals(event.getType())) {
+            TimeData timeData = createOrGetTimeData(event.getTimestamp());
+            if (HLMEventData.EventType.BYPASS_ENDE.equals(event.getType())) {
                 timeData.setBypass(0);
             }
-            if (EventType.BYPASS_BEGINN.equals(event.getType())) {
+            if (HLMEventData.EventType.BYPASS_BEGINN.equals(event.getType())) {
                 timeData.setBypass(1);
             }
-            if (EventType.AORTA_AUF.equals(event.getType())) {
+            if (HLMEventData.EventType.AORTA_AUF.equals(event.getType())) {
                 timeData.setAorta(0);
             }
-            if (EventType.AORTA_ZU.equals(event.getType())) {
+            if (HLMEventData.EventType.AORTA_ZU.equals(event.getType())) {
                 timeData.setAorta(1);
             }
-            if (EventType.REPERFUSION_BEGINN.equals(event.getType())) {
+            if (HLMEventData.EventType.REPERFUSION_BEGINN.equals(event.getType())) {
                 timeData.setReperfusion(1);
             }
-            if (EventType.REPERFUSION_ENDE.equals(event.getType())) {
+            if (HLMEventData.EventType.REPERFUSION_ENDE.equals(event.getType())) {
                 timeData.setReperfusion(0);
             }
-            if (EventType.KARDIOPLEGIE.equals(event.getType())) {
+            if (HLMEventData.EventType.KARDIOPLEGIE.equals(event.getType())) {
                 timeData.setKardioplegie(event.getAmount());
             }
-            if (EventType.JONOSTERIL.equals(event.getType())) {
+            if (HLMEventData.EventType.JONOSTERIL.equals(event.getType())) {
                 timeData.setJonosteril(event.getAmount());
             }
-            if (EventType.HEPARIN.equals(event.getType())) {
+            if (HLMEventData.EventType.HEPARIN.equals(event.getType())) {
                 timeData.setHeparin(event.getAmount());
             }
-            if (EventType.NABI_8_4_PC.equals(event.getType())) {
+            if (HLMEventData.EventType.NABI_8_4_PC.equals(event.getType())) {
                 timeData.setNabi_8_4(event.getAmount());
             }
-            if (EventType.RESERVOIRVOLUMEN.equals(event.getType())) {
+            if (HLMEventData.EventType.RESERVOIRVOLUMEN.equals(event.getType())) {
                 timeData.setLevelstand(event.getAmount());
             }
-            if (EventType.CS_EK.equals(event.getType())) {
+            if (HLMEventData.EventType.CS_EK.equals(event.getType())) {
                 timeData.setCs_ek(event.getAmount());
             }
-            if (EventType.FREMDBLUT.equals(event.getType())) {
+            if (HLMEventData.EventType.FREMDBLUT.equals(event.getType())) {
                 timeData.setFremdblut("TODO");
             }
-            if (EventType.HUMANALBUMIN_5.equals(event.getType())) {
+            if (HLMEventData.EventType.HUMANALBUMIN_5.equals(event.getType())) {
                 timeData.setHumanalbumin_5pc("TODO");
             }
-            if (EventType.HUMANALBUMIN_20.equals(event.getType())) {
+            if (HLMEventData.EventType.HUMANALBUMIN_20.equals(event.getType())) {
                 timeData.setHumanalbumin_20pc("TODO");
             }
-            if (EventType.HAEMOFILTRAT.equals(event.getType())) {
+            if (HLMEventData.EventType.HAEMOFILTRAT.equals(event.getType())) {
                 timeData.setHaemofiltrat(event.getAmount());
             }
-            if (EventType.RESTBLUT_PERF.equals(event.getType())) {
+            if (HLMEventData.EventType.RESTBLUT_PERF.equals(event.getType())) {
                 timeData.setRestblut_perf(event.getAmount());
             }
-            if (EventType.MASCHINENBLUT.equals(event.getType())) {
+            if (HLMEventData.EventType.MASCHINENBLUT.equals(event.getType())) {
                 timeData.setMaschinenblut(event.getAmount());
             }
-            if (EventType.CELL_SAVER_ABGESAUGT.equals(event.getType())) {
+            if (HLMEventData.EventType.CELL_SAVER_ABGESAUGT.equals(event.getType())) {
                 timeData.setCell_saver_abgesaugt(event.getAmount());
             }
-            if (EventType.DEFIBRILLATION.equals(event.getType())) {
+            if (HLMEventData.EventType.DEFIBRILLATION.equals(event.getType())) {
                 timeData.setDefibrillation("DEFIBRILLATION");
             }
-            if (EventType.ACT.equals(event.getType())) {
+            if (HLMEventData.EventType.ACT.equals(event.getType())) {
                 timeData.setAct(event.getAmount());
             }
-            if (EventType.HAEMOFILTRATION.equals(event.getType())) {
+            if (HLMEventData.EventType.HAEMOFILTRATION.equals(event.getType())) {
                 timeData.setHaemofiltration("TODO!");
             }
-            if (EventType.CYTOKIN_ADSORPTION.equals(event.getType())) {
+            if (HLMEventData.EventType.CYTOKIN_ADSORPTION.equals(event.getType())) {
                 timeData.setCytokin_adsorption("TODO!");
             }
-
-            // add to list
-            timeDataList.add(timeData);
         });
     }
 
 
-    private void convertInfusionData(List<InfusionData> infusionData, List<TimeData> timeDataList) {
+    private void convertInfusionData(List<InfusionData> infusionData) {
         infusionData.forEach(data -> {
 
-            TimeData timeData = new TimeData(data.getTimestamp());
             boolean hasRelevantPerfusorData = false;
 
             // look for relevant perfusor data
             for (PerfusorData perfusor : data.getPerfusorDataList()) {
-                if ("Arterenol".equals(perfusor.getName())) {
-                    timeData.setPerfusorArterenol(perfusor.getRate());
+                if (ARTERENOL.equals(perfusor.getName())
+                        || VASOPRESSIN.equals(perfusor.getName())
+                        || SUFENTANIL.equals(perfusor.getName())) {
                     hasRelevantPerfusorData = true;
-                } else if ("Vasopressin".equals(perfusor.getName())) {
-                    timeData.setPerfusorVasopressin(perfusor.getRate());
-                    hasRelevantPerfusorData = true;
-                } else if ("Sufentanil".equals(perfusor.getName())) {
-                    timeData.setPerfusorSufentanil(perfusor.getRate());
-                    hasRelevantPerfusorData = true;
+                    break;
                 }
             }
 
             // only add time data object if it has relevant data for documentation
             if (hasRelevantPerfusorData) {
-                timeDataList.add(timeData);
+                TimeData timeData = createOrGetTimeData(data.getTimestamp());
+                for (PerfusorData perfusor : data.getPerfusorDataList()) {
+                    String name = perfusor.getName();
+                    Double rate = perfusor.getRate();
+                    if (ARTERENOL.equals(name)) {
+                        timeData.setPerfusorArterenol(rate);
+                    }
+                    if (VASOPRESSIN.equals(name)) {
+                        timeData.setPerfusorVasopressin(rate);
+                    }
+                    if (SUFENTANIL.equals(name)) {
+                        timeData.setPerfusorSufentanil(rate);
+                    }
+                }
             }
         });
     }
 
-    private void convertAnesthesiaData(List<AnesthesiaData> anesthesiaData, List<TimeData> timeDataList) {
+    private void convertAnesthesiaData(List<AnesthesiaData> anesthesiaData) {
         anesthesiaData.forEach(data -> {
-            TimeData timeData = new TimeData(data.getTimestamp());
+            TimeData timeData = createOrGetTimeData(data.getTimestamp());
             timeData.setDepthOfAnesthesia(data.getDepthOfAnesthesia());
-            timeDataList.add(timeData);
         });
     }
 
@@ -403,12 +428,11 @@ public class ExcelReportGenerator implements ReportFileGenerator {
         setCellValue(row, 82, data.getDo2());
     }
 
-    private void convertNirsData(List<NIRSData> infusionData, List<TimeData> timeDataList) {
+    private void convertNirsData(List<NIRSData> infusionData) {
         infusionData.forEach(data -> {
-            TimeData timeData = new TimeData(data.getTimestamp());
+            TimeData timeData = createOrGetTimeData(data.getTimestamp());
             timeData.setLeftSaturation(data.getLeftSaturation());
             timeData.setRightSaturation(data.getRightSaturation());
-            timeDataList.add(timeData);
         });
     }
 
@@ -467,5 +491,6 @@ public class ExcelReportGenerator implements ReportFileGenerator {
             return r;
         }
     }
+
 
 }

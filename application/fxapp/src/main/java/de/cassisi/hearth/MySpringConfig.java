@@ -1,6 +1,6 @@
 package de.cassisi.hearth;
 
-import de.cassisi.heart.port.ExcelReportGenerator;
+import de.cassisi.heart.port.ExcelReportFileGeneratorImpl;
 import de.cassisi.hearth.port.*;
 import de.cassisi.hearth.usecase.*;
 import de.cassisi.hearth.usecase.interactor.*;
@@ -21,7 +21,7 @@ public class MySpringConfig {
     private final GenerateReportRepository generateReportRepository;
 
     private final HLMFileReader hlmFileReader = new HLMExcelFileReader();
-    private final ReportFileGenerator reportFileGenerator = new ExcelReportGenerator();
+    private final ReportFileGenerator reportFileGenerator = new ExcelReportFileGeneratorImpl();
 
     public MySpringConfig(CreateOperationJpaRepository createOperationJpaRepository, AddInfusionDataRepository addInfusionDataRepository, AddNirsDataRepository addNirsDataRepository, ReadHLMDataFileRepository readHLMDataFileRepository, FindAllOperationsJpaRepository findAllOperationsJpaRepository, FindOperationJpaRepository findOperationJpaRepository, GenerateReportRepository generateReportRepository, AddAnesthesiaDataJpaRepository addAnesthesiaDataJpaRepository) {
         this.createOperationJpaRepository = createOperationJpaRepository;
