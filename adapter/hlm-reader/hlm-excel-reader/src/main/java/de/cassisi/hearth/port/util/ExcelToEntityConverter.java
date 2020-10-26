@@ -152,6 +152,7 @@ public final class ExcelToEntityConverter {
         return HlmBloodSample.builder()
                 .timestamp(data.getTimestamp())
                 .typ(convertBloodSampleType(data.getTyp()))
+                .hbOfl(data.getHbOfl())
                 .hctOFL(data.getHctOfl())
                 .phOfl(data.getPhOfl())
                 .pco2Ofl(data.getPco2Ofl())
