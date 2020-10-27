@@ -1,13 +1,14 @@
-package de.cassisi.hearth.ui.recorder.data;
+package de.cassisi.hearth.tools.recorder.nirs;
 
 import lombok.AllArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
-public final class BISData {
+public final class NIRSData {
 
     public final LocalDateTime timestamp;
-    public final double depthOfAnesthesia;
+    public final int left;
+    public final int right;
 
 }

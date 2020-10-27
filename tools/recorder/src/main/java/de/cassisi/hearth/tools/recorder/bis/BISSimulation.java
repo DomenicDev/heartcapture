@@ -1,6 +1,6 @@
-package de.cassisi.hearth.ui.recorder;
+package de.cassisi.hearth.tools.recorder.bis;
 
-import de.cassisi.hearth.ui.recorder.data.BISData;
+import de.cassisi.hearth.tools.recorder.AbstractRecorder;
 
 import java.time.LocalDateTime;
 

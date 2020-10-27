@@ -1,4 +1,4 @@
-package de.cassisi.hearth.ui.recorder;
+package de.cassisi.hearth.tools.recorder;
 
 public abstract class AbstractRecorder<T> implements Recorder<T> {
 

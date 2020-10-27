@@ -46,6 +46,7 @@ dependencies {
 
 
     compile project(':usecase')
+    compile project(':recorder')
     compile project(':spring-jpa-repository')
     implementation project(':hlm-excel-reader')
     implementation project(':excel-report-generator')

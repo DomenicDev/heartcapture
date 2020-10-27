@@ -6,10 +6,12 @@ import com.dlsc.formsfx.model.structure.Group;
 import com.dlsc.formsfx.view.renderer.FormRenderer;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
+import de.cassisi.hearth.ui.enums.MessageType;
 import de.cassisi.hearth.ui.event.*;
 import de.cassisi.hearth.ui.interactor.UseCaseExecutor;
 import de.cassisi.hearth.ui.navigator.Navigator;
 import de.cassisi.hearth.ui.presenter.*;
+import de.cassisi.hearth.ui.recorder.RecordingController;
 import de.cassisi.hearth.ui.utils.EventBusProvider;
 import de.cassisi.hearth.usecase.*;
 import javafx.beans.property.ObjectProperty;
@@ -38,12 +40,14 @@ public class GuiEventController {
     private final OperationOverviewPresenter operationOverviewPresenter;
     private final ReadHLMDataFilePresenter hlmDataFilePresenter;
     private final GenerateReportPresenter generateReportPresenter;
+    private final RecordingStatePresenter recordingStatePresenter;
 
     private final Navigator navigator;
+    private final RecordingController recordingController;
 
     private final EventBus eventBus;
 
-    public GuiEventController(UseCaseExecutor useCaseExecutor, AddNirsDataPresenter addNirsDataPresenter, AddAnesthesiaDataPresenter addAnesthesiaDataPresenter, AddInfusionDataPresenter addInfusionDataPresenter, CreateOperationPresenter createOperationPresenter, RefreshLatestOperationPresenter refreshLatestOperationPresenter1, OperationOverviewPresenter operationOverviewPresenter, ReadHLMDataFilePresenter hlmDataFilePresenter, GenerateReportPresenter generateReportPresenter, Navigator navigator) {
+    public GuiEventController(UseCaseExecutor useCaseExecutor, AddNirsDataPresenter addNirsDataPresenter, AddAnesthesiaDataPresenter addAnesthesiaDataPresenter, AddInfusionDataPresenter addInfusionDataPresenter, CreateOperationPresenter createOperationPresenter, RefreshLatestOperationPresenter refreshLatestOperationPresenter1, OperationOverviewPresenter operationOverviewPresenter, ReadHLMDataFilePresenter hlmDataFilePresenter, GenerateReportPresenter generateReportPresenter, RecordingStatePresenter recordingStatePresenter, Navigator navigator, RecordingController recordingController) {
         this.useCaseExecutor = useCaseExecutor;
         this.addNirsDataPresenter = addNirsDataPresenter;
         this.addAnesthesiaDataPresenter = addAnesthesiaDataPresenter;
@@ -53,7 +57,9 @@ public class GuiEventController {
         this.operationOverviewPresenter = operationOverviewPresenter;
         this.hlmDataFilePresenter = hlmDataFilePresenter;
         this.generateReportPresenter = generateReportPresenter;
+        this.recordingStatePresenter = recordingStatePresenter;
         this.navigator = navigator;
+        this.recordingController = recordingController;
 
         // register to event bus
         this.eventBus = EventBusProvider.getEventBus();
@@ -159,7 +165,32 @@ public class GuiEventController {
         getUseCaseExecutor().generateReportEvent(inputData, generateReportPresenter);
     }
 
+    @Subscribe
+    public void handle(ShowMessageEvent event) {
+        String messageKey = event.getMessageKey();
+        MessageType messageType = event.getMessageType();
+        navigator.showMessage(messageKey, messageType);
+    }
+
+    @Subscribe
+    public void handle(StartRecordingEvent event) {
+        boolean started = this.recordingController.startRecording(event);
+        if (started) {
+            recordingStatePresenter.handleStarted();
+        }
+    }
+
+    @Subscribe
+    public void handle(StopRecordingEvent event) {
+        boolean stopped = this.recordingController.stopRecording();
+        if (stopped) {
+            recordingStatePresenter.handleStopped();
+        }
+    }
+
     private UseCaseExecutor getUseCaseExecutor() {
         return this.useCaseExecutor;
     }
+
+
 }

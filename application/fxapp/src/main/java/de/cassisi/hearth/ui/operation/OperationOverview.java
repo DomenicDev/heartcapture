@@ -64,9 +64,11 @@ public class OperationOverview implements FxmlView<OperationOverviewViewModel>, 
         titleLabel.textProperty().bind(viewModel.titleLabel());
         operationDatePicker.valueProperty().bind(viewModel.dateProperty());
         roomTextField.textProperty().bind(viewModel.roomProperty());
+        startRecordingButton.disableProperty().bind(viewModel.getStartRecordingButtonDisableProperty());
+        stopRecordingButton.disableProperty().bind(viewModel.getStopRecordingButtonDisableProperty());
 
-        startRecordingButton.setOnAction(event -> post(new StartRecordingEvent(viewModel.idProperty().get())));
-        stopRecordingButton.setOnAction(event -> post(new StopRecordingEvent()));
+        startRecordingButton.setOnAction(event -> startRecording());
+        stopRecordingButton.setOnAction(event -> stopRecording());
 
         // setup live data presenters
        initRecordingGauges();
@@ -135,6 +137,20 @@ public class OperationOverview implements FxmlView<OperationOverviewViewModel>, 
                 return cell;
             }
         });
+    }
+
+    private void startRecording() {
+        post(new StartRecordingEvent(viewModel.idProperty().get(),
+                true,
+                true,
+                true,
+                "COM7",
+                "COM5",
+                "COM9"));
+    }
+
+    private void stopRecording() {
+        post(new StopRecordingEvent());
     }
 
     private long getOperationId() {

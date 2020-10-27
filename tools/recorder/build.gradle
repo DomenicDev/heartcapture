@@ -1,0 +1,17 @@
+
+
+dependencies {
+    compileOnly 'org.projectlombok:lombok:1.18.12'
+    annotationProcessor 'org.projectlombok:lombok:1.18.12'
+
+    compile 'com.fazecast:jSerialComm:[2.0.0,3.0.0)'
+
+    testCompile group: 'org.mockito', name: 'mockito-core', version: '3.5.13'
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
+}
+
+test {
+    useJUnitPlatform()
+}
+

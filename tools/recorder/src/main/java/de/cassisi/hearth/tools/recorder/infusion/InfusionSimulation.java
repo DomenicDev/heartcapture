@@ -1,6 +1,6 @@
-package de.cassisi.hearth.ui.recorder;
+package de.cassisi.hearth.tools.recorder.infusion;
 
-import de.cassisi.hearth.ui.recorder.data.InfusionData;
+import de.cassisi.hearth.tools.recorder.AbstractRecorder;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

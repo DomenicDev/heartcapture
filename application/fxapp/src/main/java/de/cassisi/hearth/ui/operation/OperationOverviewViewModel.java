@@ -3,13 +3,13 @@ package de.cassisi.hearth.ui.operation;
 import de.cassisi.hearth.ui.data.PerfusionUIData;
 import de.saxsys.mvvmfx.ViewModel;
 import javafx.beans.property.*;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import lombok.Getter;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 
+@Getter
 @Component
 public class OperationOverviewViewModel implements ViewModel {
 
@@ -25,6 +25,10 @@ public class OperationOverviewViewModel implements ViewModel {
     private final IntegerProperty nirsLeftValue = new SimpleIntegerProperty();
     private final IntegerProperty nirsRightValue = new SimpleIntegerProperty();
     private final DoubleProperty bisProperty = new SimpleDoubleProperty();
+
+    private final BooleanProperty startRecordingButtonDisableProperty = new SimpleBooleanProperty(false);
+    private final BooleanProperty stopRecordingButtonDisableProperty = new SimpleBooleanProperty(true);
+
 
     //***************************//
     //      ACCESS METHODS       //
@@ -61,4 +65,5 @@ public class OperationOverviewViewModel implements ViewModel {
     public ObjectProperty<ObservableList<PerfusionUIData>> infusionList() {
         return this.perfusionData;
     }
+
 }
