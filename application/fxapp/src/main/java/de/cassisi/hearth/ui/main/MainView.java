@@ -58,6 +58,7 @@ public class MainView implements FxmlView<MainViewModel>, Initializable {
     public void showDashboard() {
         mainContent.getChildren().clear();
         mainContent.getChildren().add(dashboardViewTuple.getView());
+        dashboardViewTuple.getCodeBehind().refreshTableData();
     }
 
     public void showOperationOverview() {

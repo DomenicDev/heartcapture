@@ -71,4 +71,11 @@ public class ReadHLMDataFileJpaRepository implements ReadHLMDataFileRepository {
 
         operationRepository.save(operationDB);
     }
+
+    @Override
+    public Operation getOperation(long operationId) {
+        OperationDB operationDB = operationRepository.findById(operationId).orElseThrow(() -> new OperationNotFoundException(operationId));
+        return DBConverter.convert(operationDB);
+
+    }
 }

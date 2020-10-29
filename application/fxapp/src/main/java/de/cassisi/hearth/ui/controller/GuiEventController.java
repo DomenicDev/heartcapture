@@ -12,6 +12,7 @@ import de.cassisi.hearth.ui.interactor.UseCaseExecutor;
 import de.cassisi.hearth.ui.navigator.Navigator;
 import de.cassisi.hearth.ui.presenter.*;
 import de.cassisi.hearth.ui.recorder.RecordingController;
+import de.cassisi.hearth.ui.utils.DialogCreator;
 import de.cassisi.hearth.ui.utils.EventBusProvider;
 import de.cassisi.hearth.usecase.*;
 import javafx.beans.property.ObjectProperty;
@@ -102,38 +103,15 @@ public class GuiEventController {
         inputData.localDate = event.getOperationDate();
         inputData.room = event.getRoomNr();
         this.useCaseExecutor.createOperation(inputData, createOperationPresenter);
-        this.eventBus.post(new ShowOperationView());
+        this.navigator.showOperation();
     }
 
     @Subscribe
     public void handle(OpenNewCreateOperationWindow event) {
-        ObjectProperty<LocalDate> localDate = new SimpleObjectProperty<>();
-        StringProperty roomProperty = new SimpleStringProperty("");
-        Form form = Form.of(
-                Group.of(
-                        Field.ofDate(localDate).label("Datum").required(true),
-                        Field.ofStringType(roomProperty).label("Raum").required(true)
-                )
-        ).title("Der Titel");
-        Stage stage = new Stage();
-        Button submitButton = new Button("Submit");
-        submitButton.setOnAction(e -> {
-            form.persist();
-            eventBus.post(new CreateOperationEvent(localDate.get(), roomProperty.get()));
-            stage.close();
-        });
-
-        VBox formPane = new VBox();
-        formPane.getChildren().add(new FormRenderer(form));
-        formPane.getChildren().add(submitButton);
-        stage.setScene(new Scene(formPane));
-        stage.setWidth(400);
-        stage.setHeight(300);
-        stage.setResizable(false);
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.initOwner(event.getOwner());
-        stage.show();
-
+        DialogCreator.showCreateOperationDialog(
+                event.getOwner(),
+                (operationDate, room) -> eventBus.post(new CreateOperationEvent(operationDate, room))
+        );
     }
 
     @Subscribe

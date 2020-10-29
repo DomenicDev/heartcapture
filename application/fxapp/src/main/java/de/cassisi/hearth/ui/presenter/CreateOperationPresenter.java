@@ -1,10 +1,10 @@
 package de.cassisi.hearth.ui.presenter;
 
 import de.cassisi.hearth.ui.operation.OperationOverviewViewModel;
+import de.cassisi.hearth.ui.utils.PresenterUtils;
 import de.cassisi.hearth.usecase.CreateOperation;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 
 @Component
 public class CreateOperationPresenter extends UseCasePresenter<CreateOperation.OutputData> {
@@ -17,9 +17,7 @@ public class CreateOperationPresenter extends UseCasePresenter<CreateOperation.O
 
     @Override
     public void runOnUI(CreateOperation.OutputData outputData) {
-        viewModel.idProperty().setValue(outputData.id);
-        viewModel.dateProperty().setValue(LocalDate.now());
-        viewModel.roomProperty().setValue(outputData.room);
+        PresenterUtils.present(viewModel, outputData.operationData);
     }
 
 }

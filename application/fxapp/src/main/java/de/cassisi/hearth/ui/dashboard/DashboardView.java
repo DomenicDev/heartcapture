@@ -57,6 +57,10 @@ public class DashboardView implements FxmlView<DashboardViewModel>, Initializabl
         initLatestOperationTable();
 
         // init table data
+        refreshTableData();
+    }
+
+    public void refreshTableData() {
         this.eventBus.post(new RefreshLatestOperationDataEvent(true, 20));
     }
 

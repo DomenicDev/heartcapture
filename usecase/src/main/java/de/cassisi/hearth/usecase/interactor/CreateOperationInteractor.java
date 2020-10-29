@@ -4,12 +4,13 @@ import de.cassisi.hearth.entity.Operation;
 import de.cassisi.hearth.usecase.CreateOperation;
 import de.cassisi.hearth.usecase.output.OutputHandler;
 import de.cassisi.hearth.usecase.port.CreateOperationRepository;
+import de.cassisi.hearth.usecase.util.DTOConverter;
 
 import java.time.LocalDate;
 
 public class CreateOperationInteractor implements CreateOperation {
 
-    private CreateOperationRepository operationRepository;
+    private final CreateOperationRepository operationRepository;
 
     public CreateOperationInteractor(CreateOperationRepository operationRepository) {
         this.operationRepository = operationRepository;
@@ -37,9 +38,7 @@ public class CreateOperationInteractor implements CreateOperation {
 
         //generate output
         OutputData data = new OutputData();
-        data.id = savedOperation.getId();
-        data.date = savedOperation.getDate();
-        data.room = savedOperation.getRoomNr();
+        data.operationData = DTOConverter.toSimpleOperationData(savedOperation);
         outputHandler.handle(data);
     }
 }
