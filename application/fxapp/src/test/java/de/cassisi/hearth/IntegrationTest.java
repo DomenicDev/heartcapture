@@ -40,7 +40,7 @@ public class IntegrationTest {
         CreateOperation.InputData inputData = new CreateOperation.InputData();
         inputData.localDate = LocalDate.now();
         inputData.room = "Room 14";
-        createOperation.execute(inputData, outputData -> operationId = outputData.id);
+        createOperation.execute(inputData, outputData -> operationId = outputData.operationData.getId());
 
         // CHECK THAT IT REALLY EXISTS
         FindOperation.InputData findInputData = new FindOperation.InputData();
