@@ -18,9 +18,9 @@ import java.util.List;
 @Repository
 public class AddInfusionDataJpaRepository implements AddInfusionDataRepository {
 
-    private PerfusorRepository perfusorRepository;
-    private InfusionRepository infusionRepository;
-    private OperationRepository operationRepository;
+    private final PerfusorRepository perfusorRepository;
+    private final InfusionRepository infusionRepository;
+    private final OperationRepository operationRepository;
 
     public AddInfusionDataJpaRepository(PerfusorRepository perfusorRepository, InfusionRepository infusionRepository, OperationRepository operationRepository) {
         this.perfusorRepository = perfusorRepository;
@@ -28,8 +28,8 @@ public class AddInfusionDataJpaRepository implements AddInfusionDataRepository {
         this.operationRepository = operationRepository;
     }
 
-    @Transactional
     @Override
+    @Transactional
     public void addInfusionDataToOperation(long operationId, InfusionData infusionData) {
         if (!operationRepository.existsById(operationId)) {
             throw new OperationNotFoundException(operationId);
@@ -62,7 +62,10 @@ public class AddInfusionDataJpaRepository implements AddInfusionDataRepository {
 
         // add infusion data to operation and save it
         operationDB.getInfusionData().add(infusionDataDB);
+
+        // set flag
+        operationDB.setInfusionDataAvailable(true);
+
         operationRepository.save(operationDB);
     }
-
 }

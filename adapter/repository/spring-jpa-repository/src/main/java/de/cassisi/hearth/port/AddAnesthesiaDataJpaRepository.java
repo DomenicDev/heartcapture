@@ -7,14 +7,15 @@ import de.cassisi.hearth.repository.model.AnesthesiaDataDB;
 import de.cassisi.hearth.repository.model.OperationDB;
 import de.cassisi.hearth.usecase.exception.OperationNotFoundException;
 import de.cassisi.hearth.usecase.port.AddAnesthesiaDataRepository;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
+
+import javax.transaction.Transactional;
 
 @Repository
 public class AddAnesthesiaDataJpaRepository implements AddAnesthesiaDataRepository {
 
-    private AnesthesiaRepository anesthesiaRepository;
-    private OperationRepository operationRepository;
+    private final AnesthesiaRepository anesthesiaRepository;
+    private final OperationRepository operationRepository;
 
     public AddAnesthesiaDataJpaRepository(AnesthesiaRepository anesthesiaRepository, OperationRepository operationRepository) {
         this.anesthesiaRepository = anesthesiaRepository;
@@ -22,6 +23,7 @@ public class AddAnesthesiaDataJpaRepository implements AddAnesthesiaDataReposito
     }
 
     @Override
+    @Transactional
     public void addAnesthesiaData(long operationId, AnesthesiaData anesthesiaData) throws OperationNotFoundException {
         // find operation to add the anesthesia data to
         OperationDB operationDB = operationRepository.findById(operationId).orElseThrow(() -> new OperationNotFoundException(operationId));
@@ -35,5 +37,8 @@ public class AddAnesthesiaDataJpaRepository implements AddAnesthesiaDataReposito
 
         // save entity to database
         anesthesiaRepository.save(anesthesiaDataDB);
+
+        // set flag
+        operationDB.setAnesthesiaDataAvailable(true);
     }
 }

@@ -13,18 +13,16 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public class AddNirsDataJpaRepository implements AddNirsDataRepository {
 
-    private NirsRepository nirsRepository;
-    private OperationRepository operationRepository;
-
+    private final NirsRepository nirsRepository;
+    private final OperationRepository operationRepository;
 
     public AddNirsDataJpaRepository(NirsRepository nirsRepository, OperationRepository operationRepository) {
         this.nirsRepository = nirsRepository;
         this.operationRepository = operationRepository;
     }
 
-
-    @Transactional
     @Override
+    @Transactional
     public void addNirsDataToOperation(long operationId, NIRSData nirsData) {
         // check if operation does really exist
         OperationDB operationDB = operationRepository.findById(operationId).orElseThrow(() -> new OperationNotFoundException(operationId));
@@ -40,6 +38,11 @@ public class AddNirsDataJpaRepository implements AddNirsDataRepository {
 
         // update specific operation entity
         operationDB.addNirsData(nirsDataDB);
+
+        // set flag
+        operationDB.setNirsDataAvailable(true);
+
+        // save entity
         operationRepository.save(operationDB);
     }
 }

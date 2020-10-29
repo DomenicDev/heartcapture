@@ -66,6 +66,9 @@ public class ReadHLMDataFileJpaRepository implements ReadHLMDataFileRepository {
 
         operationDB.setHlmData(hlmDataDB);
 
+        // set flag
+        operationDB.setHlmDataAvailable(true);
+
         operationRepository.save(operationDB);
     }
 }

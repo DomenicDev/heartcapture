@@ -5,7 +5,9 @@ import de.saxsys.mvvmfx.ViewModel;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.paint.Paint;
 import lombok.Getter;
+import org.kordamp.ikonli.Ikon;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -19,6 +21,18 @@ public class OperationOverviewViewModel implements ViewModel {
     private final StringProperty roomProperty = new SimpleStringProperty();
     private final StringProperty titleLabel = new SimpleStringProperty();
     private final ObjectProperty<ObservableList<PerfusionUIData>> perfusionData = new SimpleObjectProperty<>(FXCollections.observableArrayList());
+
+    // STATUS
+    private final ObjectProperty<Ikon> nirsAvailableIconCode = new SimpleObjectProperty<>();
+    private final ObjectProperty<Ikon> bisAvailableIconCode = new SimpleObjectProperty<>();
+    private final ObjectProperty<Ikon> infusionAvailableIconCode = new SimpleObjectProperty<>();
+    private final ObjectProperty<Ikon> hlmAvailableIconCode = new SimpleObjectProperty<>();
+
+    private final ObjectProperty<Paint> nirsAvailableIconColor = new SimpleObjectProperty<>();
+    private final ObjectProperty<Paint> bisAvailableIconColor = new SimpleObjectProperty<>();
+    private final ObjectProperty<Paint> infusionAvailableIconColor = new SimpleObjectProperty<>();
+    private final ObjectProperty<Paint> hlmAvailableIconColor = new SimpleObjectProperty<>();
+
 
     /*
     LIVE RECORDING

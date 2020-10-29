@@ -17,6 +17,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import javafx.util.Callback;
+import org.kordamp.ikonli.javafx.FontIcon;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -38,6 +39,19 @@ public class OperationOverview implements FxmlView<OperationOverviewViewModel>, 
     private DatePicker operationDatePicker;
     @FXML
     private TextField roomTextField;
+
+    // STATUS
+    @FXML
+    private FontIcon nirsDataAvailableFontIcon;
+
+    @FXML
+    private FontIcon bisDataAvailableFontIcon;
+
+    @FXML
+    private FontIcon infusionDataAvailableFontIcon;
+
+    @FXML
+    private FontIcon hlmDataAvailableFontIcon;
 
     // RECORDING
     //Settings
@@ -97,6 +111,7 @@ public class OperationOverview implements FxmlView<OperationOverviewViewModel>, 
         startRecordingButton.setOnAction(event -> startRecording());
         stopRecordingButton.setOnAction(event -> stopRecording());
 
+        initStatusInformation();
         initFileChooser();
         initRecordingSettings();
 
@@ -113,6 +128,18 @@ public class OperationOverview implements FxmlView<OperationOverviewViewModel>, 
 
         // REPORT GENERATOR
         generateReportButton.setOnAction(event -> post(new GenerateReportEvent(getOperationId())));
+    }
+
+    private void initStatusInformation() {
+        bisDataAvailableFontIcon.iconCodeProperty().bind(viewModel.getBisAvailableIconCode());
+        nirsDataAvailableFontIcon.iconCodeProperty().bind(viewModel.getNirsAvailableIconCode());
+        infusionDataAvailableFontIcon.iconCodeProperty().bind(viewModel.getInfusionAvailableIconCode());
+        hlmDataAvailableFontIcon.iconCodeProperty().bind(viewModel.getHlmAvailableIconCode());
+
+        bisDataAvailableFontIcon.iconColorProperty().bind(viewModel.getBisAvailableIconColor());
+        nirsDataAvailableFontIcon.iconColorProperty().bind(viewModel.getNirsAvailableIconColor());
+        infusionDataAvailableFontIcon.iconColorProperty().bind(viewModel.getInfusionAvailableIconColor());
+        hlmDataAvailableFontIcon.iconColorProperty().bind(viewModel.getHlmAvailableIconColor());
     }
 
     private void initFileChooser() {
@@ -249,7 +276,7 @@ public class OperationOverview implements FxmlView<OperationOverviewViewModel>, 
     }
 
     private void stopRecording() {
-        post(new StopRecordingEvent());
+        post(new StopRecordingEvent(getOperationId()));
     }
 
     private long getOperationId() {

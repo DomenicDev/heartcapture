@@ -16,7 +16,7 @@ import static de.cassisi.hearth.usecase.AddInfusionData.InputData.*;
 
 public class AddInfusionDataInteractor implements AddInfusionData {
 
-    private AddInfusionDataRepository repository;
+    private final AddInfusionDataRepository repository;
 
     public AddInfusionDataInteractor(AddInfusionDataRepository repository) {
         this.repository = repository;
