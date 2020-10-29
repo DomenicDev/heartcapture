@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 
 @Component
-public class CreateOperationPresenter extends FXPresenter<CreateOperation.OutputData> {
+public class CreateOperationPresenter extends UseCasePresenter<CreateOperation.OutputData> {
 
     private final OperationOverviewViewModel viewModel;
 

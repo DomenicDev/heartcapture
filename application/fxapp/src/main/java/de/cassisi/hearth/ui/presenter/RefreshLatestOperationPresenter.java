@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class RefreshLatestOperationPresenter extends FXPresenter<FindAllOperations.OutputData> {
+public class RefreshLatestOperationPresenter extends UseCasePresenter<FindAllOperations.OutputData> {
 
     private final DashboardViewModel viewModel;
 

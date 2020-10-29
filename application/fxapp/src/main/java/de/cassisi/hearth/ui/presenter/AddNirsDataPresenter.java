@@ -5,7 +5,7 @@ import de.cassisi.hearth.usecase.AddNirsData;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AddNirsDataPresenter extends FXPresenter<AddNirsData.OutputData> {
+public class AddNirsDataPresenter extends UseCasePresenter<AddNirsData.OutputData> {
 
     private final OperationOverviewViewModel viewModel;
 

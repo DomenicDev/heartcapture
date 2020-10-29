@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import static de.cassisi.hearth.usecase.FindOperation.OutputData;
 
 @Component
-public class OperationOverviewPresenter extends FXPresenter<OutputData> {
+public class OperationOverviewPresenter extends UseCasePresenter<OutputData> {
 
     private final OperationOverviewViewModel viewModel;
 

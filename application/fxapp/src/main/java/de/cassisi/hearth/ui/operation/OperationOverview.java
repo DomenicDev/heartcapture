@@ -2,10 +2,9 @@ package de.cassisi.hearth.ui.operation;
 
 import com.google.common.eventbus.EventBus;
 import de.cassisi.hearth.ui.data.PerfusionUIData;
-import de.cassisi.hearth.ui.event.AddHlmFileToOperationEvent;
-import de.cassisi.hearth.ui.event.GenerateReportEvent;
-import de.cassisi.hearth.ui.event.StartRecordingEvent;
-import de.cassisi.hearth.ui.event.StopRecordingEvent;
+import de.cassisi.hearth.ui.enums.MessageType;
+import de.cassisi.hearth.ui.event.*;
+import de.cassisi.hearth.ui.preference.UserPreference;
 import de.cassisi.hearth.ui.utils.EventBusProvider;
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
@@ -23,6 +22,7 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.prefs.Preferences;
 
 @Component
 public class OperationOverview implements FxmlView<OperationOverviewViewModel>, Initializable {
@@ -32,15 +32,40 @@ public class OperationOverview implements FxmlView<OperationOverviewViewModel>, 
     @InjectViewModel
     private OperationOverviewViewModel viewModel;
 
-    @FXML private Label titleLabel;
-    @FXML private DatePicker operationDatePicker;
-    @FXML private TextField roomTextField;
+    @FXML
+    private Label titleLabel;
+    @FXML
+    private DatePicker operationDatePicker;
+    @FXML
+    private TextField roomTextField;
 
     // RECORDING
+    //Settings
+    @FXML
+    private CheckBox bisSerialCheckBox;
+
+    @FXML
+    private CheckBox nirsSerialCheckBox;
+
+    @FXML
+    private CheckBox infusionSerialCheckBox;
+
+    @FXML
+    private ComboBox<String> bisSerialPortComboBox;
+
+    @FXML
+    private ComboBox<String> nirsSerialPortComboBox;
+
+    @FXML
+    private ComboBox<String> infusionSerialPortComboBox;
+
+    // Start / Stop
     @FXML
     private Button startRecordingButton;
     @FXML
     private Button stopRecordingButton;
+
+    // Gauges
     @FXML
     private Pane nirsContainer;
     @FXML
@@ -59,6 +84,8 @@ public class OperationOverview implements FxmlView<OperationOverviewViewModel>, 
     @FXML
     private Button generateReportButton;
 
+    private final Preferences preferences = UserPreference.getInstance().getPreferences();
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         titleLabel.textProperty().bind(viewModel.titleLabel());
@@ -70,12 +97,14 @@ public class OperationOverview implements FxmlView<OperationOverviewViewModel>, 
         startRecordingButton.setOnAction(event -> startRecording());
         stopRecordingButton.setOnAction(event -> stopRecording());
 
+        initFileChooser();
+        initRecordingSettings();
+
         // setup live data presenters
-       initRecordingGauges();
+        initRecordingGauges();
 
         // READ HLM FILE BUTTON
         readHLMFileButton.setOnAction(event -> {
-            // todo add extension filter
             File hlmFile = hlmFileChooser.showOpenDialog(getWindow());
             if (hlmFile != null) {
                 eventBus.post(new AddHlmFileToOperationEvent(viewModel.idProperty().get(), hlmFile));
@@ -86,20 +115,67 @@ public class OperationOverview implements FxmlView<OperationOverviewViewModel>, 
         generateReportButton.setOnAction(event -> post(new GenerateReportEvent(getOperationId())));
     }
 
+    private void initFileChooser() {
+        hlmFileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("HLM-Excel-File (*.xlsx)", "*.xlsx"));
+    }
+
+    private void initRecordingSettings() {
+        bisSerialPortComboBox.itemsProperty().bind(viewModel.getSerialPorts());
+        nirsSerialPortComboBox.itemsProperty().bind(viewModel.getSerialPorts());
+        infusionSerialPortComboBox.itemsProperty().bind(viewModel.getSerialPorts());
+
+        bisSerialCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> preferences.putBoolean("BIS_SERIAL_ENABLED", newValue));
+        nirsSerialCheckBox.selectedProperty().addListener(((observable, oldValue, newValue) -> preferences.putBoolean("NIRS_SERIAL_ENABLED", newValue)));
+        infusionSerialCheckBox.selectedProperty().addListener(((observable, oldValue, newValue) -> preferences.putBoolean("INFUSION_SERIAL_ENABLED", newValue)));
+
+        bisSerialPortComboBox.valueProperty().addListener((observable, oldValue, newValue) -> preferences.put("BIS_SERIAL_PORT_NAME", newValue));
+        nirsSerialPortComboBox.valueProperty().addListener((observable, oldValue, newValue) -> preferences.put("NIRS_SERIAL_PORT_NAME", newValue));
+        infusionSerialPortComboBox.valueProperty().addListener((observable, oldValue, newValue) -> preferences.put("INFUSION_SERIAL_PORT_NAME", newValue));
+
+        boolean bisSerialEnabled = preferences.getBoolean("BIS_SERIAL_ENABLED", true);
+        boolean nirsSerialEnabled = preferences.getBoolean("NIRS_SERIAL_ENABLED", true);
+        boolean infusionSerialEnabled = preferences.getBoolean("INFUSION_SERIAL_ENABLED", true);
+
+        String bisSerialPortName = preferences.get("BIS_SERIAL_PORT_NAME", null);
+        String nirsSerialPortName = preferences.get("NIRS_SERIAL_PORT_NAME", null);
+        String infusionSerialPortName = preferences.get("INFUSION_SERIAL_PORT_NAME", null);
+
+        refreshComPorts();
+        setRecordingSettings(
+                bisSerialEnabled,nirsSerialEnabled,infusionSerialEnabled,
+                bisSerialPortName, nirsSerialPortName, infusionSerialPortName
+        );
+
+    }
+
+    private void refreshComPorts() {
+        post(new RefreshSerialPortEvent());
+    }
+
+    private void setRecordingSettings(boolean bis, boolean nirs, boolean infusion, String bisSerialPortName, String nirsSerialPortName, String infusionSerialPortName) {
+        bisSerialCheckBox.setSelected(bis);
+        nirsSerialCheckBox.setSelected(nirs);
+        infusionSerialCheckBox.setSelected(infusion);
+
+        bisSerialPortComboBox.valueProperty().setValue(bisSerialPortName);
+        nirsSerialPortComboBox.valueProperty().setValue(nirsSerialPortName);
+        infusionSerialPortComboBox.valueProperty().setValue(infusionSerialPortName);
+    }
+
     private void initRecordingGauges() {
         // init NIRS gauges
         Gauge nirsLeftValueGauge = GaugeBuilder.create()
                 .skinType(Gauge.SkinType.TILE_SPARK_LINE)
                 .minValue(0)
                 .maxValue(100)
-          //      .prefSize(250, 250)
+                //      .prefSize(250, 250)
                 .animated(true)
                 .build();
         Gauge nirsRightValueGauge = GaugeBuilder.create()
                 .skinType(Gauge.SkinType.TILE_SPARK_LINE)
                 .averageVisible(true)
                 .minValue(0)
-            //    .prefSize(250, 250)
+                //    .prefSize(250, 250)
                 .maxValue(100)
                 .animated(true)
                 .build();
@@ -130,7 +206,7 @@ public class OperationOverview implements FxmlView<OperationOverviewViewModel>, 
                     protected void updateItem(PerfusionUIData item, boolean empty) {
                         super.updateItem(item, empty);
                         if (item != null) {
-                            setText(item.getName() + " --> " + item.getRate());
+                            setText(item.getName() + ": " + item.getRate() + "ml");
                         }
                     }
                 };
@@ -140,13 +216,36 @@ public class OperationOverview implements FxmlView<OperationOverviewViewModel>, 
     }
 
     private void startRecording() {
-        post(new StartRecordingEvent(viewModel.idProperty().get(),
-                true,
-                true,
-                true,
-                "COM7",
-                "COM5",
-                "COM9"));
+        boolean useBisSerial = bisSerialCheckBox.isSelected();
+        boolean useNirsSerial = nirsSerialCheckBox.isSelected();
+        boolean useInfusionSerial = infusionSerialCheckBox.isSelected();
+
+        String bisSerialPort = bisSerialPortComboBox.getValue();
+        if (useBisSerial && bisSerialPort == null) {
+            postWarningMessage("ui.message.warning_select_bis_serial_port");
+            return;
+        }
+
+        String nirsSerialPort = nirsSerialPortComboBox.getValue();
+        if (useNirsSerial && nirsSerialPort == null) {
+            postWarningMessage("ui.message.warning_select_nirs_serial_port");
+            return;
+        }
+
+        String infusionSerialPort = infusionSerialPortComboBox.getValue();
+        if (useInfusionSerial && infusionSerialPort == null) {
+            postWarningMessage("ui.message.warning_select_infusion_serial_port");
+            return;
+        }
+
+        post(new StartRecordingEvent(
+                getOperationId(),
+                useBisSerial,
+                useNirsSerial,
+                useInfusionSerial,
+                bisSerialPort,
+                nirsSerialPort,
+                infusionSerialPort));
     }
 
     private void stopRecording() {
@@ -165,4 +264,7 @@ public class OperationOverview implements FxmlView<OperationOverviewViewModel>, 
         return readHLMFileButton.getScene().getWindow();
     }
 
+    private void postWarningMessage(String message) {
+        post(new ShowMessageEvent(message, MessageType.WARNING));
+    }
 }

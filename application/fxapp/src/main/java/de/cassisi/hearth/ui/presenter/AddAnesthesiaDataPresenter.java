@@ -5,7 +5,7 @@ import de.cassisi.hearth.usecase.AddAnesthesiaData;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AddAnesthesiaDataPresenter extends FXPresenter<AddAnesthesiaData.OutputData> {
+public class AddAnesthesiaDataPresenter extends UseCasePresenter<AddAnesthesiaData.OutputData> {
 
     private final OperationOverviewViewModel viewModel;
 

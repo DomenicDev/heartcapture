@@ -10,7 +10,7 @@ import java.io.IOException;
 import static de.cassisi.hearth.usecase.GenerateReport.OutputData;
 
 @Component
-public class GenerateReportPresenter extends FXPresenter<OutputData> {
+public class GenerateReportPresenter extends UseCasePresenter<OutputData> {
 
     @Override
     public void runOnUI(OutputData outputData) {

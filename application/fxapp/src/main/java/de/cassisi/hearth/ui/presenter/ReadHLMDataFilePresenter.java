@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import static de.cassisi.hearth.usecase.ReadHLMDataFile.OutputData;
 
 @Component
-public class ReadHLMDataFilePresenter extends FXPresenter<OutputData> {
+public class ReadHLMDataFilePresenter extends UseCasePresenter<OutputData> {
 
     private OperationOverviewViewModel viewModel;
 

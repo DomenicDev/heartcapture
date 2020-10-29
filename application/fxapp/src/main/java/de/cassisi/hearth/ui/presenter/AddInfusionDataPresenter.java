@@ -2,7 +2,6 @@ package de.cassisi.hearth.ui.presenter;
 
 import de.cassisi.hearth.ui.data.PerfusionUIData;
 import de.cassisi.hearth.ui.operation.OperationOverviewViewModel;
-import de.cassisi.hearth.usecase.output.OutputHandler;
 import javafx.collections.FXCollections;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +11,7 @@ import java.util.stream.Collectors;
 import static de.cassisi.hearth.usecase.AddInfusionData.OutputData;
 
 @Component
-public class AddInfusionDataPresenter extends FXPresenter<OutputData> {
+public class AddInfusionDataPresenter extends UseCasePresenter<OutputData> {
 
     private final OperationOverviewViewModel viewModel;
 
