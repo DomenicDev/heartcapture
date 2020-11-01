@@ -1,14 +1,11 @@
 package de.cassisi.hearth.ui.presenter;
 
 import de.cassisi.hearth.ui.dashboard.DashboardViewModel;
-import de.cassisi.hearth.ui.data.LatestOperationTableData;
+import de.cassisi.hearth.ui.data.LatestOperation;
 import de.cassisi.hearth.ui.utils.PresenterUtils;
 import de.cassisi.hearth.usecase.FindAllOperations;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.scene.control.TreeItem;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class RefreshLatestOperationPresenter extends UseCasePresenter<FindAllOperations.OutputData> {
@@ -21,9 +18,8 @@ public class RefreshLatestOperationPresenter extends UseCasePresenter<FindAllOpe
 
     @Override
     public void runOnUI(FindAllOperations.OutputData outputData) {
-        List<LatestOperationTableData> tableDataList = PresenterUtils.convert(outputData.simpleOperationDataList);
-        ObservableList<LatestOperationTableData> obsData = FXCollections.observableArrayList(tableDataList);
-        viewModel.latestOperationData().set(obsData);
+        TreeItem<LatestOperation> treeItem = PresenterUtils.convert(outputData.simpleOperationDataList);
+        viewModel.getLatestOperation().setValue(treeItem);
     }
 
 }

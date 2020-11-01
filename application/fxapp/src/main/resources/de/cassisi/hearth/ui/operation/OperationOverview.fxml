@@ -13,75 +13,102 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<VBox fx:id="operationOverviewRoot" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" spacing="20.0" stylesheets="@../../../../../css/full-design.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.cassisi.hearth.ui.operation.OperationOverview">
+<VBox fx:id="operationOverviewRoot" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="915.0" prefWidth="1247.0" spacing="20.0" stylesheets="@../../../../../css/full-design.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.cassisi.hearth.ui.operation.OperationOverview">
    <children>
       <VBox prefHeight="38.0">
          <children>
             <Label fx:id="titleLabel" styleClass="dashboard-title" text="Ansicht Operation #15" />
          </children>
       </VBox>
-      <VBox fillWidth="false" styleClass="container">
+      <HBox spacing="20.0">
          <children>
-            <HBox spacing="20.0">
+            <VBox fillWidth="false" styleClass="container">
                <children>
-                  <VBox minWidth="100.0">
+                  <Label styleClass="dashboard-title" text="Allgemeines">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                  </Label>
+                  <HBox spacing="20.0">
                      <children>
-                        <VBox>
+                        <VBox minWidth="100.0">
                            <children>
                               <VBox>
                                  <children>
-                                    <Label text="Datum" />
-                                    <DatePicker fx:id="operationDatePicker" />
+                                    <VBox>
+                                       <children>
+                                          <Label text="Datum" />
+                                          <DatePicker fx:id="operationDatePicker" />
+                                       </children>
+                                    </VBox>
+                                    <VBox prefWidth="100.0">
+                                       <children>
+                                          <Label text="Raum" />
+                                          <TextField fx:id="roomTextField" />
+                                       </children>
+                                    </VBox>
                                  </children>
                               </VBox>
-                              <VBox prefWidth="100.0">
-                                 <children>
-                                    <Label text="Raum" />
-                                    <TextField fx:id="roomTextField" />
-                                 </children>
-                              </VBox>
+                              <Button mnemonicParsing="false" text="Speichern" />
                            </children>
                         </VBox>
-                        <Button mnemonicParsing="false" text="Speichern" />
                      </children>
-                  </VBox>
-                  <VBox maxWidth="300.0">
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox maxWidth="300.0" styleClass="container">
+               <children>
+                  <Label styleClass="dashboard-title" text="Statusinformationen" />
+                  <VBox>
                      <children>
-                        <Label styleClass="dashboard-title" text="Statusinformationen" />
-                        <VBox>
+                        <GridPane>
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="198.0" minWidth="198.0" prefWidth="198.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="774.0" minWidth="10.0" prefWidth="758.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
                            <children>
-                              <GridPane>
-                                <columnConstraints>
-                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="198.0" minWidth="198.0" prefWidth="198.0" />
-                                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="774.0" minWidth="10.0" prefWidth="758.0" />
-                                </columnConstraints>
-                                <rowConstraints>
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                </rowConstraints>
-                                 <children>
-                                    <Label text="NIRS-Daten verfügbar" />
-                                    <Label text="BIS-Daten verfügbar" GridPane.rowIndex="1" />
-                                    <Label text="Infusions-Daten verfügbar" GridPane.rowIndex="2" />
-                                    <Label text="HLM-Daten verfügbar" GridPane.rowIndex="3" />
-                                    <FontIcon fx:id="nirsDataAvailableFontIcon" iconColor="#0f6114" iconLiteral="fa-check" iconSize="20" GridPane.columnIndex="1" />
-                                    <FontIcon fx:id="bisDataAvailableFontIcon" iconColor="#0f6114" iconLiteral="fa-check" iconSize="20" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                    <FontIcon fx:id="infusionDataAvailableFontIcon" iconColor="#0f6114" iconLiteral="fa-check" iconSize="20" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                    <FontIcon fx:id="hlmDataAvailableFontIcon" iconColor="#0f6114" iconLiteral="fa-check" iconSize="20" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                 </children>
-                              </GridPane>
+                              <Label text="NIRS-Daten verfügbar" />
+                              <Label text="BIS-Daten verfügbar" GridPane.rowIndex="1" />
+                              <Label text="Infusions-Daten verfügbar" GridPane.rowIndex="2" />
+                              <Label text="HLM-Daten verfügbar" GridPane.rowIndex="3" />
+                              <FontIcon fx:id="nirsDataAvailableFontIcon" iconColor="#0f6114" iconLiteral="fa-check" iconSize="20" GridPane.columnIndex="1" />
+                              <FontIcon fx:id="bisDataAvailableFontIcon" iconColor="#0f6114" iconLiteral="fa-check" iconSize="20" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <FontIcon fx:id="infusionDataAvailableFontIcon" iconColor="#0f6114" iconLiteral="fa-check" iconSize="20" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <FontIcon fx:id="hlmDataAvailableFontIcon" iconColor="#0f6114" iconLiteral="fa-check" iconSize="20" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                            </children>
-                        </VBox>
+                        </GridPane>
                      </children>
                   </VBox>
                </children>
-            </HBox>
+            </VBox>
+            <VBox prefHeight="200.0" styleClass="container">
+               <children>
+                  <Label styleClass="dashboard-title" text="HLM-Daten" />
+                  <Label prefWidth="250.0" text="Fügen Sie den Excel-Export der Herz-Lungen-Maschine hinzu." wrapText="true" />
+                  <Button fx:id="readHLMFileButton" mnemonicParsing="false" text="HLM-Datei einlesen">
+                     <VBox.margin>
+                        <Insets top="15.0" />
+                     </VBox.margin>
+                  </Button>
+               </children>
+            </VBox>
+            <VBox prefHeight="200.0" styleClass="container">
+               <children>
+                  <Label styleClass="dashboard-title" text="Dokumentation" />
+                  <Button fx:id="generateReportButton" mnemonicParsing="false" text="Generieren" />
+               </children>
+            </VBox>
          </children>
-      </VBox>
+      </HBox>
       <VBox minHeight="300.0" prefHeight="500.0" spacing="5.0" styleClass="container">
          <children>
             <Label styleClass="section-title" text="Live-Aufzeichnung" />
@@ -162,11 +189,6 @@
             </GridPane>
          </children>
       </VBox>
-      <VBox>
-         <children>
-            <Button fx:id="readHLMFileButton" mnemonicParsing="false" text="HLM-Daten einlesen" />
-            <Button fx:id="generateReportButton" mnemonicParsing="false" text="Datendokumentation generieren" />
-         </children>
-      </VBox>
+      <VBox />
    </children>
 </VBox>

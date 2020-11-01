@@ -14,7 +14,8 @@ COLOR PALETTE
 }
 
 .sidebar {
-    -fx-background-color: #0a4593;
+    -fx-background-color: #5156a4;
+    -fx-effect: dropshadow(two-pass-box, #05050522, 10, 0, 0, 1);
 }
 
 .main-content-title {
@@ -40,7 +41,7 @@ COLOR PALETTE
 }
 
 .logo-container {
-    -fx-background-color: #930a45;
+    -fx-background-color: #5156a4;
 }
 
 .top-bar {
@@ -48,7 +49,7 @@ COLOR PALETTE
 }
 
 .center-main {
-    -fx-background-color: #e3f1fb;
+    -fx-background-color:  #eaecf5;
 }
 
 .main-content {
@@ -80,9 +81,9 @@ COLOR PALETTE
     -fx-background-insets: 0px;
     -fx-border-radius: 3;
     -fx-background-color: white;
-    -fx-background-radius: 0pt;
+    -fx-background-radius: 10pt;
 
-    -fx-effect: dropshadow(two-pass-box, #050505dd, 10, 0, 0, 1);
+    -fx-effect: dropshadow(two-pass-box, #05050522, 10, 0, 0, 1);
 }
 
 .add-button {
@@ -91,6 +92,16 @@ COLOR PALETTE
     -fx-font-size: 12pt;
 }
 
+.dashboard_stats_title {
+    -fx-font-size: 13pt;
+    -fx-text-fill: #AFAFAFFF;
+}
+
+.dashboard_stats_number {
+    -fx-font-size: 18pt;
+    -fx-text-fill: black;
+}
+
 .root {
-    -fx-background-color: #e3f1fb;
+    -fx-background-color:  #eaecf5;
 }

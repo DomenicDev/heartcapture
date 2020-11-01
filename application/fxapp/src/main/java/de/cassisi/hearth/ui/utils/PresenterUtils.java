@@ -1,16 +1,20 @@
 package de.cassisi.hearth.ui.utils;
 
-import de.cassisi.hearth.ui.data.LatestOperationTableData;
+import com.jfoenix.controls.RecursiveTreeItem;
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import de.cassisi.hearth.ui.data.LatestOperation;
 import de.cassisi.hearth.ui.operation.OperationOverviewViewModel;
 import de.cassisi.hearth.usecase.dto.SimpleOperationData;
 import javafx.beans.property.ObjectProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.TreeItem;
 import javafx.scene.paint.Paint;
 import org.kordamp.ikonli.Ikon;
 import org.kordamp.ikonli.fontawesome.FontAwesome;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 public final class PresenterUtils {
@@ -31,14 +35,11 @@ public final class PresenterUtils {
         return localDate.format(LOCAL_DATE_FORMATTER);
     }
 
-    public static List<LatestOperationTableData> convert(List<SimpleOperationData> operationDataList) {
-        List<LatestOperationTableData> tableDataList = new ArrayList<>();
-        operationDataList.forEach(op -> {
-            String dateFormatted = formatLocalDate(op.getDate());
-            LatestOperationTableData tableData = new LatestOperationTableData(op.getId(), dateFormatted, op.getRoom());
-            tableDataList.add(tableData);
-        });
-        return tableDataList;
+    public static TreeItem<LatestOperation> convert(List<SimpleOperationData> operationDataList) {
+        ObservableList<LatestOperation> items = FXCollections.observableArrayList();
+        operationDataList.forEach(data ->
+                items.add(new LatestOperation(data.getId(), formatLocalDate(data.getDate()), data.getRoom())));
+        return new RecursiveTreeItem<>(items, RecursiveTreeObject::getChildren);
     }
 
     public static void present(OperationOverviewViewModel viewModel, SimpleOperationData data) {
