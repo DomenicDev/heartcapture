@@ -1,6 +1,5 @@
 package de.cassisi.hearth.ui.operation;
 
-import de.cassisi.hearth.ui.data.LatestOperation;
 import de.cassisi.hearth.ui.data.PerfusionUIData;
 import de.saxsys.mvvmfx.ViewModel;
 import javafx.beans.property.*;
@@ -48,6 +47,17 @@ public class OperationOverviewViewModel implements ViewModel {
     private final BooleanProperty stopRecordingButtonDisableProperty = new SimpleBooleanProperty(true);
 
     private final ObjectProperty<ObservableList<String>> serialPorts = new SimpleObjectProperty<>(FXCollections.observableArrayList());
+
+    private final BooleanProperty bisSerialEnabled = new SimpleBooleanProperty();
+    private final BooleanProperty nirsSerialEnabled = new SimpleBooleanProperty();
+    private final BooleanProperty infusionSerialEnabled = new SimpleBooleanProperty();
+
+    private final StringProperty bisSerialPort = new SimpleStringProperty();
+    private final StringProperty nirsSerialPort = new SimpleStringProperty();
+    private final StringProperty infusionSerialPort = new SimpleStringProperty();
+
+    private final BooleanProperty autoDetectProgressBarVisible = new SimpleBooleanProperty(false);
+
 
     //***************************//
     //      ACCESS METHODS       //

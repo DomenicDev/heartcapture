@@ -10,11 +10,14 @@ import de.cassisi.hearth.tools.recorder.nirs.NirsRS232Recorder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
+import java.util.logging.Logger;
 
 /**
  * An AutoPortDetector tries to detect on which port a device is running.
  */
 public class AutoPortDetector {
+
+    private static final Logger LOGGER = Logger.getLogger(AutoPortDetector.class.getName());
 
     /**
      * Key to access BIS port from result
@@ -35,13 +38,6 @@ public class AutoPortDetector {
     // this is helpful to easily close all recorders properly
     private final List<Recorder<?>> activeRecorders = new ArrayList<>();
 
-    public static void main(String[] args) {
-        AutoPortDetector detector = new AutoPortDetector();
-        DetectionResult result = detector.detectSerialPorts();
-        System.out.println("NIRS: " + result.get(NIRS_SERIAL));
-        System.out.println("INFUSION: " + result.get(INFUSION_SERIAL));
-        System.out.println("BIS:  " + result.get(BIS_SERIAL));
-    }
 
     /**
      * Tries to detect the port of the specified device.
@@ -83,13 +79,25 @@ public class AutoPortDetector {
      * @return the DetectionResult object containing the devices port names that also can be null
      */
     public DetectionResult detectSerialPorts() {
-        DetectionResult result = new DetectionResult();
+        ExecutorService executor = Executors.newCachedThreadPool();
+        CompletableFuture<DetectionResult> future = CompletableFuture.supplyAsync(() -> {
+            DetectionResult result = new DetectionResult();
 
-        searchPort(result, BIS_SERIAL, BisRS232Recorder::new, 10);
-        searchPort(result, NIRS_SERIAL, NirsRS232Recorder::new, 10);
-        searchPort(result, INFUSION_SERIAL, InfusionRS232Recorder::new, 15);
+            searchPort(result, BIS_SERIAL, BisRS232Recorder::new, 10);
+            searchPort(result, NIRS_SERIAL, NirsRS232Recorder::new, 10);
+            searchPort(result, INFUSION_SERIAL, InfusionRS232Recorder::new, 15);
 
-        return result;
+            return result;
+        }, executor);
+
+        try {
+            return future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            LOGGER.warning(e.getLocalizedMessage());
+            throw new RuntimeException("Detection could not be executed: " + e);
+        } finally {
+            executor.shutdown();
+        }
     }
 
 
@@ -108,7 +116,8 @@ public class AutoPortDetector {
             String port = getPort(recorderSupplier, secondsTimeout);
             result.put(device, port);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            e.printStackTrace();
+            LOGGER.warning(e.getLocalizedMessage());
+            result.put(device, null);
         } finally {
             stopAndClearActiveRecorders();
         }
@@ -135,7 +144,7 @@ public class AutoPortDetector {
             try {
                 recorder.stop();
             } catch (RecorderException e) {
-                e.printStackTrace();
+                LOGGER.fine(e.getLocalizedMessage());
             }
         });
         this.activeRecorders.clear();
@@ -151,7 +160,7 @@ public class AutoPortDetector {
             recorder.start();
             addAsActiveRecorder(recorder);
         } catch (RecorderException e) {
-            e.printStackTrace();
+            LOGGER.fine(e.getLocalizedMessage());
         }
     }
 

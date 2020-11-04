@@ -1,6 +1,7 @@
 package de.cassisi.hearth.ui.operation;
 
 import com.google.common.eventbus.EventBus;
+import com.jfoenix.controls.JFXProgressBar;
 import com.jfoenix.controls.JFXTreeTableView;
 import de.cassisi.hearth.ui.data.PerfusionUIData;
 import de.cassisi.hearth.ui.enums.MessageType;
@@ -11,14 +12,12 @@ import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
 import eu.hansolo.medusa.Gauge;
 import eu.hansolo.medusa.GaugeBuilder;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
-import javafx.util.Callback;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.springframework.stereotype.Component;
 
@@ -75,6 +74,12 @@ public class OperationOverview implements FxmlView<OperationOverviewViewModel>, 
     @FXML
     private ComboBox<String> infusionSerialPortComboBox;
 
+    @FXML
+    private Button autoDetectButton;
+
+    @FXML
+    private ProgressBar autoDetectProgressBar;
+
     // Start / Stop
     @FXML
     private Button startRecordingButton;
@@ -117,6 +122,8 @@ public class OperationOverview implements FxmlView<OperationOverviewViewModel>, 
         startRecordingButton.setOnAction(event -> startRecording());
         stopRecordingButton.setOnAction(event -> stopRecording());
 
+        initAutoDetection();
+
         initStatusInformation();
         initFileChooser();
         initRecordingSettings();
@@ -134,6 +141,24 @@ public class OperationOverview implements FxmlView<OperationOverviewViewModel>, 
 
         // REPORT GENERATOR
         generateReportButton.setOnAction(event -> post(new GenerateReportEvent(getOperationId())));
+    }
+
+    private void initAutoDetection() {
+        autoDetectButton.setOnAction(event -> post(new AutoDetectEvent(bisEnabled(), nirsEnabled(), infusionEnabled())));
+        autoDetectProgressBar.setProgress(ProgressBar.INDETERMINATE_PROGRESS);
+        autoDetectProgressBar.visibleProperty().bindBidirectional(viewModel.getAutoDetectProgressBarVisible());
+    }
+
+    private boolean bisEnabled() {
+        return this.bisSerialCheckBox.isSelected();
+    }
+
+    private boolean nirsEnabled() {
+        return this.nirsSerialCheckBox.isSelected();
+    }
+
+    private boolean infusionEnabled() {
+        return this.infusionSerialCheckBox.isSelected();
     }
 
     private void initStatusInformation() {
@@ -172,6 +197,10 @@ public class OperationOverview implements FxmlView<OperationOverviewViewModel>, 
         String bisSerialPortName = preferences.get("BIS_SERIAL_PORT_NAME", null);
         String nirsSerialPortName = preferences.get("NIRS_SERIAL_PORT_NAME", null);
         String infusionSerialPortName = preferences.get("INFUSION_SERIAL_PORT_NAME", null);
+
+        bisSerialPortComboBox.valueProperty().bindBidirectional(viewModel.getBisSerialPort());
+        nirsSerialPortComboBox.valueProperty().bindBidirectional(viewModel.getNirsSerialPort());
+        infusionSerialPortComboBox.valueProperty().bindBidirectional(viewModel.getInfusionSerialPort());
 
         refreshComPorts();
         setRecordingSettings(

@@ -61,12 +61,9 @@ public abstract class AbstractRS232Recorder<T> extends AbstractRecorder<T> imple
     public final void serialEvent(SerialPortEvent event) {
         byte[] data = event.getReceivedData();
         String asciiData = new String(data);
-        asciiData = asciiData.trim();
         try {
             T result = convert(asciiData);
-            if (result != null) {
-                post(result);
-            }
+            post(result);
         } catch (Exception e) {
             LOGGER.fine(e.getMessage());
         }

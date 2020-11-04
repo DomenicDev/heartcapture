@@ -18,7 +18,7 @@ public class BisRS232Recorder extends AbstractRS232Recorder<BISData> {
 
     @Override
     protected BISData convert(String data) throws ConversionException {
-        Matcher matcher = pattern.matcher(data);
+        Matcher matcher = pattern.matcher(data.trim());
         if (matcher.find()) {
             String depthOfAnesthesia = matcher.group(1);
             double value = Double.parseDouble(depthOfAnesthesia);

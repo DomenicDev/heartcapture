@@ -1,11 +1,9 @@
 package de.cassisi.hearth.ui.controller;
 
-import com.dlsc.formsfx.model.structure.Field;
-import com.dlsc.formsfx.model.structure.Form;
-import com.dlsc.formsfx.model.structure.Group;
-import com.dlsc.formsfx.view.renderer.FormRenderer;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
+import de.cassisi.hearth.tools.recorder.detect.AutoPortDetector;
+import de.cassisi.hearth.tools.recorder.detect.DetectionResult;
 import de.cassisi.hearth.ui.enums.MessageType;
 import de.cassisi.hearth.ui.event.*;
 import de.cassisi.hearth.ui.interactor.UseCaseExecutor;
@@ -15,18 +13,8 @@ import de.cassisi.hearth.ui.recorder.RecordingController;
 import de.cassisi.hearth.ui.utils.DialogCreator;
 import de.cassisi.hearth.ui.utils.EventBusProvider;
 import de.cassisi.hearth.usecase.*;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.util.stream.Collectors;
 
 @Component
@@ -43,13 +31,15 @@ public class GuiEventController {
     private final GenerateReportPresenter generateReportPresenter;
     private final RecordingStatePresenter recordingStatePresenter;
     private final RefreshSerialPortPresenter refreshSerialPortPresenter;
+    private final AutoDetectPortStartPresenter autoDetectPortStartPresenter;
+    private final AutoDetectResultPresenter autoDetectResultPresenter;
 
     private final Navigator navigator;
     private final RecordingController recordingController;
 
     private final EventBus eventBus;
 
-    public GuiEventController(UseCaseExecutor useCaseExecutor, AddNirsDataPresenter addNirsDataPresenter, AddAnesthesiaDataPresenter addAnesthesiaDataPresenter, AddInfusionDataPresenter addInfusionDataPresenter, CreateOperationPresenter createOperationPresenter, RefreshLatestOperationPresenter refreshLatestOperationPresenter1, OperationOverviewPresenter operationOverviewPresenter, ReadHLMDataFilePresenter hlmDataFilePresenter, GenerateReportPresenter generateReportPresenter, RecordingStatePresenter recordingStatePresenter, RefreshSerialPortPresenter refreshSerialPortPresenter, Navigator navigator, RecordingController recordingController) {
+    public GuiEventController(UseCaseExecutor useCaseExecutor, AddNirsDataPresenter addNirsDataPresenter, AddAnesthesiaDataPresenter addAnesthesiaDataPresenter, AddInfusionDataPresenter addInfusionDataPresenter, CreateOperationPresenter createOperationPresenter, RefreshLatestOperationPresenter refreshLatestOperationPresenter1, OperationOverviewPresenter operationOverviewPresenter, ReadHLMDataFilePresenter hlmDataFilePresenter, GenerateReportPresenter generateReportPresenter, RecordingStatePresenter recordingStatePresenter, RefreshSerialPortPresenter refreshSerialPortPresenter, AutoDetectPortStartPresenter autoDetectPortStartPresenter, AutoDetectResultPresenter autoDetectResultPresenter, Navigator navigator, RecordingController recordingController) {
         this.useCaseExecutor = useCaseExecutor;
         this.addNirsDataPresenter = addNirsDataPresenter;
         this.addAnesthesiaDataPresenter = addAnesthesiaDataPresenter;
@@ -61,6 +51,8 @@ public class GuiEventController {
         this.generateReportPresenter = generateReportPresenter;
         this.recordingStatePresenter = recordingStatePresenter;
         this.refreshSerialPortPresenter = refreshSerialPortPresenter;
+        this.autoDetectPortStartPresenter = autoDetectPortStartPresenter;
+        this.autoDetectResultPresenter = autoDetectResultPresenter;
         this.navigator = navigator;
         this.recordingController = recordingController;
 
@@ -172,6 +164,17 @@ public class GuiEventController {
     }
 
     @Subscribe
+    public void handle(AutoDetectEvent event) {
+        new Thread(() -> {
+            executePresenter(autoDetectPortStartPresenter);
+            AutoPortDetector detector = new AutoPortDetector();
+            DetectionResult result = detector.detectSerialPorts();
+            executePresenter(autoDetectResultPresenter, result);
+        }).start();
+
+    }
+
+    @Subscribe
     public void handle(RefreshSerialPortEvent event) {
         executePresenter(refreshSerialPortPresenter, null);
     }
@@ -184,4 +187,7 @@ public class GuiEventController {
         presenter.present(data);
     }
 
+    private void executePresenter(FXPresenter<Void> presenter) {
+        presenter.present(null);
+    }
 }

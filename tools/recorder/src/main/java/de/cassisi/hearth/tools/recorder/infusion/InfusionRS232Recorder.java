@@ -68,16 +68,12 @@ public class InfusionRS232Recorder extends AbstractRS232Recorder<InfusionData> {
                 } catch (Exception e) {
                     rate = null;
                 }
-
             }
 
             if (rate != null && name != null && rate != 0.0 && !"_NV".equals(name)) {
-
                 // add to list
                 InfusionData.Perfusion perfusion = new InfusionData.Perfusion(name, rate);
                 perfs.add(perfusion);
-
-
             }
 
             // is this the end of the block?
@@ -85,12 +81,14 @@ public class InfusionRS232Recorder extends AbstractRS232Recorder<InfusionData> {
             if (endMatcher.find()) {
                 String tag = endMatcher.group(1);
                 if ("<etb>".equals(tag)) {
-                    //    System.out.println("es kommt noch was...");
+                    // there is at least one more block coming
                 } else if ("<etx>".equals(tag)) {
-                    // end...
+                    // end of package
+
+                    // save all infusions in separate result list
+                    ArrayList<InfusionData.Perfusion> resultList = new ArrayList<>(perfs);
 
                     // cleanup
-                    ArrayList<InfusionData.Perfusion> resultList = new ArrayList<>(perfs);
                     perfs.clear();
 
                     // return result
