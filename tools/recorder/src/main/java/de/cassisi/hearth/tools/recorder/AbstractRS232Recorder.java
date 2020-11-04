@@ -61,9 +61,12 @@ public abstract class AbstractRS232Recorder<T> extends AbstractRecorder<T> imple
     public final void serialEvent(SerialPortEvent event) {
         byte[] data = event.getReceivedData();
         String asciiData = new String(data);
+        asciiData = asciiData.trim();
         try {
             T result = convert(asciiData);
-            post(result);
+            if (result != null) {
+                post(result);
+            }
         } catch (Exception e) {
             LOGGER.fine(e.getMessage());
         }
@@ -74,7 +77,7 @@ public abstract class AbstractRS232Recorder<T> extends AbstractRecorder<T> imple
      * Here, the received data is converted to the defined object type.
      * Do not call the method <code>post()</code> in here! This is already called for you after.
      * @param data the received data to be converted
-     * @return the specific result object
+     * @return the specific result object, or null if no data should be posted yet
      * @throws ConversionException if data could not be converted to result object
      */
     protected abstract T convert(String data) throws ConversionException;

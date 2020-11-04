@@ -1,14 +1,22 @@
 package de.cassisi.hearth.ui.data;
 
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
-public final class PerfusionUIData {
+public final class PerfusionUIData extends RecursiveTreeObject<PerfusionUIData> {
 
-    private final String name;
-    private final int rate;
+    private final StringProperty name;
+    private final DoubleProperty rate;
 
+    public PerfusionUIData(String name, double rate) {
+        this.name = new SimpleStringProperty(name);
+        this.rate = new SimpleDoubleProperty(rate);
+    }
 
 }

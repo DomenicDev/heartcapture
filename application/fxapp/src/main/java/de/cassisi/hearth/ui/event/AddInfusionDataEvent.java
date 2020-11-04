@@ -23,6 +23,6 @@ public final class AddInfusionDataEvent {
     @AllArgsConstructor
     public static class PerfusionData {
         public final String name;
-        public final int rate;
+        public final double rate;
     }
 }

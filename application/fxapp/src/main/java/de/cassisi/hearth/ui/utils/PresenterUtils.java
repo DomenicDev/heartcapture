@@ -3,7 +3,9 @@ package de.cassisi.hearth.ui.utils;
 import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import de.cassisi.hearth.ui.data.LatestOperation;
+import de.cassisi.hearth.ui.data.PerfusionUIData;
 import de.cassisi.hearth.ui.operation.OperationOverviewViewModel;
+import de.cassisi.hearth.usecase.AddInfusionData;
 import de.cassisi.hearth.usecase.dto.SimpleOperationData;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
@@ -39,6 +41,13 @@ public final class PresenterUtils {
         ObservableList<LatestOperation> items = FXCollections.observableArrayList();
         operationDataList.forEach(data ->
                 items.add(new LatestOperation(data.getId(), formatLocalDate(data.getDate()), data.getRoom())));
+        return new RecursiveTreeItem<>(items, RecursiveTreeObject::getChildren);
+    }
+
+    public static TreeItem<PerfusionUIData> convertInfusionData(List<AddInfusionData.OutputData.PerfusorData> infusionList) {
+        ObservableList<PerfusionUIData> items = FXCollections.observableArrayList();
+        infusionList.forEach(data ->
+                items.add(new PerfusionUIData(data.name, data.rate)));
         return new RecursiveTreeItem<>(items, RecursiveTreeObject::getChildren);
     }
 

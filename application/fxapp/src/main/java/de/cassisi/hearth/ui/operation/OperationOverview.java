@@ -1,6 +1,7 @@
 package de.cassisi.hearth.ui.operation;
 
 import com.google.common.eventbus.EventBus;
+import com.jfoenix.controls.JFXTreeTableView;
 import de.cassisi.hearth.ui.data.PerfusionUIData;
 import de.cassisi.hearth.ui.enums.MessageType;
 import de.cassisi.hearth.ui.event.*;
@@ -10,6 +11,7 @@ import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
 import eu.hansolo.medusa.Gauge;
 import eu.hansolo.medusa.GaugeBuilder;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -87,7 +89,11 @@ public class OperationOverview implements FxmlView<OperationOverviewViewModel>, 
     @FXML
     private Pane infusionContainer;
     @FXML
-    private ListView<PerfusionUIData> infusionListView;
+    private JFXTreeTableView<PerfusionUIData> infusionTableView;
+    @FXML
+    private TreeTableColumn<PerfusionUIData, String> infusionNameColumn;
+    @FXML
+    private TreeTableColumn<PerfusionUIData, Number> infusionRateColumn;
 
     // HLM FILE READER BUTTON
     @FXML
@@ -224,22 +230,12 @@ public class OperationOverview implements FxmlView<OperationOverviewViewModel>, 
         bisContainer.getChildren().add(bisGauge);
 
         // init infusion view
-        infusionListView.itemsProperty().bind(viewModel.infusionList());
-        infusionListView.setCellFactory(new Callback<ListView<PerfusionUIData>, ListCell<PerfusionUIData>>() {
-            @Override
-            public ListCell<PerfusionUIData> call(ListView<PerfusionUIData> param) {
-                ListCell<PerfusionUIData> cell = new ListCell<>() {
-                    @Override
-                    protected void updateItem(PerfusionUIData item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (item != null) {
-                            setText(item.getName() + ": " + item.getRate() + "ml");
-                        }
-                    }
-                };
-                return cell;
-            }
-        });
+        infusionTableView.rootProperty().bind(viewModel.getInfusionData());
+        infusionTableView.setShowRoot(false);
+
+        infusionNameColumn.setCellValueFactory(param -> param.getValue().getValue().getName());
+        infusionRateColumn.setCellValueFactory(param -> param.getValue().getValue().getRate());
+
     }
 
     private void startRecording() {

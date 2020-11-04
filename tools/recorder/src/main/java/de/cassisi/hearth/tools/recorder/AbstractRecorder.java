@@ -10,7 +10,7 @@ public abstract class AbstractRecorder<T> implements Recorder<T> {
     }
 
     protected void post(T data) {
-        if (callback != null) {
+        if (callback != null && data != null) {
             callback.callback(data);
         }
     }

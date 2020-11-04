@@ -19,7 +19,7 @@ public final class InfusionData {
     @AllArgsConstructor
     public static class Perfusion {
         public final String name;
-        public final int rate;
+        public final double rate;
     }
 
 }

@@ -46,7 +46,7 @@ public class AddInfusionDataInteractor implements AddInfusionData {
 
         // callback output handler
         OutputData outputData = new OutputData();
-        outputData.data = perfusorData.stream().map(data -> new AddInfusionData.OutputData.PerfusorData(data.getName(), (int) data.getRate())).collect(Collectors.toList());
+        outputData.data = perfusorData.stream().map(data -> new AddInfusionData.OutputData.PerfusorData(data.getName(), data.getRate())).collect(Collectors.toList());
         outputHandler.handle(outputData);
     }
 
