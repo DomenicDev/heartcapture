@@ -379,9 +379,11 @@ public class ExcelReportGenerator {
 
             // look for relevant perfusor data
             for (PerfusorData perfusor : data.getPerfusorDataList()) {
-                if (ARTERENOL.equals(perfusor.getName())
-                        || VASOPRESSIN.equals(perfusor.getName())
-                        || SUFENTANIL.equals(perfusor.getName())) {
+                String name = perfusor.getName();
+                if (name == null) continue;
+                if (name.contains(ARTERENOL)
+                        || name.contains(VASOPRESSIN)
+                        || name.contains(SUFENTANIL)) {
                     hasRelevantPerfusorData = true;
                     break;
                 }
@@ -393,13 +395,13 @@ public class ExcelReportGenerator {
                 for (PerfusorData perfusor : data.getPerfusorDataList()) {
                     String name = perfusor.getName();
                     Double rate = perfusor.getRate();
-                    if (ARTERENOL.equals(name)) {
+                    if (name.contains(ARTERENOL)) {
                         timeData.setPerfusorArterenol(rate);
                     }
-                    if (VASOPRESSIN.equals(name)) {
+                    if (name.contains(VASOPRESSIN)) {
                         timeData.setPerfusorVasopressin(rate);
                     }
-                    if (SUFENTANIL.equals(name)) {
+                    if (name.contains(SUFENTANIL)) {
                         timeData.setPerfusorSufentanil(rate);
                     }
                 }
