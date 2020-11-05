@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTreeTableView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TreeTableColumn?>
+<?import javafx.scene.control.TreeTableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="20.0" styleClass="container" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.cassisi.hearth.ui.operation.overview.OperationView">
+   <children>
+      <HBox>
+         <children>
+            <Label text="Alle Operationen ">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Label>
+            <HBox alignment="TOP_RIGHT" HBox.hgrow="ALWAYS">
+               <children>
+                  <JFXButton fx:id="createOperation" alignment="CENTER" styleClass="add-button" text="Neue Operation">
+                     <graphic>
+                        <FontIcon iconColor="WHITE" iconLiteral="fa-plus" iconSize="15" />
+                     </graphic>
+                     <font>
+                        <Font size="10.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets right="10.0" top="10.0" />
+                     </HBox.margin>
+                  </JFXButton>
+               </children>
+            </HBox>
+         </children>
+      </HBox>
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" VBox.vgrow="ALWAYS">
+         <children>
+            <JFXTreeTableView fx:id="operationTableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+               <columns>
+                  <TreeTableColumn fx:id="operationIdColumn" prefWidth="75.0" text="#" />
+                  <TreeTableColumn fx:id="operationDateColumn" prefWidth="75.0" text="Datum" />
+                  <TreeTableColumn fx:id="operationRoomColumn" prefWidth="75.0" text="Saal" />
+                  <TreeTableColumn fx:id="operationRecordingColumn" prefWidth="75.0" text="Aufzeichnung " />
+                  <TreeTableColumn fx:id="operationHlmColumn" prefWidth="75.0" text="HLM" />
+                  <TreeTableColumn fx:id="operationOpenColumn" prefWidth="75.0" text="Öffnen" />
+               </columns>
+               <columnResizePolicy>
+                  <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </JFXTreeTableView>
+         </children>
+      </VBox>
+   </children>
+</VBox>

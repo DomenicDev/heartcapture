@@ -1,6 +1,5 @@
 package de.cassisi.hearth.ui;
 
-import de.cassisi.hearth.ui.dashboard.DashboardView;
 import de.cassisi.hearth.ui.main.MainView;
 import de.saxsys.mvvmfx.FluentViewLoader;
 import javafx.scene.Parent;
@@ -19,7 +18,7 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
         Parent root = FluentViewLoader.fxmlView(MainView.class).load().getView();
 
         Stage stage = event.getStage();
-        stage.setTitle("My Window");
+        stage.setTitle("HearthCapture");
         stage.setWidth(1920);
         stage.setHeight(1080);
         stage.setScene(new Scene(root));

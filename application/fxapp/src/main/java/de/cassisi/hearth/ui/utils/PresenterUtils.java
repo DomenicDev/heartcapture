@@ -5,6 +5,7 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import de.cassisi.hearth.ui.data.LatestOperation;
 import de.cassisi.hearth.ui.data.PerfusionUIData;
 import de.cassisi.hearth.ui.operation.OperationOverviewViewModel;
+import de.cassisi.hearth.ui.operation.overview.OperationTableData;
 import de.cassisi.hearth.usecase.AddInfusionData;
 import de.cassisi.hearth.usecase.dto.SimpleOperationData;
 import javafx.beans.property.ObjectProperty;
@@ -65,6 +66,19 @@ public final class PresenterUtils {
         updateFontIcon(viewModel.getHlmAvailableIconCode(), viewModel.getHlmAvailableIconColor(), data.isHlmDataAvailable());
     }
 
+    public static TreeItem<OperationTableData> convertToOperationViewTableData(List<SimpleOperationData> data) {
+        ObservableList<OperationTableData> items = FXCollections.observableArrayList();
+        data.forEach(d -> {
+            boolean liveDataAvailable = d.isBisDataAvailable() && d.isNirsDataAvailable() && d.isInfusionDataAvailable();
+            items.add(new OperationTableData(
+                    d.getId(),
+                    formatLocalDate(d.getDate()),
+                    d.getRoom(),
+                    liveDataAvailable,
+                    d.isHlmDataAvailable()));
+        });
+        return new RecursiveTreeItem<>(items, RecursiveTreeObject::getChildren);
+    }
 
     private static void updateFontIcon(ObjectProperty<Ikon> iconCode, ObjectProperty<Paint> iconColor, boolean available) {
         Paint color = available ? AVAILABLE_COLOR : UNAVAILABLE_COLOR;

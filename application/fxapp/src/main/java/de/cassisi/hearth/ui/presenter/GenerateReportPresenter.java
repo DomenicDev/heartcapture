@@ -16,7 +16,9 @@ public class GenerateReportPresenter extends UseCasePresenter<OutputData> {
     public void runOnUI(OutputData outputData) {
         try {
             FileChooser fileChooser = new FileChooser();
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel-File (*.xlsx)", "*.xlsx"));
             File fileToSave = fileChooser.showSaveDialog(null);
+
 
             if (fileToSave == null) {
                 // user did not select a file, so return

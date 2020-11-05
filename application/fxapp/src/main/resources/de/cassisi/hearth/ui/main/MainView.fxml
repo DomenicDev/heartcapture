@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<VBox prefHeight="844.0" prefWidth="1423.0" stylesheets="@../../../../../css/full-design.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.cassisi.hearth.ui.main.MainView">
+<VBox prefHeight="826.0" prefWidth="1246.0" stylesheets="@../../../../../css/full-design.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.cassisi.hearth.ui.main.MainView">
   <children>
       <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
          <children>
@@ -32,9 +32,9 @@
                      <children>
                         <VBox alignment="CENTER_LEFT">
                            <children>
-                              <Button fx:id="dashboardButton" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="sidebar-button" text="Home">
+                              <Button fx:id="dashboardButton" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="sidebar-button" text="Dashboard">
                                  <graphic>
-                                    <FontIcon iconColor="WHITE" iconLiteral="fa-home" />
+                                    <FontIcon iconColor="#dadada" iconLiteral="fa-dashboard" />
                                  </graphic>
                               </Button>
                            </children>
@@ -43,7 +43,7 @@
                            <children>
                               <Button fx:id="operationOverviewButton" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="sidebar-button" text="Operationen">
                                  <graphic>
-                                    <FontIcon iconColor="WHITE" iconLiteral="fa-book" />
+                                    <FontIcon iconColor="#dadada" iconLiteral="fa-list" />
                                  </graphic></Button>
                            </children>
                         </VBox>
@@ -51,7 +51,7 @@
                            <children>
                               <Button fx:id="settingsButton" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="sidebar-button" text="Einstellungen">
                                  <graphic>
-                                    <FontIcon iconColor="WHITE" iconLiteral="fa-cog" />
+                                    <FontIcon iconColor="#dadada" iconLiteral="fa-cog" />
                                  </graphic>
                               </Button>
                            </children>
@@ -73,7 +73,7 @@
             </VBox>
             <VBox styleClass="center-main" HBox.hgrow="ALWAYS">
                <children>
-                  <VBox fx:id="mainContent" spacing="10.0" styleClass="center-main" VBox.vgrow="ALWAYS">
+                  <VBox fx:id="mainContent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0" styleClass="center-main" VBox.vgrow="ALWAYS">
                      <padding>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                      </padding>

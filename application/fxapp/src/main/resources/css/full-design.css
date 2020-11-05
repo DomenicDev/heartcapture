@@ -14,7 +14,7 @@ COLOR PALETTE
 }
 
 .sidebar {
-    -fx-background-color: #5156a4;
+    -fx-background-color: #2f2a6b;
     -fx-effect: dropshadow(two-pass-box, #05050522, 10, 0, 0, 1);
 }
 
@@ -30,18 +30,20 @@ COLOR PALETTE
 
 .sidebar-button {
     -fx-background-color: none;
-    -fx-text-fill: white;
-    -fx-font-size: 17pt;
+    -fx-text-fill: #eeeeee;
+    -fx-font-size: 16pt;
     -fx-padding: 22 15;
     -fx-font-weight: lighter;
+    -fx-graphic-text-gap: 10pt;
 }
+
 
 .sidebar-button:hover {
     -fx-background-color: #ffffff0f;
 }
 
 .logo-container {
-    -fx-background-color: #5156a4;
+    -fx-background-color: #823b3b; /*#2e2a6b;*/
 }
 
 .top-bar {
@@ -73,7 +75,8 @@ COLOR PALETTE
 }
 
 .live-capture-data-header {
-    -fx-font-size: 13pt;
+    -fx-font-size: 15pt;
+    -fx-font-weight: light;
 }
 
 .container {
@@ -87,7 +90,7 @@ COLOR PALETTE
 }
 
 .add-button {
-    -fx-background-color: #93580a;
+    -fx-background-color: #838abf;
     -fx-text-fill: white;
     -fx-font-size: 12pt;
 }

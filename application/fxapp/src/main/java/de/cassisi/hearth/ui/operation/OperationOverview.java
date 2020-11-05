@@ -12,6 +12,8 @@ import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
 import eu.hansolo.medusa.Gauge;
 import eu.hansolo.medusa.GaugeBuilder;
+import eu.hansolo.tilesfx.Tile;
+import eu.hansolo.tilesfx.TileBuilder;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -226,14 +228,18 @@ public class OperationOverview implements FxmlView<OperationOverviewViewModel>, 
 
     private void initRecordingGauges() {
         // init NIRS gauges
+
         Gauge nirsLeftValueGauge = GaugeBuilder.create()
                 .skinType(Gauge.SkinType.TILE_SPARK_LINE)
+                .title("NIRS (L)")
                 .minValue(0)
+                .minSize(50,50)
                 .maxValue(100)
                 //      .prefSize(250, 250)
                 .animated(true)
                 .build();
         Gauge nirsRightValueGauge = GaugeBuilder.create()
+                .title("NIRS (R)")
                 .skinType(Gauge.SkinType.TILE_SPARK_LINE)
                 .averageVisible(true)
                 .minValue(0)
@@ -242,6 +248,24 @@ public class OperationOverview implements FxmlView<OperationOverviewViewModel>, 
                 .animated(true)
                 .build();
 
+
+
+        /*
+        Gauge nirsLeftValueGauge = GaugeBuilder.create()
+                .skinType(Gauge.SkinType.DASHBOARD)
+                .minValue(0)
+                .maxValue(100)
+                .animated(true)
+                .build();
+        Gauge nirsRightValueGauge = GaugeBuilder.create()
+                .skinType(Gauge.SkinType.DASHBOARD)
+                .minValue(0)
+                .maxValue(100)
+                .animated(true)
+                .build();
+
+         */
+
         nirsLeftValueGauge.valueProperty().bind(viewModel.nirsLeftValue());
         nirsRightValueGauge.valueProperty().bind(viewModel.nirsRightValue());
 
@@ -249,14 +273,27 @@ public class OperationOverview implements FxmlView<OperationOverviewViewModel>, 
         nirsContainer.getChildren().add(nirsRightValueGauge);
 
         // init BIS Gauges
+        /*
         Gauge bisGauge = GaugeBuilder.create()
                 .skinType(Gauge.SkinType.DASHBOARD)
+                .minValue(0)
+                .maxValue(100)
+                .animated(true)
+                .prefSize(300, 300)
+                .maxSize(300, 300)
+                .build();
+         */
+        Gauge bisGauge = GaugeBuilder.create()
+                .skinType(Gauge.SkinType.TILE_SPARK_LINE)
+                .title("BIS")
                 .minValue(0)
                 .maxValue(100)
                 .animated(true)
                 .build();
         bisGauge.valueProperty().bind(viewModel.bisValue());
         bisContainer.getChildren().add(bisGauge);
+
+
 
         // init infusion view
         infusionTableView.rootProperty().bind(viewModel.getInfusionData());

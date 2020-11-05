@@ -36,9 +36,6 @@ public class DashboardView implements FxmlView<DashboardViewModel>, Initializabl
     private DashboardViewModel viewModel;
 
     @FXML
-    private VBox mainContent;
-
-    @FXML
     private Button createOperation;
 
     @FXML
@@ -171,7 +168,7 @@ public class DashboardView implements FxmlView<DashboardViewModel>, Initializabl
     }
 
     private Window getWindow() {
-        return mainContent.getScene().getWindow();
+        return createOperation.getScene().getWindow();
     }
 
 }

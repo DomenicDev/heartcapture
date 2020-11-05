@@ -71,7 +71,6 @@ public class OperationOverviewViewModel implements ViewModel {
     }
 
     public LongProperty idProperty() {
-        titleLabel.setValue(String.valueOf(idProperty.get()));
         return idProperty;
     }
 

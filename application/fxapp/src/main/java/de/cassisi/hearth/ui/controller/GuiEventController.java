@@ -33,13 +33,14 @@ public class GuiEventController {
     private final RefreshSerialPortPresenter refreshSerialPortPresenter;
     private final AutoDetectPortStartPresenter autoDetectPortStartPresenter;
     private final AutoDetectResultPresenter autoDetectResultPresenter;
+    private final RefreshOperationViewDataPresenter refreshOperationViewDataPresenter;
 
     private final Navigator navigator;
     private final RecordingController recordingController;
 
     private final EventBus eventBus;
 
-    public GuiEventController(UseCaseExecutor useCaseExecutor, AddNirsDataPresenter addNirsDataPresenter, AddAnesthesiaDataPresenter addAnesthesiaDataPresenter, AddInfusionDataPresenter addInfusionDataPresenter, CreateOperationPresenter createOperationPresenter, RefreshLatestOperationPresenter refreshLatestOperationPresenter1, OperationOverviewPresenter operationOverviewPresenter, ReadHLMDataFilePresenter hlmDataFilePresenter, GenerateReportPresenter generateReportPresenter, RecordingStatePresenter recordingStatePresenter, RefreshSerialPortPresenter refreshSerialPortPresenter, AutoDetectPortStartPresenter autoDetectPortStartPresenter, AutoDetectResultPresenter autoDetectResultPresenter, Navigator navigator, RecordingController recordingController) {
+    public GuiEventController(UseCaseExecutor useCaseExecutor, AddNirsDataPresenter addNirsDataPresenter, AddAnesthesiaDataPresenter addAnesthesiaDataPresenter, AddInfusionDataPresenter addInfusionDataPresenter, CreateOperationPresenter createOperationPresenter, RefreshLatestOperationPresenter refreshLatestOperationPresenter1, OperationOverviewPresenter operationOverviewPresenter, ReadHLMDataFilePresenter hlmDataFilePresenter, GenerateReportPresenter generateReportPresenter, RecordingStatePresenter recordingStatePresenter, RefreshSerialPortPresenter refreshSerialPortPresenter, AutoDetectPortStartPresenter autoDetectPortStartPresenter, AutoDetectResultPresenter autoDetectResultPresenter, RefreshOperationViewDataPresenter refreshOperationViewDataPresenter, Navigator navigator, RecordingController recordingController) {
         this.useCaseExecutor = useCaseExecutor;
         this.addNirsDataPresenter = addNirsDataPresenter;
         this.addAnesthesiaDataPresenter = addAnesthesiaDataPresenter;
@@ -53,6 +54,7 @@ public class GuiEventController {
         this.refreshSerialPortPresenter = refreshSerialPortPresenter;
         this.autoDetectPortStartPresenter = autoDetectPortStartPresenter;
         this.autoDetectResultPresenter = autoDetectResultPresenter;
+        this.refreshOperationViewDataPresenter = refreshOperationViewDataPresenter;
         this.navigator = navigator;
         this.recordingController = recordingController;
 
@@ -171,7 +173,14 @@ public class GuiEventController {
             DetectionResult result = detector.detectSerialPorts();
             executePresenter(autoDetectResultPresenter, result);
         }).start();
+    }
 
+    @Subscribe
+    public void handle(RefreshOperationViewDataEvent event) {
+        FindAllOperations.InputData inputData = new FindAllOperations.InputData();
+        inputData.sortByLatest = true;
+        inputData.limit = Integer.MAX_VALUE;
+        getUseCaseExecutor().findAllOperations(inputData, refreshOperationViewDataPresenter);
     }
 
     @Subscribe
