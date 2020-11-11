@@ -1,19 +1,16 @@
-package de.cassisi.hearth.ui.operation;
+package de.cassisi.hearth.ui.view.operation;
 
 import com.google.common.eventbus.EventBus;
-import com.jfoenix.controls.JFXProgressBar;
 import com.jfoenix.controls.JFXTreeTableView;
-import de.cassisi.hearth.ui.data.PerfusionUIData;
 import de.cassisi.hearth.ui.enums.MessageType;
 import de.cassisi.hearth.ui.event.*;
 import de.cassisi.hearth.ui.preference.UserPreference;
 import de.cassisi.hearth.ui.utils.EventBusProvider;
+import de.cassisi.hearth.ui.view.BaseView;
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
 import eu.hansolo.medusa.Gauge;
 import eu.hansolo.medusa.GaugeBuilder;
-import eu.hansolo.tilesfx.Tile;
-import eu.hansolo.tilesfx.TileBuilder;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -29,7 +26,7 @@ import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
 @Component
-public class OperationOverview implements FxmlView<OperationOverviewViewModel>, Initializable {
+public class OperationOverview extends BaseView implements FxmlView<OperationOverviewViewModel>, Initializable {
 
     private final EventBus eventBus = EventBusProvider.getEventBus();
 
@@ -93,8 +90,6 @@ public class OperationOverview implements FxmlView<OperationOverviewViewModel>, 
     private Pane nirsContainer;
     @FXML
     private Pane bisContainer;
-    @FXML
-    private Pane infusionContainer;
     @FXML
     private JFXTreeTableView<PerfusionUIData> infusionTableView;
     @FXML
@@ -176,7 +171,7 @@ public class OperationOverview implements FxmlView<OperationOverviewViewModel>, 
     }
 
     private void initFileChooser() {
-        hlmFileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("HLM-Excel-File (*.xlsx)", "*.xlsx"));
+        hlmFileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(getString("ui.operation_detail_view.hlm_file_chooser.hlm_file_extension"), "*.xlsx"));
     }
 
     private void initRecordingSettings() {
@@ -231,7 +226,7 @@ public class OperationOverview implements FxmlView<OperationOverviewViewModel>, 
 
         Gauge nirsLeftValueGauge = GaugeBuilder.create()
                 .skinType(Gauge.SkinType.TILE_SPARK_LINE)
-                .title("NIRS (L)")
+                .title(getString("ui.live_recording.nirs_left.title"))
                 .minValue(0)
                 .minSize(50,50)
                 .maxValue(100)
@@ -239,7 +234,7 @@ public class OperationOverview implements FxmlView<OperationOverviewViewModel>, 
                 .animated(true)
                 .build();
         Gauge nirsRightValueGauge = GaugeBuilder.create()
-                .title("NIRS (R)")
+                .title(getString("ui.live_recording.nirs_right.title"))
                 .skinType(Gauge.SkinType.TILE_SPARK_LINE)
                 .averageVisible(true)
                 .minValue(0)
@@ -345,11 +340,8 @@ public class OperationOverview implements FxmlView<OperationOverviewViewModel>, 
         return viewModel.idProperty().get();
     }
 
-    private void post(Object event) {
-        this.eventBus.post(event);
-    }
-
-    private Window getWindow() {
+    @Override
+    protected Window getWindow() {
         return readHLMFileButton.getScene().getWindow();
     }
 

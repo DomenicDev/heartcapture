@@ -1,14 +1,12 @@
-package de.cassisi.hearth.ui.main;
+package de.cassisi.hearth.ui.view.main;
 
-import com.google.common.eventbus.EventBus;
-import com.jfoenix.controls.JFXButton;
-import de.cassisi.hearth.ui.dashboard.DashboardView;
-import de.cassisi.hearth.ui.dashboard.DashboardViewModel;
-import de.cassisi.hearth.ui.operation.OperationOverview;
-import de.cassisi.hearth.ui.operation.OperationOverviewViewModel;
-import de.cassisi.hearth.ui.operation.overview.OperationView;
-import de.cassisi.hearth.ui.operation.overview.OperationViewViewModel;
-import de.cassisi.hearth.ui.utils.EventBusProvider;
+import de.cassisi.hearth.ui.view.BaseView;
+import de.cassisi.hearth.ui.view.dashboard.DashboardView;
+import de.cassisi.hearth.ui.view.dashboard.DashboardViewModel;
+import de.cassisi.hearth.ui.view.operation.OperationOverview;
+import de.cassisi.hearth.ui.view.operation.OperationOverviewViewModel;
+import de.cassisi.hearth.ui.view.operation.overview.OperationView;
+import de.cassisi.hearth.ui.view.operation.overview.OperationViewViewModel;
 import de.saxsys.mvvmfx.FluentViewLoader;
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.ViewTuple;
@@ -16,7 +14,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.springframework.stereotype.Component;
@@ -25,9 +22,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 @Component
-public class MainView implements FxmlView<MainViewModel>, Initializable {
-
-    private final EventBus eventBus = EventBusProvider.getEventBus();
+public class MainView extends BaseView implements FxmlView<MainViewModel>, Initializable {
 
     @FXML
     private VBox mainContent;

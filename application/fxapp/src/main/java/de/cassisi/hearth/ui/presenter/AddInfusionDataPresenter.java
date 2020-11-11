@@ -1,13 +1,10 @@
 package de.cassisi.hearth.ui.presenter;
 
-import de.cassisi.hearth.ui.data.PerfusionUIData;
-import de.cassisi.hearth.ui.operation.OperationOverviewViewModel;
+import de.cassisi.hearth.ui.view.operation.OperationOverviewViewModel;
 import de.cassisi.hearth.ui.utils.PresenterUtils;
-import javafx.collections.FXCollections;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static de.cassisi.hearth.usecase.AddInfusionData.OutputData;
 

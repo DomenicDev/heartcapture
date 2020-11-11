@@ -2,10 +2,10 @@ package de.cassisi.hearth.ui.utils;
 
 import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
-import de.cassisi.hearth.ui.data.LatestOperation;
-import de.cassisi.hearth.ui.data.PerfusionUIData;
-import de.cassisi.hearth.ui.operation.OperationOverviewViewModel;
-import de.cassisi.hearth.ui.operation.overview.OperationTableData;
+import de.cassisi.hearth.ui.view.dashboard.LatestOperation;
+import de.cassisi.hearth.ui.view.operation.PerfusionUIData;
+import de.cassisi.hearth.ui.view.operation.OperationOverviewViewModel;
+import de.cassisi.hearth.ui.view.operation.overview.OperationTableData;
 import de.cassisi.hearth.usecase.AddInfusionData;
 import de.cassisi.hearth.usecase.dto.SimpleOperationData;
 import javafx.beans.property.ObjectProperty;

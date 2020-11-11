@@ -1,11 +1,10 @@
-package de.cassisi.hearth.ui.data;
+package de.cassisi.hearth.ui.view.operation;
 
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter

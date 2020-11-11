@@ -1,7 +1,7 @@
 package de.cassisi.hearth.ui.navigator;
 
 import de.cassisi.hearth.ui.enums.MessageType;
-import de.cassisi.hearth.ui.main.MainView;
+import de.cassisi.hearth.ui.view.main.MainView;
 import javafx.scene.control.Alert;
 import org.springframework.stereotype.Component;
 

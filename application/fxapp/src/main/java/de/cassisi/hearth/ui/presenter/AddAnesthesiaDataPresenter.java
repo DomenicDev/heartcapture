@@ -1,6 +1,6 @@
 package de.cassisi.hearth.ui.presenter;
 
-import de.cassisi.hearth.ui.operation.OperationOverviewViewModel;
+import de.cassisi.hearth.ui.view.operation.OperationOverviewViewModel;
 import de.cassisi.hearth.usecase.AddAnesthesiaData;
 import org.springframework.stereotype.Component;
 

@@ -1,4 +1,4 @@
-package de.cassisi.hearth.ui.operation.overview;
+package de.cassisi.hearth.ui.view.operation.overview;
 
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.beans.property.*;

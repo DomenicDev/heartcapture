@@ -1,4 +1,4 @@
-package de.cassisi.hearth.ui.operation.overview;
+package de.cassisi.hearth.ui.view.operation.overview;
 
 import de.saxsys.mvvmfx.ViewModel;
 import javafx.beans.property.ObjectProperty;

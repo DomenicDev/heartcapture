@@ -1,7 +1,7 @@
 package de.cassisi.hearth.ui.presenter;
 
-import de.cassisi.hearth.ui.operation.overview.OperationTableData;
-import de.cassisi.hearth.ui.operation.overview.OperationViewViewModel;
+import de.cassisi.hearth.ui.view.operation.overview.OperationTableData;
+import de.cassisi.hearth.ui.view.operation.overview.OperationViewViewModel;
 import de.cassisi.hearth.ui.utils.PresenterUtils;
 import de.cassisi.hearth.usecase.FindAllOperations;
 import javafx.scene.control.TreeItem;

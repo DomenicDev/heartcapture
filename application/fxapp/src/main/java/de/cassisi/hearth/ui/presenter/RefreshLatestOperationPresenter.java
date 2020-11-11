@@ -1,7 +1,7 @@
 package de.cassisi.hearth.ui.presenter;
 
-import de.cassisi.hearth.ui.dashboard.DashboardViewModel;
-import de.cassisi.hearth.ui.data.LatestOperation;
+import de.cassisi.hearth.ui.view.dashboard.DashboardViewModel;
+import de.cassisi.hearth.ui.view.dashboard.LatestOperation;
 import de.cassisi.hearth.ui.utils.PresenterUtils;
 import de.cassisi.hearth.usecase.FindAllOperations;
 import javafx.scene.control.TreeItem;

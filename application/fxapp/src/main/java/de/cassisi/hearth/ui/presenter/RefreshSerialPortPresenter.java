@@ -1,7 +1,7 @@
 package de.cassisi.hearth.ui.presenter;
 
 import com.fazecast.jSerialComm.SerialPort;
-import de.cassisi.hearth.ui.operation.OperationOverviewViewModel;
+import de.cassisi.hearth.ui.view.operation.OperationOverviewViewModel;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

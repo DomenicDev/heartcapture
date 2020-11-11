@@ -11,8 +11,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-
-<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="20.0" styleClass="container" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.cassisi.hearth.ui.operation.overview.OperationView">
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="20.0" styleClass="container" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.cassisi.hearth.ui.view.operation.overview.OperationView">
    <children>
       <HBox>
          <children>
@@ -23,7 +22,7 @@
             </Label>
             <HBox alignment="TOP_RIGHT" HBox.hgrow="ALWAYS">
                <children>
-                  <JFXButton fx:id="createOperation" alignment="CENTER" styleClass="add-button" text="Neue Operation">
+                  <JFXButton fx:id="createOperationButton" alignment="CENTER" styleClass="add-button" text="Neue Operation">
                      <graphic>
                         <FontIcon iconColor="WHITE" iconLiteral="fa-plus" iconSize="15" />
                      </graphic>

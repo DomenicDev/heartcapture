@@ -5,6 +5,7 @@ import com.dlsc.formsfx.model.structure.Form;
 import com.dlsc.formsfx.model.structure.Group;
 import com.dlsc.formsfx.model.structure.NodeElement;
 import com.dlsc.formsfx.view.renderer.FormRenderer;
+import de.cassisi.hearth.ui.lang.LanguageResourceProvider;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -17,26 +18,33 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import java.time.LocalDate;
+import java.util.ResourceBundle;
 
 public final class DialogCreator {
+
+    private static final ResourceBundle language = LanguageResourceProvider.getLanguageBundle();
+
+    public static String getString(String key) {
+        return language.getString(key);
+    }
 
     public static void showCreateOperationDialog(Window owner, CreateOperationSubmitCallback callback) {
         ObjectProperty<LocalDate> localDate = new SimpleObjectProperty<>(LocalDate.now());
         StringProperty roomProperty = new SimpleStringProperty("");
-        Button submitButton = new Button("Anlegen");
+        Button submitButton = new Button(getString("ui.create_operation_dialog.create"));
 
         // create form
         Form form = Form.of(
                 Group.of(
-                        Field.ofDate(localDate).label("Datum").required(true),
-                        Field.ofStringType(roomProperty).label("Raum").required(true),
+                        Field.ofDate(localDate).label(getString("ui.create_operation_dialog.operation_date")).required(true),
+                        Field.ofStringType(roomProperty).label(getString("ui.create_operation_dialog.operation_room")).required(true),
                         NodeElement.of(submitButton)
                 )
-        ).title("Der Titel");
+        );
 
         // create stage
         Stage stage = new Stage();
-        stage.setTitle("Neue Operation anlegen");
+        stage.setTitle(getString("ui.create_operation_dialog.window_title"));
 
         // setup callback
         submitButton.setOnAction(e -> {

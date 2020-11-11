@@ -2,7 +2,7 @@ package de.cassisi.hearth.ui.presenter;
 
 import de.cassisi.hearth.tools.recorder.detect.AutoPortDetector;
 import de.cassisi.hearth.tools.recorder.detect.DetectionResult;
-import de.cassisi.hearth.ui.operation.OperationOverviewViewModel;
+import de.cassisi.hearth.ui.view.operation.OperationOverviewViewModel;
 import org.springframework.stereotype.Component;
 
 @Component

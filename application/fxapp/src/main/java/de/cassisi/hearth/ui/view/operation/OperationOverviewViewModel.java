@@ -1,6 +1,5 @@
-package de.cassisi.hearth.ui.operation;
+package de.cassisi.hearth.ui.view.operation;
 
-import de.cassisi.hearth.ui.data.PerfusionUIData;
 import de.saxsys.mvvmfx.ViewModel;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;

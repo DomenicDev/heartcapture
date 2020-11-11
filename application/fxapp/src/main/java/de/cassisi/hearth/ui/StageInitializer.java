@@ -1,6 +1,6 @@
 package de.cassisi.hearth.ui;
 
-import de.cassisi.hearth.ui.main.MainView;
+import de.cassisi.hearth.ui.view.main.MainView;
 import de.saxsys.mvvmfx.FluentViewLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;

@@ -1,15 +1,14 @@
-package de.cassisi.hearth.ui.dashboard;
+package de.cassisi.hearth.ui.view.dashboard;
 
 import com.google.common.eventbus.EventBus;
 import com.jfoenix.controls.JFXTreeTableView;
-import com.jfoenix.controls.RecursiveTreeItem;
-import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
-import de.cassisi.hearth.ui.data.LatestOperation;
-import de.cassisi.hearth.ui.event.*;
+import de.cassisi.hearth.ui.event.OpenNewCreateOperationWindow;
+import de.cassisi.hearth.ui.event.OpenOperationOverviewEvent;
+import de.cassisi.hearth.ui.event.RefreshLatestOperationDataEvent;
 import de.cassisi.hearth.ui.utils.EventBusProvider;
+import de.cassisi.hearth.ui.view.BaseView;
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
-import javafx.beans.property.LongProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -18,7 +17,6 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
 import javafx.stage.Window;
 import javafx.util.Callback;
 import org.springframework.stereotype.Component;
@@ -28,7 +26,7 @@ import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 @Component
-public class DashboardView implements FxmlView<DashboardViewModel>, Initializable {
+public class DashboardView extends BaseView implements FxmlView<DashboardViewModel>, Initializable {
 
     private final EventBus eventBus = EventBusProvider.getEventBus();
 
@@ -86,7 +84,7 @@ public class DashboardView implements FxmlView<DashboardViewModel>, Initializabl
             public TreeTableCell<LatestOperation, String> call(TreeTableColumn<LatestOperation, String> param) {
                 return new TreeTableCell<>() {
 
-                    private final Hyperlink detailsLink = new Hyperlink("Öffnen");
+                    private final Hyperlink detailsLink = new Hyperlink(getString("ui.label.open"));
 
                     @Override
                     protected void updateItem(String item, boolean empty) {
@@ -124,7 +122,7 @@ public class DashboardView implements FxmlView<DashboardViewModel>, Initializabl
     }
 
     private void initOperationLineChart() {
-        operationLineChart.setTitle("Aufzeichnungen der letzten zwei Wochen");
+        operationLineChart.setTitle(getString("ui.dashboard.operation_line_chart.title"));
         operationLineChart.setCreateSymbols(false);
         operationLineChart.setLegendVisible(false);
 
@@ -160,14 +158,15 @@ public class DashboardView implements FxmlView<DashboardViewModel>, Initializabl
                         new PieChart.Data("70 - 79", 59),
                         new PieChart.Data("< 80", 30));
         operationPieChart.setData(pieChartData);
-        operationPieChart.setTitle("Verteilung Alter Patienten");
+        operationPieChart.setTitle(getString("ui.dashboard.operation_pie_chart.title"));
     }
 
     public void refreshTableData() {
         this.eventBus.post(new RefreshLatestOperationDataEvent(true, 20));
     }
 
-    private Window getWindow() {
+    @Override
+    public Window getWindow() {
         return createOperation.getScene().getWindow();
     }
 

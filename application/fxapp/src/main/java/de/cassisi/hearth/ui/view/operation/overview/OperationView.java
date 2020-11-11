@@ -1,28 +1,26 @@
-package de.cassisi.hearth.ui.operation.overview;
+package de.cassisi.hearth.ui.view.operation.overview;
 
-import com.google.common.eventbus.EventBus;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTreeTableView;
+import de.cassisi.hearth.ui.event.OpenNewCreateOperationWindow;
 import de.cassisi.hearth.ui.event.OpenOperationOverviewEvent;
 import de.cassisi.hearth.ui.event.RefreshOperationViewDataEvent;
-import de.cassisi.hearth.ui.utils.EventBusProvider;
+import de.cassisi.hearth.ui.view.BaseView;
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.stage.Window;
 import javafx.util.Callback;
 import org.springframework.stereotype.Component;
 
-import javax.swing.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 @Component
-public class OperationView implements FxmlView<OperationViewViewModel>, Initializable {
-
-    private final EventBus eventBus = EventBusProvider.getEventBus();
+public class OperationView extends BaseView implements FxmlView<OperationViewViewModel>, Initializable {
 
     @InjectViewModel
     private OperationViewViewModel viewModel;
@@ -48,12 +46,17 @@ public class OperationView implements FxmlView<OperationViewViewModel>, Initiali
     @FXML
     private TreeTableColumn<OperationTableData, String> operationOpenColumn;
 
+    @FXML
+    private Button createOperationButton;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-
+        initCreateOperationButton();
         initOperationTable();
+    }
 
+    private void initCreateOperationButton() {
+        this.createOperationButton.setOnAction(event -> post(new OpenNewCreateOperationWindow(getWindow())));
     }
 
     private void initOperationTable() {
@@ -72,7 +75,7 @@ public class OperationView implements FxmlView<OperationViewViewModel>, Initiali
             public TreeTableCell<OperationTableData, Boolean> call(TreeTableColumn<OperationTableData, Boolean> param) {
                 return new TreeTableCell<>() {
 
-                    private final CheckBox liveDataCheckBox = new JFXCheckBox("Verfügbar");
+                    private final CheckBox liveDataCheckBox = new JFXCheckBox(getString("ui.label.available"));
 
                     @Override
                     protected void updateItem(Boolean item, boolean empty) {
@@ -90,12 +93,12 @@ public class OperationView implements FxmlView<OperationViewViewModel>, Initiali
             }
         });
 
-        operationHlmColumn.setCellFactory(new Callback<TreeTableColumn<OperationTableData, Boolean>, TreeTableCell<OperationTableData, Boolean>>() {
+        operationHlmColumn.setCellFactory(new Callback<>() {
             @Override
             public TreeTableCell<OperationTableData, Boolean> call(TreeTableColumn<OperationTableData, Boolean> param) {
                 return new TreeTableCell<>() {
 
-                    private final CheckBox dataAvailableCheckBox = new JFXCheckBox("Verfügbar");
+                    private final CheckBox dataAvailableCheckBox = new JFXCheckBox(getString("ui.label.available"));
 
                     @Override
                     protected void updateItem(Boolean item, boolean empty) {
@@ -119,7 +122,7 @@ public class OperationView implements FxmlView<OperationViewViewModel>, Initiali
             public TreeTableCell<OperationTableData, String> call(TreeTableColumn<OperationTableData, String> param) {
                 return new TreeTableCell<>() {
 
-                    private final Hyperlink open = new Hyperlink("Öffnen");
+                    private final Hyperlink open = new Hyperlink("ui.label.open");
 
                     @Override
                     protected void updateItem(String item, boolean empty) {
@@ -142,8 +145,9 @@ public class OperationView implements FxmlView<OperationViewViewModel>, Initiali
         });
     }
 
-    private void post(Object o) {
-        eventBus.post(o);
+    @Override
+    public Window getWindow() {
+        return createOperationButton.getScene().getWindow();
     }
 
     public void refreshData() {
