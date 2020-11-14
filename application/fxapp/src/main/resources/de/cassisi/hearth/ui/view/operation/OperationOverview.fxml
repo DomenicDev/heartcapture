@@ -97,7 +97,7 @@
             <VBox prefHeight="200.0" styleClass="container">
                <children>
                   <Label styleClass="dashboard-title" text="HLM-Daten" />
-                  <Label prefHeight="51.0" prefWidth="173.0" text="Fügen Sie den Excel-Export der Herz-Lungen-Maschine hinzu." wrapText="true" />
+                  <Label prefWidth="173.0" text="Fügen Sie den Excel-Export der Herz-Lungen-Maschine hinzu." wrapText="true" />
                   <HBox alignment="CENTER_LEFT">
                      <VBox.margin>
                         <Insets top="15.0" />
@@ -111,13 +111,13 @@
             <VBox prefHeight="200.0" styleClass="container">
                <children>
                   <Label styleClass="dashboard-title" text="Dokumentation" />
-                  <Label prefHeight="51.0" prefWidth="230.0" text="Generieren Sie die Datendokumentation mit allen aufgezeichneten Daten kombiniert mit den Daten der HLM-Datei." wrapText="true" />
+                  <Label prefWidth="230.0" text="Generieren Sie die Datendokumentation mit allen aufgezeichneten Daten kombiniert mit den Daten der HLM-Datei." wrapText="true" />
                   <HBox alignment="CENTER_LEFT">
                      <VBox.margin>
                         <Insets top="15.0" />
                      </VBox.margin>
                      <children>
-                        <Button fx:id="generateReportButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="82.0" text="Generieren" />
+                        <Button fx:id="generateReportButton" mnemonicParsing="false" prefHeight="25.0" text="Generieren" />
                      </children>
                   </HBox>
                </children>
