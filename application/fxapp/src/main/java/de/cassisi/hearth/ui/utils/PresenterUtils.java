@@ -23,6 +23,7 @@ import org.kordamp.ikonli.fontawesome.FontAwesome;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
 
 public final class PresenterUtils {
@@ -111,6 +112,7 @@ public final class PresenterUtils {
 
         // Nirs Chart
         List<NirsDataDTO> nirsData = data.getNirsData();
+        nirsData.sort(Comparator.comparing(NirsDataDTO::getTimestamp));
 
         XYChart.Series<String, Integer> nirsLeftSeries = new XYChart.Series<>();
         nirsLeftSeries.setName("NIRS (L)");
@@ -119,15 +121,6 @@ public final class PresenterUtils {
         nirsRightSeries.setName("NIRS (R)");
 
         int size = nirsData.size();
-        /*
-
-        10 platz, 100 vals, --> jeder 10. (100/10 = 10)
-        10 platz, 200 vals --> jeder 20.  (200/10 = 20)
-        10 platz, 8 vals --> jeder 1.     (8 / 10 = 0)
-
-        0 % 10 = 10 --> take | 1 % 10 = 10 | 2 % 10 = 2 | 8 % 10 = 8 | 10 % 10 = 0
-
-         */
         int comp = size / 50;
         int counter = 0;
 
