@@ -6,10 +6,16 @@ import com.dlsc.formsfx.model.structure.Group;
 import com.dlsc.formsfx.model.structure.NodeElement;
 import com.dlsc.formsfx.view.renderer.FormRenderer;
 import de.cassisi.hearth.ui.lang.LanguageResourceProvider;
+import de.cassisi.hearth.ui.view.recording.RecordingView;
+import de.cassisi.hearth.ui.view.recording.RecordingViewModel;
+import de.saxsys.mvvmfx.FluentViewLoader;
+import de.saxsys.mvvmfx.MvvmFX;
+import de.saxsys.mvvmfx.ViewTuple;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
@@ -23,6 +29,10 @@ import java.util.ResourceBundle;
 public final class DialogCreator {
 
     private static final ResourceBundle language = LanguageResourceProvider.getLanguageBundle();
+
+    static {
+        MvvmFX.setGlobalResourceBundle(language);
+    }
 
     public static String getString(String key) {
         return language.getString(key);
@@ -69,4 +79,26 @@ public final class DialogCreator {
         void handle(LocalDate operationDate, String room);
     }
 
+    public static void showRecordingDialog(Window owner, long operationId) {
+        ViewTuple<RecordingView, RecordingViewModel> tuple = FluentViewLoader.fxmlView(RecordingView.class).load();
+
+        // init operation id
+        RecordingViewModel viewModel = tuple.getViewModel();
+        viewModel.getIdProperty().set(operationId);
+
+        // setup view
+        Parent root = tuple.getView();
+        Scene scene = new Scene(root);
+
+        Stage stage = new Stage();
+        stage.setTitle(getString("ui.recording_dialog.window_title"));
+        stage.setWidth(1280);
+        stage.setHeight(700);
+        stage.initOwner(owner);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setResizable(true);
+        stage.setScene(scene);
+        stage.setOnCloseRequest(event -> tuple.getCodeBehind().handleCloseRequest(event));
+        stage.show();
+    }
 }

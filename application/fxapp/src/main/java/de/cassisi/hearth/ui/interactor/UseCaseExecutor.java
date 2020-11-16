@@ -2,6 +2,7 @@ package de.cassisi.hearth.ui.interactor;
 
 import de.cassisi.hearth.ui.presenter.OperationOverviewPresenter;
 import de.cassisi.hearth.usecase.*;
+import de.cassisi.hearth.usecase.dto.CompleteOperationDataDTO;
 import de.cassisi.hearth.usecase.output.OutputHandler;
 
 public interface UseCaseExecutor {
@@ -17,6 +18,8 @@ public interface UseCaseExecutor {
     void findAllOperations(FindAllOperations.InputData inputData, OutputHandler<FindAllOperations.OutputData> outputHandler);
 
     void findOperation(FindOperation.InputData inputData, OperationOverviewPresenter operationOverviewPresenter);
+
+    void findFullOperation(FindFullOperation.InputData inputData, OutputHandler<CompleteOperationDataDTO> outputHandler);
 
     void readHlmDataFile(ReadHLMDataFile.InputData inputData, OutputHandler<ReadHLMDataFile.OutputData> outputHandler);
 

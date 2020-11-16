@@ -1,15 +1,15 @@
 package de.cassisi.hearth.ui.presenter;
 
-import de.cassisi.hearth.ui.view.operation.OperationOverviewViewModel;
+import de.cassisi.hearth.ui.view.recording.RecordingViewModel;
 import javafx.application.Platform;
 import org.springframework.stereotype.Component;
 
 @Component
 public class RecordingStatePresenter {
 
-    private final OperationOverviewViewModel viewModel;
+    private final RecordingViewModel viewModel;
 
-    public RecordingStatePresenter(OperationOverviewViewModel viewModel) {
+    public RecordingStatePresenter(RecordingViewModel viewModel) {
         this.viewModel = viewModel;
     }
 

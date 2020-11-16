@@ -2,8 +2,10 @@ package de.cassisi.hearth.ui.view.operation;
 
 import de.saxsys.mvvmfx.ViewModel;
 import javafx.beans.property.*;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.TreeItem;
 import javafx.scene.paint.Paint;
 import lombok.Getter;
@@ -21,7 +23,6 @@ public class OperationOverviewViewModel implements ViewModel {
     private final StringProperty roomProperty = new SimpleStringProperty();
     private final StringProperty titleLabel = new SimpleStringProperty();
 
-
     // STATUS
     private final ObjectProperty<Ikon> nirsAvailableIconCode = new SimpleObjectProperty<>();
     private final ObjectProperty<Ikon> bisAvailableIconCode = new SimpleObjectProperty<>();
@@ -34,28 +35,8 @@ public class OperationOverviewViewModel implements ViewModel {
     private final ObjectProperty<Paint> hlmAvailableIconColor = new SimpleObjectProperty<>();
 
 
-    /*
-    LIVE RECORDING
-     */
-    private final IntegerProperty nirsLeftValue = new SimpleIntegerProperty();
-    private final IntegerProperty nirsRightValue = new SimpleIntegerProperty();
-    private final DoubleProperty bisProperty = new SimpleDoubleProperty();
-    private final ObjectProperty<TreeItem<PerfusionUIData>> infusionData = new SimpleObjectProperty<>();
-
-    private final BooleanProperty startRecordingButtonDisableProperty = new SimpleBooleanProperty(false);
-    private final BooleanProperty stopRecordingButtonDisableProperty = new SimpleBooleanProperty(true);
-
-    private final ObjectProperty<ObservableList<String>> serialPorts = new SimpleObjectProperty<>(FXCollections.observableArrayList());
-
-    private final BooleanProperty bisSerialEnabled = new SimpleBooleanProperty();
-    private final BooleanProperty nirsSerialEnabled = new SimpleBooleanProperty();
-    private final BooleanProperty infusionSerialEnabled = new SimpleBooleanProperty();
-
-    private final StringProperty bisSerialPort = new SimpleStringProperty();
-    private final StringProperty nirsSerialPort = new SimpleStringProperty();
-    private final StringProperty infusionSerialPort = new SimpleStringProperty();
-
-    private final BooleanProperty autoDetectProgressBarVisible = new SimpleBooleanProperty(false);
+    // LIVE DATA
+    private final ObjectProperty<ObservableList<XYChart.Series<String, Integer>>> nirsChartData = new SimpleObjectProperty<>();
 
 
     //***************************//
@@ -76,19 +57,6 @@ public class OperationOverviewViewModel implements ViewModel {
     public StringProperty titleLabel() {
         return titleLabel;
     }
-
-    public IntegerProperty nirsLeftValue() {
-        return this.nirsLeftValue;
-    }
-
-    public IntegerProperty nirsRightValue() {
-        return this.nirsRightValue;
-    }
-
-    public DoubleProperty bisValue() {
-        return this.bisProperty;
-    }
-
 
 
 }

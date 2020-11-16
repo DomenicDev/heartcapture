@@ -2,15 +2,20 @@ package de.cassisi.hearth.ui.utils;
 
 import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import de.cassisi.hearth.ui.lang.LanguageReceiver;
+import de.cassisi.hearth.ui.lang.LanguageResourceProvider;
 import de.cassisi.hearth.ui.view.dashboard.LatestOperation;
 import de.cassisi.hearth.ui.view.operation.PerfusionUIData;
 import de.cassisi.hearth.ui.view.operation.OperationOverviewViewModel;
 import de.cassisi.hearth.ui.view.operation.overview.OperationTableData;
 import de.cassisi.hearth.usecase.AddInfusionData;
+import de.cassisi.hearth.usecase.dto.CompleteOperationDataDTO;
+import de.cassisi.hearth.usecase.dto.NirsDataDTO;
 import de.cassisi.hearth.usecase.dto.SimpleOperationData;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.TreeItem;
 import javafx.scene.paint.Paint;
 import org.kordamp.ikonli.Ikon;
@@ -21,6 +26,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public final class PresenterUtils {
+
+    private static String getString(String key) {
+        return LanguageResourceProvider.getLanguageBundle().getString(key);
+    }
 
     // DATE TIME CONSTANTS
     private static final DateTimeFormatter LOCAL_DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
@@ -87,5 +96,55 @@ public final class PresenterUtils {
         iconCode.set(icon);
         iconColor.set(color);
     }
+
+    public static void present(CompleteOperationDataDTO data, OperationOverviewViewModel viewModel) {
+        viewModel.idProperty().setValue(data.getId());
+        viewModel.roomProperty().setValue(data.getRoom());
+        viewModel.dateProperty().setValue(data.getDate());
+        viewModel.titleLabel().setValue("Operation #" + data.getId());
+
+        // Status
+        updateFontIcon(viewModel.getBisAvailableIconCode(), viewModel.getBisAvailableIconColor(), data.isBisDataAvailable());
+        updateFontIcon(viewModel.getNirsAvailableIconCode(), viewModel.getNirsAvailableIconColor(), data.isNirsDataAvailable());
+        updateFontIcon(viewModel.getInfusionAvailableIconCode(), viewModel.getInfusionAvailableIconColor(), data.isInfusionDataAvailable());
+        updateFontIcon(viewModel.getHlmAvailableIconCode(), viewModel.getHlmAvailableIconColor(), data.isHlmDataAvailable());
+
+        // Nirs Chart
+        List<NirsDataDTO> nirsData = data.getNirsData();
+
+        XYChart.Series<String, Integer> nirsLeftSeries = new XYChart.Series<>();
+        nirsLeftSeries.setName("NIRS (L)");
+
+        XYChart.Series<String, Integer> nirsRightSeries = new XYChart.Series<>();
+        nirsRightSeries.setName("NIRS (R)");
+
+        int size = nirsData.size();
+        /*
+
+        10 platz, 100 vals, --> jeder 10. (100/10 = 10)
+        10 platz, 200 vals --> jeder 20.  (200/10 = 20)
+        10 platz, 8 vals --> jeder 1.     (8 / 10 = 0)
+
+        0 % 10 = 10 --> take | 1 % 10 = 10 | 2 % 10 = 2 | 8 % 10 = 8 | 10 % 10 = 0
+
+         */
+        int comp = size / 50;
+        int counter = 0;
+
+        for (NirsDataDTO e : nirsData) {
+            int v = comp <= 0 ? 0 : counter % comp;
+            counter++;
+            if (v == 0) {
+                String timestamp = e.getTimestamp().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+                nirsLeftSeries.getData().add(new XYChart.Data<>(timestamp, e.getLeft()));
+                nirsRightSeries.getData().add(new XYChart.Data<>(timestamp, e.getRight()));
+            }
+
+        }
+        ObservableList<XYChart.Series<String, Integer>> resultData = FXCollections.observableArrayList(nirsLeftSeries, nirsRightSeries);
+        viewModel.getNirsChartData().setValue(resultData);
+
+    }
+
 
 }

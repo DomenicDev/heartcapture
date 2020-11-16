@@ -2,6 +2,7 @@ package de.cassisi.hearth.ui.interactor;
 
 import de.cassisi.hearth.ui.presenter.OperationOverviewPresenter;
 import de.cassisi.hearth.usecase.*;
+import de.cassisi.hearth.usecase.dto.CompleteOperationDataDTO;
 import de.cassisi.hearth.usecase.output.OutputHandler;
 import org.springframework.stereotype.Component;
 
@@ -17,18 +18,20 @@ public class DefaultExecutor implements UseCaseExecutor {
     private final CreateOperation createOperation;
     private final FindAllOperations findAllOperations;
     private final FindOperation findOperation;
+    private final FindFullOperation findFullOperation;
     private final ReadHLMDataFile readHLMDataFile;
     private final GenerateReport generateReport;
 
     private final Executor executor = new Executor();
 
-    public DefaultExecutor(AddNirsData addNirsData, AddAnesthesiaData addAnesthesiaData, AddInfusionData addInfusionData, CreateOperation createOperation, FindAllOperations findAllOperations, FindOperation findOperation, ReadHLMDataFile readHLMDataFile, GenerateReport generateReport) {
+    public DefaultExecutor(AddNirsData addNirsData, AddAnesthesiaData addAnesthesiaData, AddInfusionData addInfusionData, CreateOperation createOperation, FindAllOperations findAllOperations, FindOperation findOperation, FindFullOperation findFullOperation, ReadHLMDataFile readHLMDataFile, GenerateReport generateReport) {
         this.addNirsData = addNirsData;
         this.addAnesthesiaData = addAnesthesiaData;
         this.addInfusionData = addInfusionData;
         this.createOperation = createOperation;
         this.findAllOperations = findAllOperations;
         this.findOperation = findOperation;
+        this.findFullOperation = findFullOperation;
         this.readHLMDataFile = readHLMDataFile;
         this.generateReport = generateReport;
 
@@ -63,6 +66,11 @@ public class DefaultExecutor implements UseCaseExecutor {
     @Override
     public void findOperation(FindOperation.InputData inputData, OperationOverviewPresenter operationOverviewPresenter) {
         add(() -> findOperation.execute(inputData, operationOverviewPresenter));
+    }
+
+    @Override
+    public void findFullOperation(FindFullOperation.InputData inputData, OutputHandler<CompleteOperationDataDTO> outputHandler) {
+        add(() -> findFullOperation.execute(inputData, outputHandler));
     }
 
     @Override

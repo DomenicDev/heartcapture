@@ -14,8 +14,16 @@ COLOR PALETTE
 }
 
 .sidebar {
-    -fx-background-color: #2f2a6b;
-    -fx-effect: dropshadow(two-pass-box, #05050522, 10, 0, 0, 1);
+   /* -fx-background-color: #2f2a6b;*/
+    -fx-background-color: white;
+    -fx-background-radius: 0 0 0 0;
+    -fx-effect: dropshadow(two-pass-box, #05050522, 15, 0, 0, 1);
+}
+
+.sidebar-category {
+    -fx-text-fill: #9e9d9dfa;
+    -fx-font-size: 11pt;
+    -fx-padding: 25 20 0 10;
 }
 
 .main-content-title {
@@ -24,22 +32,30 @@ COLOR PALETTE
 
 }
 
+.main-view-top-bar {
+    -fx-background-color: #8C9EFF;
+    -fx-effect: dropshadow(two-pass-box, #05050532, 15, 0, 0, 1);
+}
+
 .main-content-top-bar {
    /* -fx-background-color: #93580a*/
 }
 
 .sidebar-button {
     -fx-background-color: none;
-    -fx-text-fill: #eeeeee;
-    -fx-font-size: 16pt;
-    -fx-padding: 22 15;
+    -fx-text-fill: #5e5e5eee;
+    -fx-font-size: 13pt;
+    -fx-padding: 18 15;
     -fx-font-weight: lighter;
     -fx-graphic-text-gap: 10pt;
 }
 
+.cursor-hand {
+    -fx-cursor: hand;
+}
 
 .sidebar-button:hover {
-    -fx-background-color: #ffffff0f;
+    -fx-background-color: #aaaaaaee;
 }
 
 .logo-container {
@@ -51,7 +67,7 @@ COLOR PALETTE
 }
 
 .center-main {
-    -fx-background-color:  #eaecf5;
+    -fx-background-color:  #E8EAF6;
 }
 
 .main-content {
@@ -75,8 +91,8 @@ COLOR PALETTE
 }
 
 .live-capture-data-header {
-    -fx-font-size: 15pt;
-    -fx-font-weight: light;
+    -fx-font-size: 12pt;
+    -fx-font-weight: bold;
 }
 
 .container {
@@ -105,6 +121,40 @@ COLOR PALETTE
     -fx-text-fill: black;
 }
 
+.operation_heart_icon {
+    -fx-icon-code: fa-heart;
+    -fx-icon-size: 40pt;
+    -fx-icon-color: #c80023;
+}
+
+.operation_document_icon {
+    -fx-icon-code: fa-book;
+    -fx-icon-size: 40pt;
+    -fx-icon-color: #f46e00;
+}
+
+.operation_lock_icon {
+    -fx-icon-code: fa-lock;
+    -fx-icon-size: 40pt;
+    -fx-icon-color: #2d5b9f;
+}
+
+.simple_button {
+    -fx-background-color: #7986CB;
+    -fx-text-fill: #ffffffff;
+}
+
+.dialog_title_banner {
+
+    -fx-padding: 20 10;
+    -fx-background-color: #8C9EFF;
+    -fx-effect: dropshadow(two-pass-box, #05050532, 15, 0, 0, 1);
+}
+
+.dialog_title_banner > .label {
+    -fx-text-fill: white;
+}
+
 .root {
-    -fx-background-color:  #eaecf5;
+    -fx-background-color:  #E8EAF6;
 }

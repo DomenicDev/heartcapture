@@ -1,14 +1,14 @@
 package de.cassisi.hearth.ui.presenter;
 
-import de.cassisi.hearth.ui.view.operation.OperationOverviewViewModel;
+import de.cassisi.hearth.ui.view.recording.RecordingViewModel;
 import org.springframework.stereotype.Component;
 
 @Component
 public class AutoDetectPortStartPresenter extends FXPresenter<Void> {
 
-    private final OperationOverviewViewModel viewModel;
+    private final RecordingViewModel viewModel;
 
-    public AutoDetectPortStartPresenter(OperationOverviewViewModel viewModel) {
+    public AutoDetectPortStartPresenter(RecordingViewModel viewModel) {
         this.viewModel = viewModel;
     }
 
