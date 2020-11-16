@@ -122,7 +122,7 @@ public class OperationView extends BaseView implements FxmlView<OperationViewVie
             public TreeTableCell<OperationTableData, String> call(TreeTableColumn<OperationTableData, String> param) {
                 return new TreeTableCell<>() {
 
-                    private final Hyperlink open = new Hyperlink("ui.label.open");
+                    private final Hyperlink open = new Hyperlink(getString("ui.label.open"));
 
                     @Override
                     protected void updateItem(String item, boolean empty) {
