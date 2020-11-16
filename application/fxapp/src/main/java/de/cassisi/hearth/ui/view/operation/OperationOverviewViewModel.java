@@ -36,7 +36,8 @@ public class OperationOverviewViewModel implements ViewModel {
 
 
     // LIVE DATA
-    private final ObjectProperty<ObservableList<XYChart.Series<String, Integer>>> nirsChartData = new SimpleObjectProperty<>();
+    private final ObjectProperty<ObservableList<XYChart.Series<String, Integer>>> nirsChartData = new SimpleObjectProperty<>(FXCollections.emptyObservableList());
+    private final ObjectProperty<ObservableList<XYChart.Series<String, Integer>>> bisChartData = new SimpleObjectProperty<>(FXCollections.emptyObservableList());
 
 
     //***************************//

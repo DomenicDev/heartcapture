@@ -2,13 +2,13 @@ package de.cassisi.hearth.ui.utils;
 
 import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
-import de.cassisi.hearth.ui.lang.LanguageReceiver;
 import de.cassisi.hearth.ui.lang.LanguageResourceProvider;
 import de.cassisi.hearth.ui.view.dashboard.LatestOperation;
-import de.cassisi.hearth.ui.view.operation.PerfusionUIData;
 import de.cassisi.hearth.ui.view.operation.OperationOverviewViewModel;
+import de.cassisi.hearth.ui.view.operation.PerfusionUIData;
 import de.cassisi.hearth.ui.view.operation.overview.OperationTableData;
 import de.cassisi.hearth.usecase.AddInfusionData;
+import de.cassisi.hearth.usecase.dto.BISDataDTO;
 import de.cassisi.hearth.usecase.dto.CompleteOperationDataDTO;
 import de.cassisi.hearth.usecase.dto.NirsDataDTO;
 import de.cassisi.hearth.usecase.dto.SimpleOperationData;
@@ -121,7 +121,7 @@ public final class PresenterUtils {
         nirsRightSeries.setName("NIRS (R)");
 
         int size = nirsData.size();
-        int comp = size / 50;
+        int comp = size / 150;
         int counter = 0;
 
         for (NirsDataDTO e : nirsData) {
@@ -134,8 +134,29 @@ public final class PresenterUtils {
             }
 
         }
-        ObservableList<XYChart.Series<String, Integer>> resultData = FXCollections.observableArrayList(nirsLeftSeries, nirsRightSeries);
+        ObservableList<XYChart.Series<String, Integer>> resultData = FXCollections.observableArrayList();
+        resultData.add(nirsLeftSeries);
+        resultData.add(nirsRightSeries);
+
         viewModel.getNirsChartData().setValue(resultData);
+
+        // BIS CHART
+        List<BISDataDTO> bisDataList = data.getBisData();
+        bisDataList.sort(Comparator.comparing(BISDataDTO::getTimestamp));
+
+        XYChart.Series<String, Integer> bisSeries = new XYChart.Series<>();
+        bisSeries.setName("BIS");
+
+        for (BISDataDTO bis : bisDataList) {
+            String timestamp = bis.getTimestamp().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+            bisSeries.getData().add(new XYChart.Data<>(timestamp, (int)(bis.getBsi())));
+        }
+
+        ObservableList<XYChart.Series<String, Integer>> bisSeriesData = FXCollections.observableArrayList();
+        bisSeriesData.add(bisSeries);
+
+        viewModel.getBisChartData().setValue(bisSeriesData);
+
 
     }
 

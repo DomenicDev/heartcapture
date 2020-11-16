@@ -20,7 +20,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<VBox fx:id="operationOverviewRoot" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="737.0" prefWidth="1502.0" spacing="20.0" stylesheets="@../../../../../../css/full-design.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.cassisi.hearth.ui.view.operation.OperationOverview">
+<VBox fx:id="operationOverviewRoot" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" spacing="20.0" stylesheets="@../../../../../../css/full-design.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.cassisi.hearth.ui.view.operation.OperationOverview">
    <children>
       <HBox maxWidth="1.7976931348623157E308" spacing="20.0">
          <children>
@@ -193,7 +193,7 @@
                   </VBox>
                </children>
             </HBox>
-            <LineChart fx:id="nirsChart" alternativeRowFillVisible="false" createSymbols="false" title="Nirs" verticalGridLinesVisible="false">
+            <LineChart fx:id="nirsChart" alternativeRowFillVisible="false" createSymbols="false" legendSide="RIGHT" minHeight="-Infinity" prefHeight="300.0" title="Nirs" verticalGridLinesVisible="false">
               <xAxis>
                 <CategoryAxis side="BOTTOM" />
               </xAxis>
@@ -203,22 +203,14 @@
             </LineChart>
             <HBox VBox.vgrow="ALWAYS">
                <children>
-                  <AreaChart HBox.hgrow="ALWAYS">
+                  <AreaChart fx:id="bisChart" legendSide="TOP" legendVisible="false" minHeight="-Infinity" prefHeight="300.0" title="BIS" verticalGridLinesVisible="false" verticalZeroLineVisible="false" HBox.hgrow="ALWAYS">
                     <xAxis>
-                      <CategoryAxis side="BOTTOM" />
+                      <CategoryAxis side="BOTTOM" tickLabelsVisible="false" tickMarkVisible="false" />
                     </xAxis>
                     <yAxis>
-                      <NumberAxis side="LEFT" />
+                      <NumberAxis minorTickVisible="false" side="LEFT" />
                     </yAxis>
                   </AreaChart>
-                  <LineChart HBox.hgrow="ALWAYS">
-                    <xAxis>
-                      <CategoryAxis side="BOTTOM" />
-                    </xAxis>
-                    <yAxis>
-                      <NumberAxis side="LEFT" />
-                    </yAxis>
-                  </LineChart>
                </children>
             </HBox>
          </children>

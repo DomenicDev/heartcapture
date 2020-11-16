@@ -10,6 +10,8 @@ import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Side;
+import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
@@ -68,6 +70,9 @@ public class OperationOverview extends BaseView implements FxmlView<OperationOve
     @FXML
     private LineChart<String, Integer> nirsChart;
 
+    @FXML
+    private AreaChart<String, Integer> bisChart;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         titleLabel.textProperty().bind(viewModel.titleLabel());
@@ -86,10 +91,21 @@ public class OperationOverview extends BaseView implements FxmlView<OperationOve
 
     private void initCharts() {
         initNirsChart();
+        initBisChart();
+    }
+
+    private void initBisChart() {
+        bisChart.dataProperty().bind(viewModel.getBisChartData());
+        bisChart.setCreateSymbols(false);
+        bisChart.getXAxis().setTickLabelsVisible(false);
     }
 
     private void initNirsChart() {
         nirsChart.setCreateSymbols(false);
+        nirsChart.setLegendSide(Side.RIGHT);
+        nirsChart.getXAxis().setTickLabelsVisible(false);
+        nirsChart.getXAxis().setOpacity(0);
+        nirsChart.getXAxis().setTickMarkVisible(false);
         nirsChart.dataProperty().bind(viewModel.getNirsChartData());
     }
 
