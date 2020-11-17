@@ -39,6 +39,8 @@ public class OperationOverviewViewModel implements ViewModel {
     private final ObjectProperty<ObservableList<XYChart.Series<String, Integer>>> nirsChartData = new SimpleObjectProperty<>(FXCollections.emptyObservableList());
     private final ObjectProperty<ObservableList<XYChart.Series<String, Integer>>> bisChartData = new SimpleObjectProperty<>(FXCollections.emptyObservableList());
 
+    // ACTIONS
+    private final BooleanProperty generateReportButtonDisableProperty = new SimpleBooleanProperty(true);
 
     //***************************//
     //      ACCESS METHODS       //

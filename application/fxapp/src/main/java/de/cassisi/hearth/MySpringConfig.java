@@ -20,11 +20,12 @@ public class MySpringConfig {
     private final FindOperationJpaRepository findOperationJpaRepository;
     private final GenerateReportRepository generateReportRepository;
     private final FindFullOperationJpaRepository findFullOperationJpaRepository;
+    private final GenerateStatisticRepository generateStatisticRepository;
 
     private final HLMFileReader hlmFileReader = new HLMExcelFileReader();
     private final ReportFileGenerator reportFileGenerator = new ExcelReportFileGeneratorImpl();
 
-    public MySpringConfig(CreateOperationJpaRepository createOperationJpaRepository, AddInfusionDataRepository addInfusionDataRepository, AddNirsDataRepository addNirsDataRepository, ReadHLMDataFileRepository readHLMDataFileRepository, FindAllOperationsJpaRepository findAllOperationsJpaRepository, FindOperationJpaRepository findOperationJpaRepository, GenerateReportRepository generateReportRepository, AddAnesthesiaDataJpaRepository addAnesthesiaDataJpaRepository, FindFullOperationJpaRepository findFullOperationJpaRepository) {
+    public MySpringConfig(CreateOperationJpaRepository createOperationJpaRepository, AddInfusionDataRepository addInfusionDataRepository, AddNirsDataRepository addNirsDataRepository, ReadHLMDataFileRepository readHLMDataFileRepository, FindAllOperationsJpaRepository findAllOperationsJpaRepository, FindOperationJpaRepository findOperationJpaRepository, GenerateReportRepository generateReportRepository, AddAnesthesiaDataJpaRepository addAnesthesiaDataJpaRepository, FindFullOperationJpaRepository findFullOperationJpaRepository, GenerateStatisticRepository generateStatisticRepository) {
         this.createOperationJpaRepository = createOperationJpaRepository;
         this.addInfusionDataRepository = addInfusionDataRepository;
         this.addNirsDataRepository = addNirsDataRepository;
@@ -34,6 +35,7 @@ public class MySpringConfig {
         this.generateReportRepository = generateReportRepository;
         this.addAnesthesiaDataJpaRepository = addAnesthesiaDataJpaRepository;
         this.findFullOperationJpaRepository = findFullOperationJpaRepository;
+        this.generateStatisticRepository = generateStatisticRepository;
     }
 
     @Bean
@@ -79,5 +81,10 @@ public class MySpringConfig {
     @Bean
     public FindFullOperation findFullOperation() {
         return new FindFullOperationInteractor(findFullOperationJpaRepository);
+    }
+
+    @Bean
+    public GenerateStatistic generateStatistic() {
+        return new GenerateStatisticInteractor(generateStatisticRepository);
     }
 }

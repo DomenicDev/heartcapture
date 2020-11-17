@@ -26,17 +26,12 @@ public final class DTOConverter {
     }
 
     public static CompleteOperationDataDTO toFullOperationData(FindFullOperationRepository.ResultData data) {
+        SimpleOperationData operationData = toSimpleOperationData(data.getOperation());
         List<BISDataDTO> bisData = data.getAnesthesiaData().stream().map(d -> new BISDataDTO(d.getTimestamp(), d.getDepthOfAnesthesia())).collect(Collectors.toList());
         List<NirsDataDTO> nirsData = data.getNirsData().stream().map(n -> new NirsDataDTO(n.getTimestamp(), n.getLeftSaturation(), n.getRightSaturation())).collect(Collectors.toList());
 
         return new CompleteOperationDataDTO(
-                data.getOperation().getId(),
-                data.getOperation().getDate(),
-                data.getOperation().getRoomNr(),
-                data.getOperation().isNirsDataAvailable(),
-                data.getOperation().isAnesthesiaDataAvailable(),
-                data.getOperation().isInfusionDataAvailable(),
-                data.getOperation().isHlmDataAvailable(),
+                operationData,
                 nirsData,
                 bisData);
     }

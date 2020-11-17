@@ -17,7 +17,7 @@ public class CreateOperationPresenter extends UseCasePresenter<CreateOperation.O
 
     @Override
     public void runOnUI(CreateOperation.OutputData outputData) {
-        PresenterUtils.present(viewModel, outputData.operationData);
+        PresenterUtils.present(outputData.operationData, viewModel);
     }
 
 }

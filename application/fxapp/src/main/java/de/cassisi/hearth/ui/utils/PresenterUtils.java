@@ -62,20 +62,6 @@ public final class PresenterUtils {
         return new RecursiveTreeItem<>(items, RecursiveTreeObject::getChildren);
     }
 
-    public static void present(OperationOverviewViewModel viewModel, SimpleOperationData data) {
-        // General
-        viewModel.idProperty().setValue(data.getId());
-        viewModel.roomProperty().setValue(data.getRoom());
-        viewModel.dateProperty().setValue(data.getDate());
-        viewModel.titleLabel().setValue("Operation #" + data.getId());
-
-        // Status
-        updateFontIcon(viewModel.getBisAvailableIconCode(), viewModel.getBisAvailableIconColor(), data.isBisDataAvailable());
-        updateFontIcon(viewModel.getNirsAvailableIconCode(), viewModel.getNirsAvailableIconColor(), data.isNirsDataAvailable());
-        updateFontIcon(viewModel.getInfusionAvailableIconCode(), viewModel.getInfusionAvailableIconColor(), data.isInfusionDataAvailable());
-        updateFontIcon(viewModel.getHlmAvailableIconCode(), viewModel.getHlmAvailableIconColor(), data.isHlmDataAvailable());
-    }
-
     public static TreeItem<OperationTableData> convertToOperationViewTableData(List<SimpleOperationData> data) {
         ObservableList<OperationTableData> items = FXCollections.observableArrayList();
         data.forEach(d -> {
@@ -98,7 +84,7 @@ public final class PresenterUtils {
         iconColor.set(color);
     }
 
-    public static void present(CompleteOperationDataDTO data, OperationOverviewViewModel viewModel) {
+    public static void present(SimpleOperationData data, OperationOverviewViewModel viewModel) {
         viewModel.idProperty().setValue(data.getId());
         viewModel.roomProperty().setValue(data.getRoom());
         viewModel.dateProperty().setValue(data.getDate());
@@ -109,6 +95,13 @@ public final class PresenterUtils {
         updateFontIcon(viewModel.getNirsAvailableIconCode(), viewModel.getNirsAvailableIconColor(), data.isNirsDataAvailable());
         updateFontIcon(viewModel.getInfusionAvailableIconCode(), viewModel.getInfusionAvailableIconColor(), data.isInfusionDataAvailable());
         updateFontIcon(viewModel.getHlmAvailableIconCode(), viewModel.getHlmAvailableIconColor(), data.isHlmDataAvailable());
+
+        // actions
+        viewModel.getGenerateReportButtonDisableProperty().set(!data.isHlmDataAvailable());
+    }
+
+    public static void present(CompleteOperationDataDTO data, OperationOverviewViewModel viewModel) {
+        present(data.getOperationData(), viewModel);
 
         // Nirs Chart
         List<NirsDataDTO> nirsData = data.getNirsData();
@@ -144,12 +137,18 @@ public final class PresenterUtils {
         List<BISDataDTO> bisDataList = data.getBisData();
         bisDataList.sort(Comparator.comparing(BISDataDTO::getTimestamp));
 
+        comp = bisDataList.size() / 150;
+        counter = 0;
+
         XYChart.Series<String, Integer> bisSeries = new XYChart.Series<>();
         bisSeries.setName("BIS");
 
         for (BISDataDTO bis : bisDataList) {
-            String timestamp = bis.getTimestamp().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-            bisSeries.getData().add(new XYChart.Data<>(timestamp, (int)(bis.getBsi())));
+            if ((comp <= 0 ? 0 : counter % comp) == 0) {
+                String timestamp = bis.getTimestamp().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+                bisSeries.getData().add(new XYChart.Data<>(timestamp, (int)(bis.getBsi())));
+            }
+            counter++;
         }
 
         ObservableList<XYChart.Series<String, Integer>> bisSeriesData = FXCollections.observableArrayList();

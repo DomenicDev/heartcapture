@@ -17,7 +17,7 @@ public class ReadHLMDataFilePresenter extends UseCasePresenter<OutputData> {
 
     @Override
     public void runOnUI(OutputData outputData) {
-        PresenterUtils.present(viewModel, outputData.simpleOperationData);
+        PresenterUtils.present(outputData.simpleOperationData, viewModel);
     }
 
 }

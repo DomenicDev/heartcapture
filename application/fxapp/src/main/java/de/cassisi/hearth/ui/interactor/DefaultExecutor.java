@@ -1,9 +1,9 @@
 package de.cassisi.hearth.ui.interactor;
 
 import de.cassisi.hearth.ui.exception.ExceptionHandler;
-import de.cassisi.hearth.ui.presenter.OperationOverviewPresenter;
 import de.cassisi.hearth.usecase.*;
 import de.cassisi.hearth.usecase.dto.CompleteOperationDataDTO;
+import de.cassisi.hearth.usecase.dto.SimpleStatisticDTO;
 import de.cassisi.hearth.usecase.output.OutputHandler;
 import org.springframework.stereotype.Component;
 
@@ -22,12 +22,13 @@ public class DefaultExecutor implements UseCaseExecutor {
     private final FindFullOperation findFullOperation;
     private final ReadHLMDataFile readHLMDataFile;
     private final GenerateReport generateReport;
+    private final GenerateStatistic generateStatistic;
 
     private final ExceptionHandler exceptionHandler;
 
     private final Executor executor = new Executor();
 
-    public DefaultExecutor(AddNirsData addNirsData, AddAnesthesiaData addAnesthesiaData, AddInfusionData addInfusionData, CreateOperation createOperation, FindAllOperations findAllOperations, FindOperation findOperation, FindFullOperation findFullOperation, ReadHLMDataFile readHLMDataFile, GenerateReport generateReport, ExceptionHandler exceptionHandler) {
+    public DefaultExecutor(AddNirsData addNirsData, AddAnesthesiaData addAnesthesiaData, AddInfusionData addInfusionData, CreateOperation createOperation, FindAllOperations findAllOperations, FindOperation findOperation, FindFullOperation findFullOperation, ReadHLMDataFile readHLMDataFile, GenerateReport generateReport, GenerateStatistic generateStatistic, ExceptionHandler exceptionHandler) {
         this.addNirsData = addNirsData;
         this.addAnesthesiaData = addAnesthesiaData;
         this.addInfusionData = addInfusionData;
@@ -37,6 +38,7 @@ public class DefaultExecutor implements UseCaseExecutor {
         this.findFullOperation = findFullOperation;
         this.readHLMDataFile = readHLMDataFile;
         this.generateReport = generateReport;
+        this.generateStatistic = generateStatistic;
         this.exceptionHandler = exceptionHandler;
 
         this.executor.start();
@@ -68,7 +70,7 @@ public class DefaultExecutor implements UseCaseExecutor {
     }
 
     @Override
-    public void findOperation(FindOperation.InputData inputData, OperationOverviewPresenter operationOverviewPresenter) {
+    public void findOperation(FindOperation.InputData inputData, OutputHandler<FindOperation.OutputData> operationOverviewPresenter) {
         add(() -> findOperation.execute(inputData, operationOverviewPresenter));
     }
 
@@ -85,6 +87,11 @@ public class DefaultExecutor implements UseCaseExecutor {
     @Override
     public void generateReportEvent(GenerateReport.InputData inputData, OutputHandler<GenerateReport.OutputData> outputHandler) {
         add(() -> generateReport.execute(inputData, outputHandler));
+    }
+
+    @Override
+    public void generateStatistic(OutputHandler<SimpleStatisticDTO> outputHandler) {
+        add(() -> generateStatistic.execute(null, outputHandler));
     }
 
     private void add(Job job) {

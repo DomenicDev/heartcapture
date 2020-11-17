@@ -75,5 +75,12 @@ public class OperationDB {
             hlmDataDB.setOperation(this);
         }
     }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof OperationDB )) return false;
+        return id != null && id.equals(((OperationDB) o).getId());
+    }
+
 
 }

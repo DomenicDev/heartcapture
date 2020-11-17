@@ -26,7 +26,6 @@ public class GuiEventController {
     private final AddInfusionDataPresenter addInfusionDataPresenter;
     private final CreateOperationPresenter createOperationPresenter;
     private final RefreshLatestOperationPresenter refreshLatestOperationPresenter;
-    private final OperationOverviewPresenter operationOverviewPresenter;
     private final ReadHLMDataFilePresenter hlmDataFilePresenter;
     private final GenerateReportPresenter generateReportPresenter;
     private final RecordingStatePresenter recordingStatePresenter;
@@ -35,20 +34,20 @@ public class GuiEventController {
     private final AutoDetectResultPresenter autoDetectResultPresenter;
     private final RefreshOperationViewDataPresenter refreshOperationViewDataPresenter;
     private final OperationViewPresenter operationViewPresenter;
+    private final GenerateDashboardStatisticPresenter generateDashboardStatisticPresenter;
 
     private final Navigator navigator;
     private final RecordingController recordingController;
 
     private final EventBus eventBus;
 
-    public GuiEventController(UseCaseExecutor useCaseExecutor, AddNirsDataPresenter addNirsDataPresenter, AddAnesthesiaDataPresenter addAnesthesiaDataPresenter, AddInfusionDataPresenter addInfusionDataPresenter, CreateOperationPresenter createOperationPresenter, RefreshLatestOperationPresenter refreshLatestOperationPresenter1, OperationOverviewPresenter operationOverviewPresenter, ReadHLMDataFilePresenter hlmDataFilePresenter, GenerateReportPresenter generateReportPresenter, RecordingStatePresenter recordingStatePresenter, RefreshSerialPortPresenter refreshSerialPortPresenter, AutoDetectPortStartPresenter autoDetectPortStartPresenter, AutoDetectResultPresenter autoDetectResultPresenter, RefreshOperationViewDataPresenter refreshOperationViewDataPresenter, OperationViewPresenter operationViewPresenter, Navigator navigator, RecordingController recordingController) {
+    public GuiEventController(UseCaseExecutor useCaseExecutor, AddNirsDataPresenter addNirsDataPresenter, AddAnesthesiaDataPresenter addAnesthesiaDataPresenter, AddInfusionDataPresenter addInfusionDataPresenter, CreateOperationPresenter createOperationPresenter, RefreshLatestOperationPresenter refreshLatestOperationPresenter1, ReadHLMDataFilePresenter hlmDataFilePresenter, GenerateReportPresenter generateReportPresenter, RecordingStatePresenter recordingStatePresenter, RefreshSerialPortPresenter refreshSerialPortPresenter, AutoDetectPortStartPresenter autoDetectPortStartPresenter, AutoDetectResultPresenter autoDetectResultPresenter, RefreshOperationViewDataPresenter refreshOperationViewDataPresenter, OperationViewPresenter operationViewPresenter, GenerateDashboardStatisticPresenter generateDashboardStatisticPresenter, Navigator navigator, RecordingController recordingController) {
         this.useCaseExecutor = useCaseExecutor;
         this.addNirsDataPresenter = addNirsDataPresenter;
         this.addAnesthesiaDataPresenter = addAnesthesiaDataPresenter;
         this.addInfusionDataPresenter = addInfusionDataPresenter;
         this.createOperationPresenter = createOperationPresenter;
         this.refreshLatestOperationPresenter = refreshLatestOperationPresenter1;
-        this.operationOverviewPresenter = operationOverviewPresenter;
         this.hlmDataFilePresenter = hlmDataFilePresenter;
         this.generateReportPresenter = generateReportPresenter;
         this.recordingStatePresenter = recordingStatePresenter;
@@ -57,6 +56,7 @@ public class GuiEventController {
         this.autoDetectResultPresenter = autoDetectResultPresenter;
         this.refreshOperationViewDataPresenter = refreshOperationViewDataPresenter;
         this.operationViewPresenter = operationViewPresenter;
+        this.generateDashboardStatisticPresenter = generateDashboardStatisticPresenter;
         this.navigator = navigator;
         this.recordingController = recordingController;
 
@@ -203,6 +203,11 @@ public class GuiEventController {
     @Subscribe
     public void handle(RefreshSerialPortEvent event) {
         executePresenter(refreshSerialPortPresenter, null);
+    }
+
+    @Subscribe
+    public void handle(RefreshDashboardStatisticEvent event) {
+        getUseCaseExecutor().generateStatistic(generateDashboardStatisticPresenter);
     }
 
     private UseCaseExecutor getUseCaseExecutor() {

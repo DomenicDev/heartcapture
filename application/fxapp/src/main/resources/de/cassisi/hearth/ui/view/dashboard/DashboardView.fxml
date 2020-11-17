@@ -3,8 +3,8 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTreeTableView?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
-<?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Label?>
@@ -23,14 +23,14 @@
          <children>
             <VBox styleClass="container" HBox.hgrow="ALWAYS">
                <children>
-                  <LineChart fx:id="operationLineChart">
+                  <BarChart fx:id="operationBarChart" animated="false">
                     <xAxis>
-                      <CategoryAxis side="BOTTOM" />
+                      <CategoryAxis animated="false" side="BOTTOM" />
                     </xAxis>
                     <yAxis>
                       <NumberAxis autoRanging="false" minorTickVisible="false" side="LEFT" tickUnit="1.0" upperBound="10.0" />
                     </yAxis>
-                  </LineChart>
+                  </BarChart>
                </children>
             </VBox>
             <VBox maxWidth="1.7976931348623157E308" prefWidth="200.0">
@@ -44,7 +44,7 @@
                                     <Label styleClass="dashboard_stats_title" text="Gesamt" />
                                     <VBox alignment="CENTER">
                                        <children>
-                                          <Label styleClass="dashboard_stats_number" text="25">
+                                          <Label fx:id="numberOfOperationsLabel" styleClass="dashboard_stats_number" text="25">
                                              <font>
                                                 <Font size="31.0" />
                                              </font>
@@ -58,7 +58,7 @@
                                     <Label styleClass="dashboard_stats_title" text="Offen" />
                                     <VBox alignment="CENTER">
                                        <children>
-                                          <Label styleClass="dashboard_stats_number" text="5">
+                                          <Label fx:id="numberOfOpenOperationsLabel" styleClass="dashboard_stats_number" text="5">
                                              <font>
                                                 <Font size="31.0" />
                                              </font>
@@ -72,7 +72,7 @@
                                     <Label styleClass="dashboard_stats_title" text="Unvollständig" />
                                     <VBox alignment="CENTER">
                                        <children>
-                                          <Label styleClass="dashboard_stats_number" text="3">
+                                          <Label fx:id="numberOfIncompleteOperationsLabel" styleClass="dashboard_stats_number" text="3">
                                              <font>
                                                 <Font size="31.0" />
                                              </font>
@@ -89,7 +89,7 @@
             </VBox>
             <VBox styleClass="container">
                <children>
-                  <PieChart fx:id="operationPieChart" />
+                  <PieChart fx:id="operationPieChart" legendSide="RIGHT" />
                </children>
             </VBox>
          </children>

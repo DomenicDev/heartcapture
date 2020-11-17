@@ -75,17 +75,23 @@ public class OperationOverview extends BaseView implements FxmlView<OperationOve
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        titleLabel.textProperty().bind(viewModel.titleLabel());
-        operationDatePicker.valueProperty().bind(viewModel.dateProperty());
-        roomTextField.textProperty().bind(viewModel.roomProperty());
-
+        initOperationInformation();
         initNewRecordingButton();
         initStatusInformation();
         initFileChooser();
         initReadHlmFileButton();
         initCharts();
+        initGenerateReportButton();
+    }
 
-        // REPORT GENERATOR
+    private void initOperationInformation() {
+        titleLabel.textProperty().bind(viewModel.titleLabel());
+        operationDatePicker.valueProperty().bind(viewModel.dateProperty());
+        roomTextField.textProperty().bind(viewModel.roomProperty());
+    }
+
+    private void initGenerateReportButton() {
+        generateReportButton.disableProperty().bind(viewModel.getGenerateReportButtonDisableProperty());
         generateReportButton.setOnAction(event -> post(new GenerateReportEvent(getOperationId())));
     }
 
