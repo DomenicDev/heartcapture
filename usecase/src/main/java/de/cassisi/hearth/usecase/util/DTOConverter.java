@@ -6,6 +6,7 @@ import de.cassisi.hearth.usecase.dto.BISDataDTO;
 import de.cassisi.hearth.usecase.dto.CompleteOperationDataDTO;
 import de.cassisi.hearth.usecase.dto.NirsDataDTO;
 import de.cassisi.hearth.usecase.dto.SimpleOperationData;
+import de.cassisi.hearth.usecase.port.FindFullOperationRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,7 +25,7 @@ public final class DTOConverter {
         );
     }
 
-    public static CompleteOperationDataDTO toFullOperationData(ReportData data) {
+    public static CompleteOperationDataDTO toFullOperationData(FindFullOperationRepository.ResultData data) {
         List<BISDataDTO> bisData = data.getAnesthesiaData().stream().map(d -> new BISDataDTO(d.getTimestamp(), d.getDepthOfAnesthesia())).collect(Collectors.toList());
         List<NirsDataDTO> nirsData = data.getNirsData().stream().map(n -> new NirsDataDTO(n.getTimestamp(), n.getLeftSaturation(), n.getRightSaturation())).collect(Collectors.toList());
 

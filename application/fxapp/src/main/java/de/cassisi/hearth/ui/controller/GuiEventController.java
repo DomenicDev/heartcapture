@@ -169,9 +169,12 @@ public class GuiEventController {
         if (stopped) {
             recordingStatePresenter.handleStopped();
         }
+        /*
         FindOperation.InputData inputData = new FindOperation.InputData();
         inputData.operationId = event.getOperationId();
         this.useCaseExecutor.findOperation(inputData, operationOverviewPresenter);
+         */
+        eventBus.post(new OpenOperationOverviewEvent(event.getOperationId()));
     }
 
     @Subscribe

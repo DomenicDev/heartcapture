@@ -1,5 +1,6 @@
 package de.cassisi.hearth.ui.interactor;
 
+import de.cassisi.hearth.ui.exception.ExceptionHandler;
 import de.cassisi.hearth.ui.presenter.OperationOverviewPresenter;
 import de.cassisi.hearth.usecase.*;
 import de.cassisi.hearth.usecase.dto.CompleteOperationDataDTO;
@@ -22,9 +23,11 @@ public class DefaultExecutor implements UseCaseExecutor {
     private final ReadHLMDataFile readHLMDataFile;
     private final GenerateReport generateReport;
 
+    private final ExceptionHandler exceptionHandler;
+
     private final Executor executor = new Executor();
 
-    public DefaultExecutor(AddNirsData addNirsData, AddAnesthesiaData addAnesthesiaData, AddInfusionData addInfusionData, CreateOperation createOperation, FindAllOperations findAllOperations, FindOperation findOperation, FindFullOperation findFullOperation, ReadHLMDataFile readHLMDataFile, GenerateReport generateReport) {
+    public DefaultExecutor(AddNirsData addNirsData, AddAnesthesiaData addAnesthesiaData, AddInfusionData addInfusionData, CreateOperation createOperation, FindAllOperations findAllOperations, FindOperation findOperation, FindFullOperation findFullOperation, ReadHLMDataFile readHLMDataFile, GenerateReport generateReport, ExceptionHandler exceptionHandler) {
         this.addNirsData = addNirsData;
         this.addAnesthesiaData = addAnesthesiaData;
         this.addInfusionData = addInfusionData;
@@ -34,6 +37,7 @@ public class DefaultExecutor implements UseCaseExecutor {
         this.findFullOperation = findFullOperation;
         this.readHLMDataFile = readHLMDataFile;
         this.generateReport = generateReport;
+        this.exceptionHandler = exceptionHandler;
 
         this.executor.start();
     }
@@ -88,7 +92,7 @@ public class DefaultExecutor implements UseCaseExecutor {
     }
 
 
-    private static class Executor implements Runnable {
+    private class Executor implements Runnable {
 
         private final Queue<Job> jobs = new ConcurrentLinkedDeque<>();
         private final Thread executorThread = new Thread(this);
@@ -117,7 +121,11 @@ public class DefaultExecutor implements UseCaseExecutor {
             while (active) {
                 Job job = jobs.poll();
                 if (job != null) {
-                    job.execute();
+                    try {
+                        job.execute();
+                    } catch (Exception e) {
+                        exceptionHandler.handleGenericException(e);
+                    }
                 }
             }
         }

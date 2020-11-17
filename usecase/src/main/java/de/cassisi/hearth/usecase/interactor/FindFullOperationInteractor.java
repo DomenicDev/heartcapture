@@ -1,12 +1,13 @@
 package de.cassisi.hearth.usecase.interactor;
 
-import de.cassisi.hearth.entity.ReportData;
 import de.cassisi.hearth.usecase.FindFullOperation;
 import de.cassisi.hearth.usecase.dto.CompleteOperationDataDTO;
 import de.cassisi.hearth.usecase.output.OutputHandler;
 import de.cassisi.hearth.usecase.port.FindFullOperationRepository;
 import de.cassisi.hearth.usecase.util.DTOConverter;
 import de.cassisi.hearth.usecase.validator.InputValidator;
+
+import static de.cassisi.hearth.usecase.port.FindFullOperationRepository.ResultData;
 
 public class FindFullOperationInteractor implements FindFullOperation {
 
@@ -24,7 +25,7 @@ public class FindFullOperationInteractor implements FindFullOperation {
         InputValidator.checkIdPositive(operationId);
 
         // find operation data
-        ReportData data = repository.getFullOperationData(operationId);
+        ResultData data = repository.getOperationData(operationId);
 
         // call output handler
         CompleteOperationDataDTO result = DTOConverter.toFullOperationData(data);

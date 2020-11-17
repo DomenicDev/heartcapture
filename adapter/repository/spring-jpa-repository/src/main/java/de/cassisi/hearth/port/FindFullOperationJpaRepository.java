@@ -22,22 +22,13 @@ public class FindFullOperationJpaRepository implements FindFullOperationReposito
 
     @Override
     @Transactional
-    public ReportData getFullOperationData(long operationId) {
+    public ResultData getOperationData(long operationId) {
         OperationDB operationDB = operationRepository.findById(operationId).orElseThrow(() -> new OperationNotFoundException(operationId));
 
-        // gather data
         Operation operation = DBConverter.convert(operationDB);
-        HLMData hlmData = DBConverter.convert(operationDB.getHlmData());
         List<NIRSData> nirsData = DBConverter.convertNIRSData(operationDB.getNirsData());
-        List<InfusionData> infusionData = DBConverter.convertInfusionData(operationDB.getInfusionData());
         List<AnesthesiaData> anesthesiaData = DBConverter.convertAnesthesiaData(operationDB.getAnesthesiaData());
 
-        return new ReportData(
-                operation,
-                hlmData,
-                nirsData,
-                infusionData,
-                anesthesiaData);
+        return new ResultData(operation, nirsData, anesthesiaData);
     }
-
 }
