@@ -18,7 +18,7 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
         Parent root = FluentViewLoader.fxmlView(MainView.class).load().getView();
 
         Stage stage = event.getStage();
-        stage.setTitle("HearthCapture");
+        stage.setTitle("HeartCapture");
         stage.setWidth(1920);
         stage.setHeight(1080);
         stage.setScene(new Scene(root));

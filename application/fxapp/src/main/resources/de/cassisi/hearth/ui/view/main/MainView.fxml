@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import javafx.geometry.Insets?>
+<?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
@@ -130,15 +131,15 @@
    <top>
       <HBox maxHeight="-Infinity" minHeight="-Infinity" prefHeight="75.0" styleClass="main-view-top-bar" BorderPane.alignment="CENTER_LEFT">
          <children>
-            <VBox alignment="CENTER" prefHeight="95.0" prefWidth="304.0">
+            <VBox alignment="CENTER" maxHeight="100.0" prefHeight="81.0" prefWidth="458.0">
                <children>
-                  <ImageView fitHeight="75.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="63.0" fitWidth="723.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../../../../images/logo.png" />
+                        <Image url="@../../../../../../images/logo_hc.png" />
                      </image>
-                     <effect>
-                        <ColorAdjust brightness="1.0" contrast="0.83" hue="-0.76" saturation="1.0" />
-                     </effect>
+                     <viewport>
+                        <Rectangle2D />
+                     </viewport>
                   </ImageView>
                </children>
             </VBox>
