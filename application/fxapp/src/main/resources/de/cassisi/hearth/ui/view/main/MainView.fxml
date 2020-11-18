@@ -131,9 +131,9 @@
    <top>
       <HBox maxHeight="-Infinity" minHeight="-Infinity" prefHeight="75.0" styleClass="main-view-top-bar" BorderPane.alignment="CENTER_LEFT">
          <children>
-            <VBox alignment="CENTER" maxHeight="100.0" prefHeight="81.0" prefWidth="458.0">
+            <VBox alignment="CENTER_LEFT" maxHeight="100.0" prefHeight="81.0" HBox.hgrow="ALWAYS">
                <children>
-                  <ImageView fitHeight="63.0" fitWidth="723.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="67.0" fitWidth="416.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../../../images/logo_hc.png" />
                      </image>
@@ -144,7 +144,7 @@
                </children>
             </VBox>
             <VBox fx:id="clockContainer" alignment="CENTER" HBox.hgrow="ALWAYS" />
-            <VBox alignment="CENTER">
+            <VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
                <children>
                   <JFXButton buttonType="RAISED" graphicTextGap="10.0" ripplerFill="#aea0a0" styleClass="cursor-hand" text="Hilfe" textFill="WHITE">
                      <graphic>
