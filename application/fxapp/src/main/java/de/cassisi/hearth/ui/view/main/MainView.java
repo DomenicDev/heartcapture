@@ -4,6 +4,8 @@ import de.cassisi.hearth.ui.event.OpenNewCreateOperationWindow;
 import de.cassisi.hearth.ui.view.BaseView;
 import de.cassisi.hearth.ui.view.dashboard.DashboardView;
 import de.cassisi.hearth.ui.view.dashboard.DashboardViewModel;
+import de.cassisi.hearth.ui.view.logging.LoggingView;
+import de.cassisi.hearth.ui.view.logging.LoggingViewModel;
 import de.cassisi.hearth.ui.view.operation.OperationOverview;
 import de.cassisi.hearth.ui.view.operation.OperationOverviewViewModel;
 import de.cassisi.hearth.ui.view.operation.overview.OperationView;
@@ -36,6 +38,7 @@ public class MainView extends BaseView implements FxmlView<MainViewModel>, Initi
     private ViewTuple<OperationOverview, OperationOverviewViewModel> operationOverviewTuple;
     private ViewTuple<DashboardView, DashboardViewModel> dashboardViewTuple;
     private ViewTuple<OperationView, OperationViewViewModel> operationViewTuple;
+    private ViewTuple<LoggingView, LoggingViewModel> loggingViewTuple;
 
     // MENU BUTTONS
     @FXML
@@ -58,6 +61,7 @@ public class MainView extends BaseView implements FxmlView<MainViewModel>, Initi
         operationOverviewTuple = FluentViewLoader.fxmlView(OperationOverview.class).load();
         dashboardViewTuple = FluentViewLoader.fxmlView(DashboardView.class).load();
         operationViewTuple = FluentViewLoader.fxmlView(OperationView.class).load();
+        loggingViewTuple = FluentViewLoader.fxmlView(LoggingView.class).load();
 
         initButtons();
         initClock();
@@ -85,26 +89,28 @@ public class MainView extends BaseView implements FxmlView<MainViewModel>, Initi
         // MENU
         this.dashboardButton.setOnAction(event -> showDashboard());
         this.operationOverviewButton.setOnAction(event -> showOperationView());
-        this.settingsButton.setOnAction(event -> {});
+        this.settingsButton.setOnAction(event -> showLoggingView());
 
         // ACTIONS
         this.sidebarAddOperationButton.setOnAction(event -> post(new OpenNewCreateOperationWindow(getWindow())));
     }
 
     public void showDashboard() {
-        mainContent.getChildren().clear();
-        mainContent.getChildren().add(dashboardViewTuple.getView());
+        show(dashboardViewTuple);
         dashboardViewTuple.getCodeBehind().refreshTableData();
     }
 
     public void showOperationOverview() {
-        mainContent.getChildren().clear();
-        mainContent.getChildren().add(operationOverviewTuple.getView());
+        show(operationOverviewTuple);
     }
 
     public void showOperationView() {
         show(operationViewTuple);
         operationViewTuple.getCodeBehind().refreshData();
+    }
+
+    public void showLoggingView() {
+        show(loggingViewTuple);
     }
 
     private void show(ViewTuple<?, ?> tuple) {

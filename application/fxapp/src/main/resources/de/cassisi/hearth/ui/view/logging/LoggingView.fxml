@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<VBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.cassisi.hearth.ui.view.logging.LoggingView">
+   <children>
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" styleClass="container" VBox.vgrow="ALWAYS">
+         <children>
+            <HBox>
+               <children>
+                  <Label text="Logs">
+                     <font>
+                        <Font size="23.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets right="20.0" />
+                     </HBox.margin>
+                  </Label>
+                  <VBox alignment="CENTER">
+                     <children>
+                        <JFXButton fx:id="refreshButton" text="Aktualisieren">
+                           <graphic>
+                              <FontIcon iconLiteral="fa-refresh" iconSize="15" />
+                           </graphic>
+                        </JFXButton>
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <Label text="Nutzen Sie die Logausgaben, um dem Entwickler beispielsweise beim Finden von Fehlern zu unterstützen." wrapText="true" />
+            <TextArea fx:id="loggingTextArea" editable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" promptText="Bisher noch keine Logs..." VBox.vgrow="ALWAYS">
+               <font>
+                  <Font name="Courier New" size="13.0" />
+               </font>
+            </TextArea>
+         </children>
+      </VBox>
+   </children>
+</VBox>

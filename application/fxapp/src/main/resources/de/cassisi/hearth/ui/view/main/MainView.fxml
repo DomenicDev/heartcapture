@@ -6,11 +6,15 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.effect.Bloom?>
 <?import javafx.scene.effect.ColorAdjust?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
@@ -69,7 +73,7 @@
                            <children>
                               <Button fx:id="settingsButton" alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" mnemonicParsing="false" styleClass="sidebar-button" text="Logs">
                                  <graphic>
-                                    <FontIcon iconColor="#9e9d9d" iconLiteral="fa-cog" />
+                                    <FontIcon iconColor="#9e9d9d" iconLiteral="fa-file-text" />
                                  </graphic>
                               </Button>
                            </children>
@@ -131,34 +135,49 @@
    <top>
       <HBox maxHeight="-Infinity" minHeight="-Infinity" prefHeight="75.0" styleClass="main-view-top-bar" BorderPane.alignment="CENTER_LEFT">
          <children>
-            <VBox alignment="CENTER_LEFT" maxHeight="100.0" prefHeight="81.0" HBox.hgrow="ALWAYS">
+            <GridPane HBox.hgrow="ALWAYS">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
                <children>
-                  <ImageView fitHeight="67.0" fitWidth="416.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../../../../images/logo_hc.png" />
-                     </image>
-                     <viewport>
-                        <Rectangle2D />
-                     </viewport>
-                  </ImageView>
+                  <VBox fx:id="clockContainer" alignment="CENTER" GridPane.columnIndex="1" />
+                  <VBox maxHeight="100.0">
+                     <children>
+                        <ImageView fitHeight="75.0" fitWidth="635.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../../images/logo_hc.png" />
+                           </image>
+                           <viewport>
+                              <Rectangle2D />
+                           </viewport>
+                           <VBox.margin>
+                              <Insets left="10.0" top="-0.0" />
+                           </VBox.margin>
+                           <effect>
+                              <Bloom threshold="0.99" />
+                           </effect>
+                        </ImageView>
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER_RIGHT" GridPane.columnIndex="2">
+                     <children>
+                        <JFXButton buttonType="RAISED" graphicTextGap="10.0" ripplerFill="#aea0a0" styleClass="cursor-hand" text="Hilfe" textFill="WHITE">
+                           <graphic>
+                              <FontIcon iconColor="WHITE" iconLiteral="fa-question-circle" iconSize="20" />
+                           </graphic>
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </JFXButton>
+                     </children>
+                  </VBox>
                </children>
-            </VBox>
-            <VBox fx:id="clockContainer" alignment="CENTER" HBox.hgrow="ALWAYS" />
-            <VBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
-               <children>
-                  <JFXButton buttonType="RAISED" graphicTextGap="10.0" ripplerFill="#aea0a0" styleClass="cursor-hand" text="Hilfe" textFill="WHITE">
-                     <graphic>
-                        <FontIcon iconColor="WHITE" iconLiteral="fa-question-circle" iconSize="20" />
-                     </graphic>
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </JFXButton>
-               </children>
-               <HBox.margin>
-                  <Insets left="20.0" right="20.0" />
-               </HBox.margin>
-            </VBox>
+            </GridPane>
          </children>
       </HBox>
    </top>

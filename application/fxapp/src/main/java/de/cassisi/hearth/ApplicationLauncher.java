@@ -4,17 +4,23 @@ import de.saxsys.mvvmfx.MvvmFX;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
+import org.apache.log4j.PropertyConfigurator;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ConfigurableApplicationContext;
 
+import java.util.logging.Logger;
+
 @SpringBootApplication
 public class ApplicationLauncher extends Application {
 
+    private static final Logger LOGGER = Logger.getLogger(ApplicationLauncher.class.getName());
     private ConfigurableApplicationContext applicationContext;
 
     public static void main(String[] args) {
+        PropertyConfigurator.configure(ApplicationLauncher.class.getClassLoader().getResource("logging.properties"));
+
         launch(ApplicationLauncher.class, args);
     }
 
