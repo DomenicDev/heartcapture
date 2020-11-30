@@ -1,6 +1,5 @@
 package de.cassisi.hearth.ui.view.operation.overview;
 
-import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTreeTableView;
 import de.cassisi.hearth.ui.event.OpenNewCreateOperationWindow;
 import de.cassisi.hearth.ui.event.OpenOperationOverviewEvent;
@@ -10,10 +9,12 @@ import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.paint.Paint;
 import javafx.stage.Window;
 import javafx.util.Callback;
+import org.kordamp.ikonli.fontawesome.FontAwesome;
+import org.kordamp.ikonli.javafx.FontIcon;
 import org.springframework.stereotype.Component;
 
 import java.net.URL;
@@ -70,52 +71,8 @@ public class OperationView extends BaseView implements FxmlView<OperationViewVie
         operationRecordingColumn.setCellValueFactory(param -> param.getValue().getValue().getLiveDataAvailable());
         operationHlmColumn.setCellValueFactory(param -> param.getValue().getValue().getHlmDataAvailable());
 
-        operationRecordingColumn.setCellFactory(new Callback<>() {
-            @Override
-            public TreeTableCell<OperationTableData, Boolean> call(TreeTableColumn<OperationTableData, Boolean> param) {
-                return new TreeTableCell<>() {
-
-                    private final CheckBox liveDataCheckBox = new JFXCheckBox(getString("ui.label.available"));
-
-                    @Override
-                    protected void updateItem(Boolean item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty || item == null) {
-                            setGraphic(null);
-                            setText(null);
-                        } else {
-                            liveDataCheckBox.setSelected(item);
-                            setGraphic(liveDataCheckBox);
-                            setText(null);
-                        }
-                    }
-                };
-            }
-        });
-
-        operationHlmColumn.setCellFactory(new Callback<>() {
-            @Override
-            public TreeTableCell<OperationTableData, Boolean> call(TreeTableColumn<OperationTableData, Boolean> param) {
-                return new TreeTableCell<>() {
-
-                    private final CheckBox dataAvailableCheckBox = new JFXCheckBox(getString("ui.label.available"));
-
-                    @Override
-                    protected void updateItem(Boolean item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty || item == null) {
-                            setGraphic(null);
-                            setText(null);
-                        } else {
-                            dataAvailableCheckBox.setSelected(item);
-                            dataAvailableCheckBox.setAlignment(Pos.CENTER);
-                            setGraphic(dataAvailableCheckBox);
-                            setText(null);
-                        }
-                    }
-                };
-            }
-        });
+        operationRecordingColumn.setCellFactory(createCheckIconCellCallback());
+        operationHlmColumn.setCellFactory(createCheckIconCellCallback());
 
         operationOpenColumn.setCellFactory(new Callback<>() {
             @Override
@@ -152,5 +109,42 @@ public class OperationView extends BaseView implements FxmlView<OperationViewVie
 
     public void refreshData() {
         post(new RefreshOperationViewDataEvent());
+    }
+
+    // UTIL CLASSES
+
+
+    private Callback<TreeTableColumn<OperationTableData, Boolean>, TreeTableCell<OperationTableData, Boolean>> createCheckIconCellCallback() {
+        return new Callback<>() {
+
+
+            @Override
+            public TreeTableCell<OperationTableData, Boolean> call(TreeTableColumn<OperationTableData, Boolean> param) {
+                return new TreeTableCell<>() {
+
+                    private final FontIcon icon = new FontIcon();
+
+                    private static final String CSS_CLASS_AVAILABLE = "operation_table_data_available_icon-available";
+                    private static final String CSS_CLASS_NOT_AVAILABLE = "operation_table_data_available_icon-not_available";
+
+                    @Override
+                    protected void updateItem(Boolean item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty || item == null) {
+                            setGraphic(null);
+                            setText(null);
+                        } else {
+                            if (item) {
+                                icon.getStyleClass().setAll(CSS_CLASS_AVAILABLE);
+                            } else {
+                                icon.getStyleClass().setAll(CSS_CLASS_NOT_AVAILABLE);
+                            }
+                            setGraphic(icon);
+                            setText(null);
+                        }
+                    }
+                };
+            }
+        };
     }
 }

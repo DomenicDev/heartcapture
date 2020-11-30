@@ -6,4 +6,7 @@ public class InputValidationException extends RuntimeException {
         super(message);
     }
 
+    public InputValidationException(Throwable cause) {
+        super(cause);
+    }
 }

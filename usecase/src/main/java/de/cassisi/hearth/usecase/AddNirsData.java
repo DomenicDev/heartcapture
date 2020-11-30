@@ -1,10 +1,16 @@
 package de.cassisi.hearth.usecase;
 
+import de.cassisi.hearth.usecase.exception.InputValidationException;
+import de.cassisi.hearth.usecase.exception.OperationLockException;
+import de.cassisi.hearth.usecase.exception.OperationNotFoundException;
+import de.cassisi.hearth.usecase.output.OutputHandler;
 import de.cassisi.hearth.usecase.template.UseCaseTemplate;
+import lombok.NonNull;
 
 import java.time.LocalDateTime;
 
-import static de.cassisi.hearth.usecase.AddNirsData.*;
+import static de.cassisi.hearth.usecase.AddNirsData.InputData;
+import static de.cassisi.hearth.usecase.AddNirsData.OutputData;
 
 public interface AddNirsData extends UseCaseTemplate<InputData, OutputData> {
 
@@ -21,4 +27,7 @@ public interface AddNirsData extends UseCaseTemplate<InputData, OutputData> {
         public int right;
     }
 
+    @Override
+    void execute(@NonNull InputData input, @NonNull OutputHandler<OutputData> outputHandler)
+            throws InputValidationException, OperationNotFoundException, OperationLockException;
 }

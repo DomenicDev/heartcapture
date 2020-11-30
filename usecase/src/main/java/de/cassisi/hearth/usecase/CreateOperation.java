@@ -1,7 +1,10 @@
 package de.cassisi.hearth.usecase;
 
 import de.cassisi.hearth.usecase.dto.SimpleOperationData;
+import de.cassisi.hearth.usecase.exception.InputValidationException;
+import de.cassisi.hearth.usecase.output.OutputHandler;
 import de.cassisi.hearth.usecase.template.UseCaseTemplate;
+import lombok.NonNull;
 
 import java.time.LocalDate;
 
@@ -18,4 +21,7 @@ public interface CreateOperation extends UseCaseTemplate<InputData, OutputData> 
         public SimpleOperationData operationData;
     }
 
+    @Override
+    void execute(@NonNull InputData input, @NonNull OutputHandler<OutputData> outputHandler) throws
+            InputValidationException;
 }

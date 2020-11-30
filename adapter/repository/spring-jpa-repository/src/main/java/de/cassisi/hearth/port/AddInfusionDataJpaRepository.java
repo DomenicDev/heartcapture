@@ -30,7 +30,7 @@ public class AddInfusionDataJpaRepository implements AddInfusionDataRepository {
 
     @Override
     @Transactional
-    public void addInfusionDataToOperation(long operationId, InfusionData infusionData) {
+    public void addInfusionDataToOperation(long operationId, InfusionData infusionData) throws OperationNotFoundException {
         if (!operationRepository.existsById(operationId)) {
             throw new OperationNotFoundException(operationId);
         }
@@ -67,5 +67,11 @@ public class AddInfusionDataJpaRepository implements AddInfusionDataRepository {
         operationDB.setInfusionDataAvailable(true);
 
         operationRepository.save(operationDB);
+    }
+
+    @Override
+    public boolean isLocked(long operationId) throws OperationNotFoundException{
+        OperationDB operationDB = operationRepository.findById(operationId).orElseThrow(() -> new OperationNotFoundException(operationId));
+        return operationDB.isLocked();
     }
 }

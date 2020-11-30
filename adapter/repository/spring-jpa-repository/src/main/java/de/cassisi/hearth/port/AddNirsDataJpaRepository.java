@@ -22,8 +22,14 @@ public class AddNirsDataJpaRepository implements AddNirsDataRepository {
     }
 
     @Override
+    public boolean isLocked(long operationId) throws OperationNotFoundException {
+        OperationDB operationDB = operationRepository.findById(operationId).orElseThrow(() -> new OperationNotFoundException(operationId));
+        return operationDB.isLocked();
+    }
+
+    @Override
     @Transactional
-    public void addNirsDataToOperation(long operationId, NIRSData nirsData) {
+    public void addNirsDataToOperation(long operationId, NIRSData nirsData) throws OperationNotFoundException {
         // check if operation does really exist
         OperationDB operationDB = operationRepository.findById(operationId).orElseThrow(() -> new OperationNotFoundException(operationId));
 

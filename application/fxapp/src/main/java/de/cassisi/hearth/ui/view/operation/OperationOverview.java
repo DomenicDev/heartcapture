@@ -1,10 +1,6 @@
 package de.cassisi.hearth.ui.view.operation;
 
-import com.google.common.eventbus.EventBus;
-import de.cassisi.hearth.ui.event.AddHlmFileToOperationEvent;
-import de.cassisi.hearth.ui.event.GenerateReportEvent;
-import de.cassisi.hearth.ui.event.OpenRecordingDialogEvent;
-import de.cassisi.hearth.ui.utils.EventBusProvider;
+import de.cassisi.hearth.ui.event.*;
 import de.cassisi.hearth.ui.view.BaseView;
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
@@ -13,10 +9,8 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Side;
 import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.LineChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -24,22 +18,31 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 @Component
 public class OperationOverview extends BaseView implements FxmlView<OperationOverviewViewModel>, Initializable {
 
-    private final EventBus eventBus = EventBusProvider.getEventBus();
-
     @InjectViewModel
     private OperationOverviewViewModel viewModel;
 
+
     @FXML
     private Label titleLabel;
+
+    // GENERAL INFORMATION
+    @FXML
+    private Pane generalInformationPane;
+
     @FXML
     private DatePicker operationDatePicker;
+
     @FXML
     private TextField roomTextField;
+
+    @FXML
+    private Button saveOperationInformationButton;
 
     // STATUS
     @FXML
@@ -66,12 +69,20 @@ public class OperationOverview extends BaseView implements FxmlView<OperationOve
     @FXML
     private Button newRecordingButton;
 
+    // LOCK OPERATION
+    @FXML
+    private FontIcon lockFontIcon;
+
+    @FXML
+    private ToggleButton lockToggleButton;
+
     // CHARTS
     @FXML
     private LineChart<String, Integer> nirsChart;
 
     @FXML
     private AreaChart<String, Integer> bisChart;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -80,19 +91,43 @@ public class OperationOverview extends BaseView implements FxmlView<OperationOve
         initStatusInformation();
         initFileChooser();
         initReadHlmFileButton();
+        initLockOperation();
         initCharts();
         initGenerateReportButton();
     }
 
+    private void initLockOperation() {
+        // FONT ICON
+        lockFontIcon.iconCodeProperty().bind(viewModel.getLockFontIconCode());
+
+
+        // TOGGLE BUTTON
+        lockToggleButton.selectedProperty().bindBidirectional(viewModel.getOperationLockedProperty());
+        lockToggleButton.setOnAction(event -> post(new LockOperationEvent(getOperationId(), lockToggleButton.isSelected())));
+    }
+
     private void initOperationInformation() {
+        generalInformationPane.disableProperty().bind(viewModel.getGeneralInformationPaneDisabledProperty());
         titleLabel.textProperty().bind(viewModel.titleLabel());
-        operationDatePicker.valueProperty().bind(viewModel.dateProperty());
-        roomTextField.textProperty().bind(viewModel.roomProperty());
+        operationDatePicker.valueProperty().bindBidirectional(viewModel.dateProperty());
+        roomTextField.textProperty().bindBidirectional(viewModel.roomProperty());
+
+        // SAVE BUTTON
+        saveOperationInformationButton.setOnAction(event -> {
+            LocalDate date = operationDatePicker.getValue();
+            String room = roomTextField.getText();
+
+            if (operationDatePicker == null || room == null || room.isBlank()) {
+                return;
+            }
+
+            post(new EditOperationInformationEvent(getOperationId(), date, room));
+        });
     }
 
     private void initGenerateReportButton() {
         generateReportButton.disableProperty().bind(viewModel.getGenerateReportButtonDisableProperty());
-        generateReportButton.setOnAction(event -> post(new GenerateReportEvent(getOperationId())));
+        generateReportButton.setOnAction(event -> post(new GenerateReportEvent(getOperationId(), getWindow())));
     }
 
     private void initCharts() {
@@ -117,13 +152,15 @@ public class OperationOverview extends BaseView implements FxmlView<OperationOve
 
     private void initNewRecordingButton() {
         newRecordingButton.setOnAction(event -> post(new OpenRecordingDialogEvent(getWindow(), getOperationId())));
+        newRecordingButton.disableProperty().bindBidirectional(viewModel.getNewRecordingButtonDisabledProperty());
     }
 
     private void initReadHlmFileButton() {
+        readHLMFileButton.disableProperty().bindBidirectional(viewModel.getReadHLMFileButtonDisabledProperty());
         readHLMFileButton.setOnAction(event -> {
             File hlmFile = hlmFileChooser.showOpenDialog(getWindow());
             if (hlmFile != null) {
-                eventBus.post(new AddHlmFileToOperationEvent(viewModel.idProperty().get(), hlmFile));
+                post(new AddHlmFileToOperationEvent(viewModel.idProperty().get(), hlmFile, getWindow()));
             }
         });
     }

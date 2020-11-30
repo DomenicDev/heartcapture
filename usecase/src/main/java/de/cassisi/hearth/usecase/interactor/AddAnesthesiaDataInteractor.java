@@ -4,6 +4,7 @@ import de.cassisi.hearth.entity.AnesthesiaData;
 import de.cassisi.hearth.usecase.AddAnesthesiaData;
 import de.cassisi.hearth.usecase.output.OutputHandler;
 import de.cassisi.hearth.usecase.port.AddAnesthesiaDataRepository;
+import de.cassisi.hearth.usecase.util.OperationUtils;
 import de.cassisi.hearth.usecase.validator.InputValidator;
 
 import java.time.LocalDateTime;
@@ -27,6 +28,9 @@ public class AddAnesthesiaDataInteractor implements AddAnesthesiaData {
         InputValidator.checkIdPositive(operationId);
         InputValidator.checkTimestamp(timestamp);
         InputValidator.checkDepthOfAnesthesia(depthOfAnesthesia);
+
+        // check if operation is locked
+        OperationUtils.throwIfLocked(operationId, repository.isLocked(operationId));
 
         // create anesthesia entity
         AnesthesiaData anesthesiaData = new AnesthesiaData(timestamp, depthOfAnesthesia);

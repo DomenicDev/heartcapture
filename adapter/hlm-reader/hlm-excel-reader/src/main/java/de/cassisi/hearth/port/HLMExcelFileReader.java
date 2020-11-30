@@ -6,6 +6,7 @@ import de.cassisi.hearth.entity.*;
 import de.cassisi.hearth.port.data.*;
 import de.cassisi.hearth.port.data.MachineExcelData;
 import de.cassisi.hearth.port.util.ExcelToEntityConverter;
+import de.cassisi.hearth.usecase.exception.ReadHLMFileException;
 import de.cassisi.hearth.usecase.port.HLMFileReader;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -29,7 +30,7 @@ public class HLMExcelFileReader implements HLMFileReader {
 
 
     @Override
-    public HLMData readHLMFile(File file) {
+    public HLMData readHLMFile(File file) throws ReadHLMFileException {
         try {
             // create workbook instance from excel file
             Workbook originalWorkbook = WorkbookFactory.create(file);
@@ -107,7 +108,7 @@ public class HLMExcelFileReader implements HLMFileReader {
                     .primingComposition(primingComposition)
                     .build();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new ReadHLMFileException(e);
         }
     }
 

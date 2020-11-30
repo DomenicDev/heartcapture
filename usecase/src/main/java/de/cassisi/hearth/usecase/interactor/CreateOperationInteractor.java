@@ -5,6 +5,7 @@ import de.cassisi.hearth.usecase.CreateOperation;
 import de.cassisi.hearth.usecase.output.OutputHandler;
 import de.cassisi.hearth.usecase.port.CreateOperationRepository;
 import de.cassisi.hearth.usecase.util.DTOConverter;
+import de.cassisi.hearth.usecase.validator.InputValidator;
 
 import java.time.LocalDate;
 
@@ -21,6 +22,9 @@ public class CreateOperationInteractor implements CreateOperation {
         // extract and validate input
         LocalDate date = input.localDate;
         String room = input.room;
+
+        InputValidator.checkNotNull(date, "operation name");
+        InputValidator.checkNotNull(room, "operation room");
 
         // create new operation entity based on input values
         Operation operationToSave = new Operation(

@@ -33,7 +33,7 @@
                               <Label fx:id="titleLabel" styleClass="dashboard-title" text="Operation #15" />
                               <HBox spacing="20.0">
                                  <children>
-                                    <VBox minWidth="100.0">
+                                    <VBox fx:id="generalInformationPane" minWidth="100.0">
                                        <children>
                                           <VBox>
                                              <children>
@@ -51,7 +51,7 @@
                                                 </VBox>
                                              </children>
                                           </VBox>
-                                          <Button mnemonicParsing="false" text="Speichern">
+                                          <Button fx:id="saveOperationInformationButton" mnemonicParsing="false" text="Speichern">
                                              <VBox.margin>
                                                 <Insets top="10.0" />
                                              </VBox.margin>
@@ -155,7 +155,7 @@
                         </VBox>
                         <VBox alignment="CENTER">
                            <children>
-                              <FontIcon styleClass="operation_lock_icon" />
+                              <FontIcon fx:id="lockFontIcon" iconLiteral="fa-lock" iconSize="40" styleClass="operation_lock_icon" />
                            </children>
                         </VBox>
                         <Label prefWidth="250.0" text="Schließen Sie diese Operation, um ungwollte Änderungen zu vermeiden. Alle Daten sind nach wie vor verfügbar." wrapText="true" />
@@ -164,7 +164,7 @@
                               <Insets />
                            </VBox.margin>
                            <children>
-                              <JFXToggleButton text="Offen / Geschlossen" />
+                              <JFXToggleButton fx:id="lockToggleButton" text="Offen / Geschlossen" />
                            </children>
                         </HBox>
                      </children>

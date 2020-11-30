@@ -21,7 +21,8 @@ public final class DTOConverter {
                 operation.isNirsDataAvailable(),
                 operation.isAnesthesiaDataAvailable(),
                 operation.isInfusionDataAvailable(),
-                operation.isHlmDataAvailable()
+                operation.isHlmDataAvailable(),
+                operation.isLocked()
         );
     }
 

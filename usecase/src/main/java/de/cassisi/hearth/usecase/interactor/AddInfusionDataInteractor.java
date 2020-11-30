@@ -5,6 +5,7 @@ import de.cassisi.hearth.entity.PerfusorData;
 import de.cassisi.hearth.usecase.AddInfusionData;
 import de.cassisi.hearth.usecase.output.OutputHandler;
 import de.cassisi.hearth.usecase.port.AddInfusionDataRepository;
+import de.cassisi.hearth.usecase.util.OperationUtils;
 import de.cassisi.hearth.usecase.validator.InputValidator;
 
 import java.time.LocalDateTime;
@@ -33,6 +34,9 @@ public class AddInfusionDataInteractor implements AddInfusionData {
         InputValidator.checkIdPositive(operationId);
         InputValidator.checkTimestamp(timestamp);
         InputValidator.checkPerfusorInput(perfusorInputList);
+
+        // check if operation is locked
+        OperationUtils.throwIfLocked(operationId, repository.isLocked(operationId));
 
         // convert input data to perfusor entity objects
         List<PerfusorData> perfusorData = new ArrayList<>();

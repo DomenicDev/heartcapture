@@ -21,11 +21,13 @@ public class MySpringConfig {
     private final GenerateReportRepository generateReportRepository;
     private final FindFullOperationJpaRepository findFullOperationJpaRepository;
     private final GenerateStatisticRepository generateStatisticRepository;
+    private final LockOperationRepository lockOperationRepository;
+    private final EditOperationInformationRepository editOperationInformationRepository;
 
     private final HLMFileReader hlmFileReader = new HLMExcelFileReader();
     private final ReportFileGenerator reportFileGenerator = new ExcelReportFileGeneratorImpl();
 
-    public MySpringConfig(CreateOperationJpaRepository createOperationJpaRepository, AddInfusionDataRepository addInfusionDataRepository, AddNirsDataRepository addNirsDataRepository, ReadHLMDataFileRepository readHLMDataFileRepository, FindAllOperationsJpaRepository findAllOperationsJpaRepository, FindOperationJpaRepository findOperationJpaRepository, GenerateReportRepository generateReportRepository, AddAnesthesiaDataJpaRepository addAnesthesiaDataJpaRepository, FindFullOperationJpaRepository findFullOperationJpaRepository, GenerateStatisticRepository generateStatisticRepository) {
+    public MySpringConfig(CreateOperationJpaRepository createOperationJpaRepository, AddInfusionDataRepository addInfusionDataRepository, AddNirsDataRepository addNirsDataRepository, ReadHLMDataFileRepository readHLMDataFileRepository, FindAllOperationsJpaRepository findAllOperationsJpaRepository, FindOperationJpaRepository findOperationJpaRepository, GenerateReportRepository generateReportRepository, AddAnesthesiaDataJpaRepository addAnesthesiaDataJpaRepository, FindFullOperationJpaRepository findFullOperationJpaRepository, GenerateStatisticRepository generateStatisticRepository, LockOperationRepository lockOperationRepository, EditOperationInformationRepository editOperationInformationRepository) {
         this.createOperationJpaRepository = createOperationJpaRepository;
         this.addInfusionDataRepository = addInfusionDataRepository;
         this.addNirsDataRepository = addNirsDataRepository;
@@ -36,6 +38,8 @@ public class MySpringConfig {
         this.addAnesthesiaDataJpaRepository = addAnesthesiaDataJpaRepository;
         this.findFullOperationJpaRepository = findFullOperationJpaRepository;
         this.generateStatisticRepository = generateStatisticRepository;
+        this.lockOperationRepository = lockOperationRepository;
+        this.editOperationInformationRepository = editOperationInformationRepository;
     }
 
     @Bean
@@ -86,5 +90,15 @@ public class MySpringConfig {
     @Bean
     public GenerateStatistic generateStatistic() {
         return new GenerateStatisticInteractor(generateStatisticRepository);
+    }
+
+    @Bean
+    public LockOperation lockOperation() {
+        return new LockOperationInteractor(lockOperationRepository);
+    }
+
+    @Bean
+    public EditOperationInformation editOperationInformation() {
+        return new EditOperationInformationInteractor(editOperationInformationRepository);
     }
 }

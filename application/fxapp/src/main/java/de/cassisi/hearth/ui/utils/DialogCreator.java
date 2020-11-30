@@ -15,18 +15,25 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.stage.Window;
+import org.apache.log4j.Logger;
 
+import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public final class DialogCreator {
+
+    private static final Logger LOGGER = Logger.getLogger(DialogCreator.class);
 
     private static final ResourceBundle language = LanguageResourceProvider.getLanguageBundle();
 
@@ -100,5 +107,25 @@ public final class DialogCreator {
         stage.setScene(scene);
         stage.setOnCloseRequest(event -> tuple.getCodeBehind().handleCloseRequest(event));
         stage.show();
+    }
+
+    public static Stage showModalProgressIndicatorWindow(Window owner) {
+        try {
+            Stage progressWindow = new Stage();
+            progressWindow.initStyle(StageStyle.UNDECORATED);
+            progressWindow.initOwner(owner);
+            progressWindow.initModality(Modality.APPLICATION_MODAL);
+            progressWindow.setResizable(false);
+
+            // load view
+            Parent root = FXMLLoader.load(Objects.requireNonNull(DialogCreator.class.getClassLoader().getResource("de/cassisi/hearth/ui/view/progress/IndeterminateProgressView.fxml")));
+            Scene scene = new Scene(root);
+            progressWindow.setScene(scene);
+            progressWindow.show();
+            return progressWindow;
+        } catch (IOException e) {
+            LOGGER.error("Could not load indeterminate progress view");
+            throw new RuntimeException(e);
+        }
     }
 }

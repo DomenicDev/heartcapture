@@ -1,6 +1,11 @@
 package de.cassisi.hearth.usecase;
 
+import de.cassisi.hearth.usecase.exception.InputValidationException;
+import de.cassisi.hearth.usecase.exception.OperationLockException;
+import de.cassisi.hearth.usecase.exception.OperationNotFoundException;
+import de.cassisi.hearth.usecase.output.OutputHandler;
 import de.cassisi.hearth.usecase.template.UseCaseTemplate;
+import lombok.NonNull;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -45,4 +50,9 @@ public interface AddInfusionData extends UseCaseTemplate<InputData, OutputData> 
 
     }
 
+    @Override
+    void execute(@NonNull InputData input, @NonNull OutputHandler<OutputData> outputHandler) throws
+            InputValidationException,
+            OperationNotFoundException,
+            OperationLockException;
 }

@@ -6,6 +6,7 @@ import de.cassisi.hearth.tools.recorder.detect.AutoPortDetector;
 import de.cassisi.hearth.tools.recorder.detect.DetectionResult;
 import de.cassisi.hearth.ui.enums.MessageType;
 import de.cassisi.hearth.ui.event.*;
+import de.cassisi.hearth.ui.exception.ExceptionHandler;
 import de.cassisi.hearth.ui.interactor.UseCaseExecutor;
 import de.cassisi.hearth.ui.navigator.Navigator;
 import de.cassisi.hearth.ui.presenter.*;
@@ -13,8 +14,13 @@ import de.cassisi.hearth.ui.recorder.RecordingController;
 import de.cassisi.hearth.ui.utils.DialogCreator;
 import de.cassisi.hearth.ui.utils.EventBusProvider;
 import de.cassisi.hearth.usecase.*;
+import javafx.application.Platform;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 import org.springframework.stereotype.Component;
 
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.stream.Collectors;
 
 @Component
@@ -36,13 +42,19 @@ public class GuiEventController {
     private final OperationViewPresenter operationViewPresenter;
     private final GenerateDashboardStatisticPresenter generateDashboardStatisticPresenter;
     private final LoggingPresenter loggingPresenter;
+    private final LockOperationPresenter lockOperationPresenter;
+    private final EditOperationInformationPresenter editOperationInformationPresenter;
 
     private final Navigator navigator;
     private final RecordingController recordingController;
 
     private final EventBus eventBus;
 
-    public GuiEventController(UseCaseExecutor useCaseExecutor, AddNirsDataPresenter addNirsDataPresenter, AddAnesthesiaDataPresenter addAnesthesiaDataPresenter, AddInfusionDataPresenter addInfusionDataPresenter, CreateOperationPresenter createOperationPresenter, RefreshLatestOperationPresenter refreshLatestOperationPresenter1, ReadHLMDataFilePresenter hlmDataFilePresenter, GenerateReportPresenter generateReportPresenter, RecordingStatePresenter recordingStatePresenter, RefreshSerialPortPresenter refreshSerialPortPresenter, AutoDetectPortStartPresenter autoDetectPortStartPresenter, AutoDetectResultPresenter autoDetectResultPresenter, RefreshOperationViewDataPresenter refreshOperationViewDataPresenter, OperationViewPresenter operationViewPresenter, GenerateDashboardStatisticPresenter generateDashboardStatisticPresenter, LoggingPresenter loggingPresenter, Navigator navigator, RecordingController recordingController) {
+    private final ExceptionHandler exceptionHandler;
+    private final Executor executor = new Executor();
+
+
+    public GuiEventController(UseCaseExecutor useCaseExecutor, AddNirsDataPresenter addNirsDataPresenter, AddAnesthesiaDataPresenter addAnesthesiaDataPresenter, AddInfusionDataPresenter addInfusionDataPresenter, CreateOperationPresenter createOperationPresenter, RefreshLatestOperationPresenter refreshLatestOperationPresenter1, ReadHLMDataFilePresenter hlmDataFilePresenter, GenerateReportPresenter generateReportPresenter, RecordingStatePresenter recordingStatePresenter, RefreshSerialPortPresenter refreshSerialPortPresenter, AutoDetectPortStartPresenter autoDetectPortStartPresenter, AutoDetectResultPresenter autoDetectResultPresenter, RefreshOperationViewDataPresenter refreshOperationViewDataPresenter, OperationViewPresenter operationViewPresenter, GenerateDashboardStatisticPresenter generateDashboardStatisticPresenter, LoggingPresenter loggingPresenter, LockOperationPresenter lockOperationPresenter, EditOperationInformationPresenter editOperationInformationPresenter, Navigator navigator, RecordingController recordingController, ExceptionHandler exceptionHandler) {
         this.useCaseExecutor = useCaseExecutor;
         this.addNirsDataPresenter = addNirsDataPresenter;
         this.addAnesthesiaDataPresenter = addAnesthesiaDataPresenter;
@@ -59,49 +71,64 @@ public class GuiEventController {
         this.operationViewPresenter = operationViewPresenter;
         this.generateDashboardStatisticPresenter = generateDashboardStatisticPresenter;
         this.loggingPresenter = loggingPresenter;
+        this.lockOperationPresenter = lockOperationPresenter;
+        this.editOperationInformationPresenter = editOperationInformationPresenter;
         this.navigator = navigator;
         this.recordingController = recordingController;
+        this.exceptionHandler = exceptionHandler;
 
         // register to event bus
         this.eventBus = EventBusProvider.getEventBus();
         this.eventBus.register(this);
+
+        // start executor thread
+        executor.start();
     }
 
     @Subscribe
     public void handle(AddNirsDataEvent event) {
-        AddNirsData.InputData inputData = new AddNirsData.InputData();
-        inputData.timestamp = event.getTimestamp();
-        inputData.leftSaturation = event.getLeft();
-        inputData.rightSaturation = event.getRight();
-        inputData.operationId = event.getOperationId();
-        this.useCaseExecutor.addNirsData(inputData, addNirsDataPresenter);
+        addJob(() -> {
+            AddNirsData.InputData inputData = new AddNirsData.InputData();
+            inputData.timestamp = event.getTimestamp();
+            inputData.leftSaturation = event.getLeft();
+            inputData.rightSaturation = event.getRight();
+            inputData.operationId = event.getOperationId();
+            this.useCaseExecutor.addNirsData(inputData, addNirsDataPresenter);
+        });
+
     }
 
     @Subscribe
     public void handle(AddAnesthesiaDataEvent event) {
-        AddAnesthesiaData.InputData inputData = new AddAnesthesiaData.InputData();
-        inputData.timestamp = event.getTimestamp();
-        inputData.depthOfAnesthesia = event.getDepthOfAnesthesia();
-        inputData.operationId = event.getOperationId();
-        getUseCaseExecutor().addAnesthesiaData(inputData, addAnesthesiaDataPresenter);
+        addJob(() -> {
+            AddAnesthesiaData.InputData inputData = new AddAnesthesiaData.InputData();
+            inputData.timestamp = event.getTimestamp();
+            inputData.depthOfAnesthesia = event.getDepthOfAnesthesia();
+            inputData.operationId = event.getOperationId();
+            getUseCaseExecutor().addAnesthesiaData(inputData, addAnesthesiaDataPresenter);
+        });
     }
 
     @Subscribe
     public void handle(AddInfusionDataEvent event) {
-        AddInfusionData.InputData inputData = new AddInfusionData.InputData();
-        inputData.operationId = event.getOperationId();
-        inputData.timestamp = event.getTimestamp();
-        inputData.infusionData = event.getPerfusions().stream().map(data -> new AddInfusionData.InputData.PerfusorInput(data.name, data.rate)).collect(Collectors.toList());
-        getUseCaseExecutor().addInfusionData(inputData, addInfusionDataPresenter);
+        addJob(() -> {
+            AddInfusionData.InputData inputData = new AddInfusionData.InputData();
+            inputData.operationId = event.getOperationId();
+            inputData.timestamp = event.getTimestamp();
+            inputData.infusionData = event.getPerfusions().stream().map(data -> new AddInfusionData.InputData.PerfusorInput(data.name, data.rate)).collect(Collectors.toList());
+            getUseCaseExecutor().addInfusionData(inputData, addInfusionDataPresenter);
+        });
     }
 
     @Subscribe
     public void handle(CreateOperationEvent event) {
-        CreateOperation.InputData inputData = new CreateOperation.InputData();
-        inputData.localDate = event.getOperationDate();
-        inputData.room = event.getRoomNr();
-        this.useCaseExecutor.createOperation(inputData, createOperationPresenter);
-        this.navigator.showOperation();
+        addJob(() -> {
+            CreateOperation.InputData inputData = new CreateOperation.InputData();
+            inputData.localDate = event.getOperationDate();
+            inputData.room = event.getRoomNr();
+            this.useCaseExecutor.createOperation(inputData, createOperationPresenter);
+            this.navigator.showOperation();
+        });
     }
 
     @Subscribe
@@ -114,40 +141,45 @@ public class GuiEventController {
 
     @Subscribe
     public void handle(RefreshLatestOperationDataEvent event) {
-        FindAllOperations.InputData inputData = new FindAllOperations.InputData();
-        inputData.limit = event.getLimit();
-        inputData.sortByLatest = event.isSortByLatest();
-        this.useCaseExecutor.findAllOperations(inputData, refreshLatestOperationPresenter);
+        addJob(() -> {
+            FindAllOperations.InputData inputData = new FindAllOperations.InputData();
+            inputData.limit = event.getLimit();
+            inputData.sortByLatest = event.isSortByLatest();
+            this.useCaseExecutor.findAllOperations(inputData, refreshLatestOperationPresenter);
+        });
     }
 
     @Subscribe
     public void handle(OpenOperationOverviewEvent event) {
-        /*
-        FindOperation.InputData inputData = new FindOperation.InputData();
-        inputData.operationId = event.getOperationId();
-        this.useCaseExecutor.findOperation(inputData, operationOverviewPresenter);
-         */
-
-        FindFullOperation.InputData inputData = new FindFullOperation.InputData();
-        inputData.operationId = event.getOperationId();
-        getUseCaseExecutor().findFullOperation(inputData, operationViewPresenter);
-
-        this.navigator.showOperation();
+        addJob(() -> {
+            FindFullOperation.InputData inputData = new FindFullOperation.InputData();
+            inputData.operationId = event.getOperationId();
+            getUseCaseExecutor().findFullOperation(inputData, operationViewPresenter);
+            Platform.runLater(this.navigator::showOperation);
+        });
     }
 
     @Subscribe
     public void handle(AddHlmFileToOperationEvent event) {
-        ReadHLMDataFile.InputData inputData = new ReadHLMDataFile.InputData();
-        inputData.operationId = event.getOperationId();
-        inputData.hlmFile = event.getHlmFile();
-        this.useCaseExecutor.readHlmDataFile(inputData, hlmDataFilePresenter);
+        addHeavyTask(
+                event.getOwner(),
+                () -> {
+                    ReadHLMDataFile.InputData inputData = new ReadHLMDataFile.InputData();
+                    inputData.operationId = event.getOperationId();
+                    inputData.hlmFile = event.getHlmFile();
+                    getUseCaseExecutor().readHlmDataFile(inputData, hlmDataFilePresenter);
+                });
     }
 
     @Subscribe
     public void handle(GenerateReportEvent event) {
-        GenerateReport.InputData inputData = new GenerateReport.InputData();
-        inputData.operationId = event.getOperationId();
-        getUseCaseExecutor().generateReportEvent(inputData, generateReportPresenter);
+        addHeavyTask(
+                event.getWindow(),
+                () -> {
+                    GenerateReport.InputData inputData = new GenerateReport.InputData();
+                    inputData.operationId = event.getOperationId();
+                    getUseCaseExecutor().generateReport(inputData, generateReportPresenter);
+                });
     }
 
     @Subscribe
@@ -197,6 +229,7 @@ public class GuiEventController {
         getUseCaseExecutor().findAllOperations(inputData, refreshOperationViewDataPresenter);
     }
 
+
     @Subscribe
     public void handle(OpenRecordingDialogEvent event) {
         DialogCreator.showRecordingDialog(event.getOwner(), event.getOperationId());
@@ -217,6 +250,34 @@ public class GuiEventController {
         executePresenter(loggingPresenter, event);
     }
 
+    @Subscribe
+    public void handle(LockOperationEvent event) {
+        addJob(() -> {
+            LockOperation.InputData inputData = new LockOperation.InputData();
+            inputData.operationId = event.getOperationId();
+            inputData.locked = event.isLocked();
+
+            getUseCaseExecutor().setLockState(inputData, lockOperationPresenter);
+        });
+    }
+
+    @Subscribe
+    public void handle(EditOperationInformationEvent event) {
+        addJob(() -> {
+            EditOperationInformation.InputData inputData = new EditOperationInformation.InputData();
+            inputData.operationId = event.getOperationId();
+            inputData.operationDate = event.getOperationDate();
+            inputData.operationRoom = event.getOperationRoom();
+
+            getUseCaseExecutor().editOperationInformation(inputData, editOperationInformationPresenter);
+        });
+    }
+
+    //-----------------------------------------
+    /*
+            HELPER METHODS
+     */
+
     private UseCaseExecutor getUseCaseExecutor() {
         return this.useCaseExecutor;
     }
@@ -227,5 +288,67 @@ public class GuiEventController {
 
     private void executePresenter(FXPresenter<Void> presenter) {
         presenter.present(null);
+    }
+
+    private void addJob(Runnable preUI, Runnable task, Runnable postUI) {
+        executor.add(() -> {
+            Platform.runLater(preUI);
+            task.run();
+            Platform.runLater(postUI);
+        });
+    }
+
+    private void addHeavyTask(Window owner, Runnable task) {
+        Stage progressWindow = DialogCreator.showModalProgressIndicatorWindow(owner);
+        addJob(
+                progressWindow::show,
+                task,
+                progressWindow::close
+        );
+    }
+
+    private void addJob(Runnable task) {
+        executor.add(task::run);
+    }
+
+    private class Executor implements Runnable {
+
+        private final Queue<Job> jobs = new ConcurrentLinkedDeque<>();
+        private final Thread executorThread = new Thread(this);
+        private boolean active = false;
+
+        Executor() {
+            this.executorThread.setName("UseCase Executor");
+            this.executorThread.setDaemon(true);
+        }
+
+        void add(Job job) {
+            this.jobs.add(job);
+        }
+
+        void start() {
+            this.active = true;
+            this.executorThread.start();
+        }
+
+        @Override
+        public void run() {
+            while (active) {
+                Job job = jobs.poll();
+                if (job != null) {
+                    try {
+                        job.execute();
+                    } catch (Exception e) {
+                        exceptionHandler.handleGenericException(e);
+                    }
+                }
+            }
+        }
+    }
+
+    private interface Job {
+
+        void execute();
+
     }
 }

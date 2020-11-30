@@ -12,8 +12,8 @@ import java.util.List;
 
 public class GenerateReportInteractor implements GenerateReport {
 
-    private GenerateReportRepository repository;
-    private ReportFileGenerator fileGenerator;
+    private final GenerateReportRepository repository;
+    private final ReportFileGenerator fileGenerator;
 
     public GenerateReportInteractor(GenerateReportRepository repository, ReportFileGenerator fileGenerator) {
         this.repository = repository;
@@ -27,14 +27,6 @@ public class GenerateReportInteractor implements GenerateReport {
 
         // gather data
         ReportData reportData = repository.getReportData(operationId);
-        /*
-        Operation operation = repository.findOperation(operationId);
-        HLMData hlmData = repository.findHLMData(operationId);
-        List<AnesthesiaData> anesthesiaData = repository.findAnesthesiaData(operationId);
-        List<InfusionData> infusionData = repository.findInfusionData(operationId);
-        List<NIRSData> nirsData = repository.findNirsData(operationId);
-
-         */
 
         // generate file
         byte[] reportFile = fileGenerator.generateReport(reportData);

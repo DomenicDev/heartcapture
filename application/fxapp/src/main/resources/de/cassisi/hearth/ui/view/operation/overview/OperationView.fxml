@@ -44,8 +44,8 @@
                   <TreeTableColumn fx:id="operationIdColumn" prefWidth="75.0" text="#" />
                   <TreeTableColumn fx:id="operationDateColumn" prefWidth="75.0" text="Datum" />
                   <TreeTableColumn fx:id="operationRoomColumn" prefWidth="75.0" text="Saal" />
-                  <TreeTableColumn fx:id="operationRecordingColumn" prefWidth="75.0" text="Aufzeichnung " />
-                  <TreeTableColumn fx:id="operationHlmColumn" prefWidth="75.0" text="HLM" />
+                  <TreeTableColumn fx:id="operationRecordingColumn" prefWidth="75.0" text="Aufzeichnung vorhanden" />
+                  <TreeTableColumn fx:id="operationHlmColumn" prefWidth="75.0" text="HLM-Datei hinzugefügt" />
                   <TreeTableColumn fx:id="operationOpenColumn" prefWidth="75.0" text="Öffnen" />
                </columns>
                <columnResizePolicy>

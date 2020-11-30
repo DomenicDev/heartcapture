@@ -78,4 +78,10 @@ public class ReadHLMDataFileJpaRepository implements ReadHLMDataFileRepository {
         return DBConverter.convert(operationDB);
 
     }
+
+    @Override
+    public boolean isLocked(long operationId) {
+        OperationDB operationDB = operationRepository.findById(operationId).orElseThrow(() -> new OperationNotFoundException(operationId));
+        return operationDB.isLocked();
+    }
 }

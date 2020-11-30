@@ -23,6 +23,11 @@ public class AddAnesthesiaDataJpaRepository implements AddAnesthesiaDataReposito
     }
 
     @Override
+    public boolean isLocked(long operationId) throws OperationNotFoundException {
+        return false;
+    }
+
+    @Override
     @Transactional
     public void addAnesthesiaData(long operationId, AnesthesiaData anesthesiaData) throws OperationNotFoundException {
         // find operation to add the anesthesia data to

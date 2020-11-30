@@ -8,4 +8,7 @@ public interface ReadHLMDataFileRepository {
     void saveHLMData(long operationId, HLMData data);
 
     Operation getOperation(long operationId);
+
+    boolean isLocked(long operationId);
+
 }

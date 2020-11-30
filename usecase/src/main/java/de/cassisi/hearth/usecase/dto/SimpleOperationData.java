@@ -16,5 +16,6 @@ public class SimpleOperationData {
     private final boolean bisDataAvailable;
     private final boolean infusionDataAvailable;
     private final boolean hlmDataAvailable;
+    private final boolean locked;
 
 }

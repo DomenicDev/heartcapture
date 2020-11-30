@@ -1,13 +1,13 @@
 package de.cassisi.hearth.ui.event;
 
-import javafx.stage.Window;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class GenerateReportEvent {
+public class LockOperationEvent {
 
     private final long operationId;
-    private final Window window;
+    private final boolean locked;
+
 }

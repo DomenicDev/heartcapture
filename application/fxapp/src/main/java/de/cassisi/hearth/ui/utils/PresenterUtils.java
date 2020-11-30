@@ -98,6 +98,14 @@ public final class PresenterUtils {
 
         // actions
         viewModel.getGenerateReportButtonDisableProperty().set(!data.isHlmDataAvailable());
+
+        // lock status
+        boolean locked = data.isLocked();
+        viewModel.getOperationLockedProperty().set(data.isLocked());
+        viewModel.getNewRecordingButtonDisabledProperty().setValue(locked);
+        viewModel.getReadHLMFileButtonDisabledProperty().setValue(locked);
+        viewModel.getGeneralInformationPaneDisabledProperty().setValue(locked);
+        viewModel.getLockFontIconCode().setValue(locked ? FontAwesome.LOCK : FontAwesome.UNLOCK);
     }
 
     public static void present(CompleteOperationDataDTO data, OperationOverviewViewModel viewModel) {

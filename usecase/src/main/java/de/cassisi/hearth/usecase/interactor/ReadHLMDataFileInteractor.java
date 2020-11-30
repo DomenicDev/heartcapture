@@ -7,6 +7,7 @@ import de.cassisi.hearth.usecase.output.OutputHandler;
 import de.cassisi.hearth.usecase.port.HLMFileReader;
 import de.cassisi.hearth.usecase.port.ReadHLMDataFileRepository;
 import de.cassisi.hearth.usecase.util.DTOConverter;
+import de.cassisi.hearth.usecase.util.OperationUtils;
 import de.cassisi.hearth.usecase.validator.InputValidator;
 
 import java.io.File;
@@ -30,6 +31,9 @@ public class ReadHLMDataFileInteractor implements ReadHLMDataFile {
         // validate input
         InputValidator.checkIdPositive(operationId);
         InputValidator.checkNotNull(file, "HLM File");
+
+        // check if locked
+        OperationUtils.throwIfLocked(operationId, repository.isLocked(operationId));
 
         // convert file to hlm data
         HLMData hlmData = hlmFileReader.readHLMFile(file);

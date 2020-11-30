@@ -1,14 +1,13 @@
 package de.cassisi.hearth.ui.interactor;
 
-import de.cassisi.hearth.ui.exception.ExceptionHandler;
 import de.cassisi.hearth.usecase.*;
 import de.cassisi.hearth.usecase.dto.CompleteOperationDataDTO;
 import de.cassisi.hearth.usecase.dto.SimpleStatisticDTO;
+import de.cassisi.hearth.usecase.exception.InputValidationException;
+import de.cassisi.hearth.usecase.exception.OperationLockException;
+import de.cassisi.hearth.usecase.exception.OperationNotFoundException;
 import de.cassisi.hearth.usecase.output.OutputHandler;
 import org.springframework.stereotype.Component;
-
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedDeque;
 
 @Component
 public class DefaultExecutor implements UseCaseExecutor {
@@ -23,12 +22,10 @@ public class DefaultExecutor implements UseCaseExecutor {
     private final ReadHLMDataFile readHLMDataFile;
     private final GenerateReport generateReport;
     private final GenerateStatistic generateStatistic;
+    private final LockOperation lockOperation;
+    private final EditOperationInformation editOperationInformation;
 
-    private final ExceptionHandler exceptionHandler;
-
-    private final Executor executor = new Executor();
-
-    public DefaultExecutor(AddNirsData addNirsData, AddAnesthesiaData addAnesthesiaData, AddInfusionData addInfusionData, CreateOperation createOperation, FindAllOperations findAllOperations, FindOperation findOperation, FindFullOperation findFullOperation, ReadHLMDataFile readHLMDataFile, GenerateReport generateReport, GenerateStatistic generateStatistic, ExceptionHandler exceptionHandler) {
+    public DefaultExecutor(AddNirsData addNirsData, AddAnesthesiaData addAnesthesiaData, AddInfusionData addInfusionData, CreateOperation createOperation, FindAllOperations findAllOperations, FindOperation findOperation, FindFullOperation findFullOperation, ReadHLMDataFile readHLMDataFile, GenerateReport generateReport, GenerateStatistic generateStatistic, LockOperation lockOperation, EditOperationInformation editOperationInformation) {
         this.addNirsData = addNirsData;
         this.addAnesthesiaData = addAnesthesiaData;
         this.addInfusionData = addInfusionData;
@@ -39,108 +36,67 @@ public class DefaultExecutor implements UseCaseExecutor {
         this.readHLMDataFile = readHLMDataFile;
         this.generateReport = generateReport;
         this.generateStatistic = generateStatistic;
-        this.exceptionHandler = exceptionHandler;
-
-        this.executor.start();
+        this.lockOperation = lockOperation;
+        this.editOperationInformation = editOperationInformation;
     }
 
     @Override
     public void addNirsData(AddNirsData.InputData inputData, OutputHandler<AddNirsData.OutputData> outputHandler) {
-        add(() -> addNirsData.execute(inputData, outputHandler));
+        addNirsData.execute(inputData, outputHandler);
     }
 
     @Override
     public void addAnesthesiaData(AddAnesthesiaData.InputData inputData, OutputHandler<AddAnesthesiaData.OutputData> outputHandler) {
-        add(() -> addAnesthesiaData.execute(inputData, outputHandler));
+       addAnesthesiaData.execute(inputData, outputHandler);
     }
 
     @Override
     public void addInfusionData(AddInfusionData.InputData inputData, OutputHandler<AddInfusionData.OutputData> outputHandler) {
-        add(() -> addInfusionData.execute(inputData, outputHandler));
+       addInfusionData.execute(inputData, outputHandler);
     }
 
     @Override
     public void createOperation(CreateOperation.InputData inputData, OutputHandler<CreateOperation.OutputData> outputHandler) {
-        add(() -> createOperation.execute(inputData, outputHandler));
+        createOperation.execute(inputData, outputHandler);
     }
 
     @Override
     public void findAllOperations(FindAllOperations.InputData inputData, OutputHandler<FindAllOperations.OutputData> outputHandler) {
-        add(() -> findAllOperations.execute(inputData,outputHandler));
+        findAllOperations.execute(inputData,outputHandler);
     }
 
     @Override
     public void findOperation(FindOperation.InputData inputData, OutputHandler<FindOperation.OutputData> operationOverviewPresenter) {
-        add(() -> findOperation.execute(inputData, operationOverviewPresenter));
+        findOperation.execute(inputData, operationOverviewPresenter);
     }
 
     @Override
     public void findFullOperation(FindFullOperation.InputData inputData, OutputHandler<CompleteOperationDataDTO> outputHandler) {
-        add(() -> findFullOperation.execute(inputData, outputHandler));
+        findFullOperation.execute(inputData, outputHandler);
     }
 
     @Override
     public void readHlmDataFile(ReadHLMDataFile.InputData inputData, OutputHandler<ReadHLMDataFile.OutputData> outputHandler) {
-        add(() -> readHLMDataFile.execute(inputData, outputHandler));
+        readHLMDataFile.execute(inputData, outputHandler);
     }
 
     @Override
-    public void generateReportEvent(GenerateReport.InputData inputData, OutputHandler<GenerateReport.OutputData> outputHandler) {
-        add(() -> generateReport.execute(inputData, outputHandler));
+    public void generateReport(GenerateReport.InputData inputData, OutputHandler<GenerateReport.OutputData> outputHandler) {
+        generateReport.execute(inputData, outputHandler);
     }
 
     @Override
     public void generateStatistic(OutputHandler<SimpleStatisticDTO> outputHandler) {
-        add(() -> generateStatistic.execute(null, outputHandler));
+        generateStatistic.execute(null, outputHandler);
     }
 
-    private void add(Job job) {
-        this.executor.add(job);
+    @Override
+    public void setLockState(LockOperation.InputData inputData, OutputHandler<LockOperation.OutputData> outputHandler) throws OperationNotFoundException {
+        lockOperation.execute(inputData, outputHandler);
     }
 
-
-    private class Executor implements Runnable {
-
-        private final Queue<Job> jobs = new ConcurrentLinkedDeque<>();
-        private final Thread executorThread = new Thread(this);
-        private boolean active = false;
-
-        Executor() {
-            this.executorThread.setName("UseCase Executor");
-            this.executorThread.setDaemon(true);
-        }
-
-        void add(Job job) {
-            this.jobs.add(job);
-        }
-
-        void start() {
-            this.active = true;
-            this.executorThread.start();
-        }
-
-        void stop() {
-            this.active = false;
-        }
-
-        @Override
-        public void run() {
-            while (active) {
-                Job job = jobs.poll();
-                if (job != null) {
-                    try {
-                        job.execute();
-                    } catch (Exception e) {
-                        exceptionHandler.handleGenericException(e);
-                    }
-                }
-            }
-        }
-    }
-
-    private interface Job {
-
-        void execute();
-
+    @Override
+    public void editOperationInformation(EditOperationInformation.InputData inputData, OutputHandler<EditOperationInformation.OutputData> outputHandler) throws InputValidationException, OperationNotFoundException, OperationLockException {
+        editOperationInformation.execute(inputData, outputHandler);
     }
 }

@@ -10,6 +10,7 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.paint.Paint;
 import lombok.Getter;
 import org.kordamp.ikonli.Ikon;
+import org.kordamp.ikonli.Ikonli;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -22,6 +23,7 @@ public class OperationOverviewViewModel implements ViewModel {
     private final ObjectProperty<LocalDate> dateProperty = new SimpleObjectProperty<>();
     private final StringProperty roomProperty = new SimpleStringProperty();
     private final StringProperty titleLabel = new SimpleStringProperty();
+    private final BooleanProperty generalInformationPaneDisabledProperty = new SimpleBooleanProperty(false);
 
     // STATUS
     private final ObjectProperty<Ikon> nirsAvailableIconCode = new SimpleObjectProperty<>();
@@ -34,6 +36,11 @@ public class OperationOverviewViewModel implements ViewModel {
     private final ObjectProperty<Paint> infusionAvailableIconColor = new SimpleObjectProperty<>();
     private final ObjectProperty<Paint> hlmAvailableIconColor = new SimpleObjectProperty<>();
 
+    // LOCK STATUS
+    private final ObjectProperty<Ikon> lockFontIconCode = new SimpleObjectProperty<>(Ikonli.NONE);
+    private final BooleanProperty operationLockedProperty = new SimpleBooleanProperty(false);
+    private final BooleanProperty newRecordingButtonDisabledProperty = new SimpleBooleanProperty(false);
+    private final BooleanProperty readHLMFileButtonDisabledProperty = new SimpleBooleanProperty(false);
 
     // LIVE DATA
     private final ObjectProperty<ObservableList<XYChart.Series<String, Integer>>> nirsChartData = new SimpleObjectProperty<>(FXCollections.emptyObservableList());
