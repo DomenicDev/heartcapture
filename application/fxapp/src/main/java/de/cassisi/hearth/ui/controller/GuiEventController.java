@@ -14,9 +14,11 @@ import de.cassisi.hearth.ui.recorder.RecordingController;
 import de.cassisi.hearth.ui.utils.DialogCreator;
 import de.cassisi.hearth.ui.utils.EventBusProvider;
 import de.cassisi.hearth.usecase.*;
+import de.cassisi.hearth.usecase.exception.*;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import java.util.Queue;
@@ -25,6 +27,8 @@ import java.util.stream.Collectors;
 
 @Component
 public class GuiEventController {
+
+    private static final Logger LOGGER = Logger.getLogger(GuiEventController.class);
 
     private final UseCaseExecutor useCaseExecutor;
     private final AddNirsDataPresenter addNirsDataPresenter;
@@ -93,7 +97,7 @@ public class GuiEventController {
             inputData.leftSaturation = event.getLeft();
             inputData.rightSaturation = event.getRight();
             inputData.operationId = event.getOperationId();
-            this.useCaseExecutor.addNirsData(inputData, addNirsDataPresenter);
+            getUseCaseExecutor().addNirsData(inputData, addNirsDataPresenter);
         });
 
     }
@@ -126,8 +130,8 @@ public class GuiEventController {
             CreateOperation.InputData inputData = new CreateOperation.InputData();
             inputData.localDate = event.getOperationDate();
             inputData.room = event.getRoomNr();
-            this.useCaseExecutor.createOperation(inputData, createOperationPresenter);
-            this.navigator.showOperation();
+            getUseCaseExecutor().createOperation(inputData, createOperationPresenter);
+            Platform.runLater(navigator::showOperation);
         });
     }
 
@@ -145,18 +149,21 @@ public class GuiEventController {
             FindAllOperations.InputData inputData = new FindAllOperations.InputData();
             inputData.limit = event.getLimit();
             inputData.sortByLatest = event.isSortByLatest();
-            this.useCaseExecutor.findAllOperations(inputData, refreshLatestOperationPresenter);
+            getUseCaseExecutor().findAllOperations(inputData, refreshLatestOperationPresenter);
         });
     }
 
     @Subscribe
     public void handle(OpenOperationOverviewEvent event) {
         addJob(() -> {
-            FindFullOperation.InputData inputData = new FindFullOperation.InputData();
-            inputData.operationId = event.getOperationId();
-            getUseCaseExecutor().findFullOperation(inputData, operationViewPresenter);
-            Platform.runLater(this.navigator::showOperation);
-        });
+                },
+                () -> {
+                    FindFullOperation.InputData inputData = new FindFullOperation.InputData();
+                    inputData.operationId = event.getOperationId();
+                    getUseCaseExecutor().findFullOperation(inputData, operationViewPresenter);
+
+                },
+                navigator::showOperation);
     }
 
     @Subscribe
@@ -256,7 +263,6 @@ public class GuiEventController {
             LockOperation.InputData inputData = new LockOperation.InputData();
             inputData.operationId = event.getOperationId();
             inputData.locked = event.isLocked();
-
             getUseCaseExecutor().setLockState(inputData, lockOperationPresenter);
         });
     }
@@ -292,8 +298,36 @@ public class GuiEventController {
 
     private void addJob(Runnable preUI, Runnable task, Runnable postUI) {
         executor.add(() -> {
+            // run pre gui code first
             Platform.runLater(preUI);
-            task.run();
+
+            // run task
+            try {
+                task.run();
+            } catch (OperationNotFoundException e) {
+                LOGGER.error("operation with id #" + e.getId() + " not found", e);
+                exceptionHandler.handle(e);
+            } catch (InputValidationException e) {
+                LOGGER.error("specified input for use case was not valid", e);
+                exceptionHandler.handle(e);
+            } catch (OperationLockException e) {
+                LOGGER.error("operation is locked. operation id #" + e.getId(), e);
+                exceptionHandler.handle(e);
+            } catch (ReadHLMFileException e) {
+                LOGGER.error("error during read of hlm file: ", e);
+                exceptionHandler.handle(e);
+            } catch (MissingHlmFileException e) {
+                LOGGER.error("missing hlm data for operation", e);
+                exceptionHandler.handle(e);
+            } catch (ReportGenerationException e) {
+                LOGGER.error("report could not be generated: ", e);
+                exceptionHandler.handle(e);
+            } catch (Exception e) {
+                LOGGER.error("There was an unknown error during job execution : " + e);
+                exceptionHandler.handleGenericException(e);
+            }
+
+            // run post code
             Platform.runLater(postUI);
         });
     }
@@ -317,13 +351,15 @@ public class GuiEventController {
         private final Thread executorThread = new Thread(this);
         private boolean active = false;
 
-        Executor() {
-            this.executorThread.setName("UseCase Executor");
+        private Executor() {
+            this.executorThread.setName("UseCase-Executor");
             this.executorThread.setDaemon(true);
         }
 
         void add(Job job) {
-            this.jobs.add(job);
+            if (job != null) {
+                this.jobs.add(job);
+            }
         }
 
         void start() {
@@ -335,12 +371,19 @@ public class GuiEventController {
         public void run() {
             while (active) {
                 Job job = jobs.poll();
-                if (job != null) {
-                    try {
+                try {
+                    if (job != null) {
                         job.execute();
-                    } catch (Exception e) {
-                        exceptionHandler.handleGenericException(e);
                     }
+                } catch (Exception e) {
+                    LOGGER.error("unknown error during job execution: ", e);
+                    exceptionHandler.handleGenericException(e);
+                }
+
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    LOGGER.error(e);
                 }
             }
         }

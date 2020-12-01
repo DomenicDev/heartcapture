@@ -1,6 +1,7 @@
 package de.cassisi.hearth.ui.exception;
 
 import de.cassisi.hearth.ui.lang.LanguageReceiver;
+import de.cassisi.hearth.usecase.exception.*;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -38,12 +39,44 @@ public class ExceptionHandler implements LanguageReceiver {
 
     }
 
+    private void showSimpleWarningDialog(String title, String message) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle(title);
+            alert.setHeaderText(message);
+            alert.show();
+        });
+
+    }
+
     private String getStackTrace(Exception e) {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         e.printStackTrace(pw);
-        String s = sw.toString();
-        return s;
+        return sw.toString();
     }
 
+    public void handle(OperationNotFoundException e) {
+        showSimpleWarningDialog(getString("ui.message.operation_not_found.title"), getString("ui.message.operation_not_found.text"));
+    }
+
+    public void handle(InputValidationException e) {
+        showSimpleWarningDialog(getString("ui.message.input_validation.title"), getString("ui.message.input_validation.text"));
+    }
+
+    public void handle(OperationLockException e) {
+        showSimpleWarningDialog(getString("ui.message.operation_lock.title"), getString("ui.message.operation_lock.text"));
+    }
+
+    public void handle(ReadHLMFileException e) {
+        showSimpleWarningDialog(getString("ui.message.read_hlm_file_error.title"), getString("ui.message.read_hlm_file_error.text"));
+    }
+
+    public void handle(MissingHlmFileException e) {
+        showSimpleWarningDialog(getString("ui.message.missing_hlm_file_error.title"), getString("ui.message.missing_hlm_file_error.text"));
+    }
+
+    public void handle(ReportGenerationException e) {
+        showSimpleWarningDialog(getString("ui.message.report_generation_error.title"), getString("ui.message.report_generation_error.text"));
+    }
 }

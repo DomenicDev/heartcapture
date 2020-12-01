@@ -8,6 +8,7 @@ import de.cassisi.hearth.usecase.dto.NirsDataDTO;
 import de.cassisi.hearth.usecase.dto.SimpleOperationData;
 import de.cassisi.hearth.usecase.port.FindFullOperationRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,5 +36,13 @@ public final class DTOConverter {
                 operationData,
                 nirsData,
                 bisData);
+    }
+
+    public static CompleteOperationDataDTO toFullOperationData(Operation operation) {
+        return new CompleteOperationDataDTO(
+                toSimpleOperationData(operation),
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
     }
 }

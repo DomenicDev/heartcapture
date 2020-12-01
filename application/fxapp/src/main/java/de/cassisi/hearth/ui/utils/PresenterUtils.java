@@ -99,13 +99,20 @@ public final class PresenterUtils {
         // actions
         viewModel.getGenerateReportButtonDisableProperty().set(!data.isHlmDataAvailable());
 
+        // disable read hlm button if hlm data is already available
+        viewModel.getReadHLMFileButtonDisabledProperty().setValue(data.isHlmDataAvailable());
+
         // lock status
         boolean locked = data.isLocked();
+        viewModel.getLockFontIconCode().setValue(locked ? FontAwesome.LOCK : FontAwesome.UNLOCK);
         viewModel.getOperationLockedProperty().set(data.isLocked());
         viewModel.getNewRecordingButtonDisabledProperty().setValue(locked);
-        viewModel.getReadHLMFileButtonDisabledProperty().setValue(locked);
         viewModel.getGeneralInformationPaneDisabledProperty().setValue(locked);
-        viewModel.getLockFontIconCode().setValue(locked ? FontAwesome.LOCK : FontAwesome.UNLOCK);
+
+        if (locked) {
+            viewModel.getReadHLMFileButtonDisabledProperty().setValue(true);
+        }
+
     }
 
     public static void present(CompleteOperationDataDTO data, OperationOverviewViewModel viewModel) {

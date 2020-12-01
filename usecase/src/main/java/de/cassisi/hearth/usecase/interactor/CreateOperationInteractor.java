@@ -42,7 +42,7 @@ public class CreateOperationInteractor implements CreateOperation {
 
         //generate output
         OutputData data = new OutputData();
-        data.operationData = DTOConverter.toSimpleOperationData(savedOperation);
+        data.operationData = DTOConverter.toFullOperationData(savedOperation);
         outputHandler.handle(data);
     }
 }
