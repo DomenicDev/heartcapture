@@ -34,7 +34,7 @@ public final class InputValidator {
 
     public static void checkIdPositive(long id) {
         if (id < 0) {
-            throw new IdMustBePositiveException(id);
+            throw new InputValidationException(new IdMustBePositiveException(id));
         }
     }
 

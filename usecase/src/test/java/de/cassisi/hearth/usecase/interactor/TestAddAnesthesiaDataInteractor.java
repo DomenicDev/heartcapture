@@ -2,6 +2,7 @@ package de.cassisi.hearth.usecase.interactor;
 
 import de.cassisi.hearth.entity.AnesthesiaData;
 import de.cassisi.hearth.usecase.exception.IdMustBePositiveException;
+import de.cassisi.hearth.usecase.exception.InputValidationException;
 import de.cassisi.hearth.usecase.exception.InvalidDepthOfAnesthesiaException;
 import de.cassisi.hearth.usecase.exception.InvalidTimestampException;
 import de.cassisi.hearth.usecase.output.AddAnesthesiaDataOutputHandler;
@@ -22,8 +23,8 @@ import static org.mockito.Mockito.verify;
 
 class TestAddAnesthesiaDataInteractor {
 
-    private AddAnesthesiaDataRepository repository = mock(AddAnesthesiaDataRepository.class);
-    private OutputHandler<OutputData> outputHandler = mock(AddAnesthesiaDataOutputHandler.class);
+    private final AddAnesthesiaDataRepository repository = mock(AddAnesthesiaDataRepository.class);
+    private final OutputHandler<OutputData> outputHandler = mock(AddAnesthesiaDataOutputHandler.class);
 
     private AddAnesthesiaDataInteractor interactor;
 
@@ -45,14 +46,14 @@ class TestAddAnesthesiaDataInteractor {
     void testInvalidOperationId() {
         InputData inputData = getValidTestInputData();
         inputData.operationId = -1;
-        assertThrows(IdMustBePositiveException.class, () -> interactor.execute(inputData, outputHandler));
+        assertThrows(InputValidationException.class, () -> interactor.execute(inputData, outputHandler));
     }
 
     @Test
     void testInvalidDate() {
         InputData inputData = getValidTestInputData();
         inputData.timestamp = null;
-        assertThrows(InvalidTimestampException.class, () -> interactor.execute(inputData, outputHandler));
+        assertThrows(InputValidationException.class, () -> interactor.execute(inputData, outputHandler));
     }
 
     @Test
@@ -61,11 +62,11 @@ class TestAddAnesthesiaDataInteractor {
 
         // value below 0 should not be allowed
         inputData.depthOfAnesthesia = -1;
-        assertThrows(InvalidDepthOfAnesthesiaException.class, () -> interactor.execute(inputData, outputHandler));
+        assertThrows(InputValidationException.class, () -> interactor.execute(inputData, outputHandler));
 
         // value above 100 should not be allowed
         inputData.depthOfAnesthesia = 101;
-        assertThrows(InvalidDepthOfAnesthesiaException.class, () -> interactor.execute(inputData, outputHandler));
+        assertThrows(InputValidationException.class, () -> interactor.execute(inputData, outputHandler));
     }
 
     private InputData getValidTestInputData() {

@@ -1,6 +1,7 @@
 package de.cassisi.hearth.usecase.interactor;
 
 import de.cassisi.hearth.usecase.exception.IdMustBePositiveException;
+import de.cassisi.hearth.usecase.exception.InputValidationException;
 import de.cassisi.hearth.usecase.exception.InvalidPerfusorInputException;
 import de.cassisi.hearth.usecase.exception.InvalidTimestampException;
 import de.cassisi.hearth.usecase.output.AddInfusionDataOutputHandler;
@@ -43,7 +44,7 @@ class TestAddInfusionDataInteractor {
     void testInvalidOperationId() {
         InputData inputData = getValidTestInputData();
         inputData.operationId = -1;
-        assertThrows(IdMustBePositiveException.class, () ->
+        assertThrows(InputValidationException.class, () ->
                 interactor.execute(inputData, outputHandler));
     }
 
@@ -51,7 +52,7 @@ class TestAddInfusionDataInteractor {
     void testInvalidTimestamp() {
         InputData inputData = getValidTestInputData();
         inputData.timestamp = null;
-        assertThrows(InvalidTimestampException.class, () ->
+        assertThrows(InputValidationException.class, () ->
                 interactor.execute(inputData, outputHandler));
     }
 
@@ -59,7 +60,7 @@ class TestAddInfusionDataInteractor {
     void testInvalidPerfusorData() {
         InputData inputData = getValidTestInputData();
         inputData.infusionData = null;
-        assertThrows(InvalidPerfusorInputException.class, () ->
+        assertThrows(InputValidationException.class, () ->
                 interactor.execute(inputData, outputHandler));
     }
 

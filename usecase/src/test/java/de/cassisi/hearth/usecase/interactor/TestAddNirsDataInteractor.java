@@ -1,6 +1,7 @@
 package de.cassisi.hearth.usecase.interactor;
 
 import de.cassisi.hearth.usecase.exception.IdMustBePositiveException;
+import de.cassisi.hearth.usecase.exception.InputValidationException;
 import de.cassisi.hearth.usecase.exception.InvalidNirsSaturationException;
 import de.cassisi.hearth.usecase.exception.InvalidTimestampException;
 import de.cassisi.hearth.usecase.output.AddNirsDataOutputHandler;
@@ -40,7 +41,7 @@ class TestAddNirsDataInteractor {
     void invalidIdShouldFail() {
         InputData inputData = getValidTestInputData();
         inputData.operationId = -1;
-        assertThrows(IdMustBePositiveException.class, () ->
+        assertThrows(InputValidationException.class, () ->
                 interactor.execute(inputData, outputHandler));
     }
 
@@ -48,7 +49,7 @@ class TestAddNirsDataInteractor {
     void invalidTimestampShouldFail() {
         InputData inputData = getValidTestInputData();
         inputData.timestamp = null;
-        assertThrows(InvalidTimestampException.class, () ->
+        assertThrows(InputValidationException.class, () ->
                 interactor.execute(inputData, outputHandler));
     }
 
@@ -56,7 +57,7 @@ class TestAddNirsDataInteractor {
     void invalidSaturationShouldFail() {
         InputData inputData = getValidTestInputData();
         inputData.leftSaturation = -1;
-        assertThrows(InvalidNirsSaturationException.class, () ->
+        assertThrows(InputValidationException.class, () ->
                 interactor.execute(inputData, outputHandler));
     }
 
@@ -64,7 +65,7 @@ class TestAddNirsDataInteractor {
     void invalidRightSaturationShouldFail() {
         InputData inputData = getValidTestInputData();
         inputData.rightSaturation = -1;
-        assertThrows(InvalidNirsSaturationException.class, () ->
+        assertThrows(InputValidationException.class, () ->
                 interactor.execute(inputData, outputHandler));
     }
 
