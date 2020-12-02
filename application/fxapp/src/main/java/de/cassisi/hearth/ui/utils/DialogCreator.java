@@ -6,6 +6,8 @@ import com.dlsc.formsfx.model.structure.Group;
 import com.dlsc.formsfx.model.structure.NodeElement;
 import com.dlsc.formsfx.view.renderer.FormRenderer;
 import de.cassisi.hearth.ui.lang.LanguageResourceProvider;
+import de.cassisi.hearth.ui.view.help.HelpView;
+import de.cassisi.hearth.ui.view.help.HelpViewModel;
 import de.cassisi.hearth.ui.view.recording.RecordingView;
 import de.cassisi.hearth.ui.view.recording.RecordingViewModel;
 import de.saxsys.mvvmfx.FluentViewLoader;
@@ -82,6 +84,19 @@ public final class DialogCreator {
         stage.show();
     }
 
+    public static void showHelpDialog(Window owner) {
+        ViewTuple<HelpView, HelpViewModel> tuple  = FluentViewLoader.fxmlView(HelpView.class).load();
+
+        Stage helpWindow = new Stage();
+        Scene helpScene = new Scene(tuple.getView());
+        helpWindow.initModality(Modality.APPLICATION_MODAL);
+        helpWindow.initOwner(owner);
+        helpWindow.setTitle(getString("ui.help_window.title"));
+        helpWindow.setScene(helpScene);
+        helpWindow.setResizable(false);
+        helpWindow.show();
+    }
+
     public interface CreateOperationSubmitCallback {
         void handle(LocalDate operationDate, String room);
     }
@@ -128,4 +143,5 @@ public final class DialogCreator {
             throw new RuntimeException(e);
         }
     }
+
 }

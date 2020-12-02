@@ -236,6 +236,11 @@ public class GuiEventController {
         getUseCaseExecutor().findAllOperations(inputData, refreshOperationViewDataPresenter);
     }
 
+    @Subscribe
+    public void handle(ShowHelpWindowEvent event) {
+        DialogCreator.showHelpDialog(event.getOwner());
+    }
+
 
     @Subscribe
     public void handle(OpenRecordingDialogEvent event) {

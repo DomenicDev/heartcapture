@@ -1,6 +1,7 @@
 package de.cassisi.hearth.ui.view.main;
 
 import de.cassisi.hearth.ui.event.OpenNewCreateOperationWindow;
+import de.cassisi.hearth.ui.event.ShowHelpWindowEvent;
 import de.cassisi.hearth.ui.view.BaseView;
 import de.cassisi.hearth.ui.view.dashboard.DashboardView;
 import de.cassisi.hearth.ui.view.dashboard.DashboardViewModel;
@@ -55,6 +56,9 @@ public class MainView extends BaseView implements FxmlView<MainViewModel>, Initi
     @FXML
     private VBox clockContainer;
 
+    // HELP
+    @FXML
+    private Button helpButton;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -65,8 +69,13 @@ public class MainView extends BaseView implements FxmlView<MainViewModel>, Initi
 
         initButtons();
         initClock();
+        initHelp();
 
         showDashboard();
+    }
+
+    private void initHelp() {
+        helpButton.setOnAction(event -> post(new ShowHelpWindowEvent(getWindow())));
     }
 
     private void initClock() {

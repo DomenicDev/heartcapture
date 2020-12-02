@@ -118,7 +118,7 @@
                               <Insets top="15.0" />
                            </VBox.margin>
                            <children>
-                              <JFXButton fx:id="readHLMFileButton" buttonType="RAISED" styleClass="simple_button" text="HLM-Datei einlesen" />
+                              <JFXButton fx:id="readHLMFileButton" styleClass="simple_button" text="HLM-Datei einlesen" />
                            </children>
                         </HBox>
                      </children>
@@ -141,7 +141,7 @@
                               <Insets top="15.0" />
                            </VBox.margin>
                            <children>
-                              <JFXButton fx:id="generateReportButton" buttonType="RAISED" styleClass="simple_button" text="Exportieren" />
+                              <JFXButton fx:id="generateReportButton" styleClass="simple_button" text="Exportieren" />
                            </children>
                         </HBox>
                      </children>
@@ -164,7 +164,7 @@
                               <Insets />
                            </VBox.margin>
                            <children>
-                              <JFXToggleButton fx:id="lockToggleButton" text="Offen / Geschlossen" />
+                              <JFXToggleButton fx:id="lockToggleButton" text="Offen / Geschlossen" toggleColor="#536dfe" toggleLineColor="#8c9eff" />
                            </children>
                         </HBox>
                      </children>

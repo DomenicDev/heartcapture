@@ -138,14 +138,14 @@ public class OperationOverview extends BaseView implements FxmlView<OperationOve
     private void initBisChart() {
         bisChart.dataProperty().bind(viewModel.getBisChartData());
         bisChart.setCreateSymbols(false);
-        bisChart.getXAxis().setTickLabelsVisible(false);
+        bisChart.getXAxis().setTickLabelsVisible(true);
     }
 
     private void initNirsChart() {
         nirsChart.setCreateSymbols(false);
-        nirsChart.setLegendSide(Side.RIGHT);
-        nirsChart.getXAxis().setTickLabelsVisible(false);
-        nirsChart.getXAxis().setOpacity(0);
+        nirsChart.setLegendSide(Side.TOP);
+        nirsChart.getXAxis().setTickLabelsVisible(true);
+        nirsChart.getXAxis().setOpacity(1);
         nirsChart.getXAxis().setTickMarkVisible(false);
         nirsChart.dataProperty().bind(viewModel.getNirsChartData());
     }

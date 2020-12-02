@@ -1,10 +1,7 @@
 package de.cassisi.hearth.usecase.interactor;
 
 import de.cassisi.hearth.entity.AnesthesiaData;
-import de.cassisi.hearth.usecase.exception.IdMustBePositiveException;
 import de.cassisi.hearth.usecase.exception.InputValidationException;
-import de.cassisi.hearth.usecase.exception.InvalidDepthOfAnesthesiaException;
-import de.cassisi.hearth.usecase.exception.InvalidTimestampException;
 import de.cassisi.hearth.usecase.output.AddAnesthesiaDataOutputHandler;
 import de.cassisi.hearth.usecase.output.OutputHandler;
 import de.cassisi.hearth.usecase.port.AddAnesthesiaDataRepository;

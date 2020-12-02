@@ -89,7 +89,7 @@
             </VBox>
             <VBox styleClass="container">
                <children>
-                  <PieChart fx:id="operationPieChart" legendSide="RIGHT" />
+                  <PieChart fx:id="operationPieChart" clockwise="false" legendSide="RIGHT" />
                </children>
             </VBox>
          </children>

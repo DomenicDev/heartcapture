@@ -110,7 +110,7 @@ label {
 }
 
 .add-button {
-    -fx-background-color: #838abf;
+    -fx-background-color: #536DFE;
     -fx-text-fill: white;
     -fx-font-size: 12pt;
 }
@@ -143,12 +143,12 @@ label {
 }
 
 .simple_button {
-    -fx-background-color: #7986CB;
-    -fx-text-fill: #ffffffff;
+    -fx-background-color: #536DFE;
+    -fx-text-fill: white;
+    -fx-font-size: 11pt;
 }
 
 .dialog_title_banner {
-
     -fx-padding: 20 10;
     -fx-background-color: #8C9EFF;
     -fx-effect: dropshadow(two-pass-box, #05050532, 15, 0, 0, 1);
@@ -168,6 +168,38 @@ label {
     -fx-icon-code: fa-close;
     -fx-icon-size: 12pt;
     -fx-icon-color: #601a0f;
+}
+
+/*
+OVERRIDE DEFAULT CHART STYLE
+ */
+/* LINE CHART */
+.chart-series-line {
+    -fx-stroke-width: 2px;
+    -fx-effect: null;
+}
+
+.default-color0.chart-line-symbol { -fx-background-color: #8C9EFF, white; }
+.default-color1.chart-line-symbol { -fx-background-color: #8cd7ff, white; }
+
+.default-color0.chart-series-line { -fx-stroke: #8C9EFF; }
+.default-color1.chart-series-line { -fx-stroke: #8cd7ff; }
+
+/* AREA CHART */
+.default-color0.chart-series-area-line { -fx-stroke: #536DFE; }
+
+.default-color0.chart-series-area-fill { -fx-fill: #8C9EFF77}
+
+/* PIE CHART */
+.default-color0.chart-pie { -fx-pie-color: #8C9EFF; }
+.default-color1.chart-pie { -fx-pie-color: #ffee8c; }
+.default-color2.chart-pie { -fx-pie-color: #8cd7ff; }
+.default-color3.chart-pie { -fx-pie-color: #b48cff; }
+.default-color4.chart-pie { -fx-pie-color: #ff8c9d; }
+
+/* BAR CHART */
+.default-color0.chart-bar {
+    -fx-background-color: #8C9EFF;
 }
 
 .root {
