@@ -20,8 +20,8 @@ public class ExcelReportGenerator {
     private Sheet sheet;
     private CellStyle timeStyle;
 
-    private static final String ARTERENOL = "Arterenol";
-    private static final String VASOPRESSIN = "Vasopressin";
+    private static final String ARTERENOL = "Norepinephrin";
+    private static final String VASOPRESSIN = "Argipressin";
     private static final String SUFENTANIL = "Sufentanil";
 
     public ExcelReportGenerator(ReportData reportData) {

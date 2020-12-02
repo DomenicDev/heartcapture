@@ -51,6 +51,7 @@ public final class DialogCreator {
         ObjectProperty<LocalDate> localDate = new SimpleObjectProperty<>(LocalDate.now());
         StringProperty roomProperty = new SimpleStringProperty("");
         Button submitButton = new Button(getString("ui.create_operation_dialog.create"));
+        submitButton.setDefaultButton(true);
 
         // create form
         Form form = Form.of(
