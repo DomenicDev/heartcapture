@@ -1,7 +1,8 @@
 package de.cassisi.hearth.util;
 
-import de.cassisi.hearth.entity.*;
-import de.cassisi.hearth.repository.model.*;
+import de.cassisi.heartcapture.entity.*;
+import de.cassisi.heartcapture.port.util.DBConverter;
+import de.cassisi.heartcapture.repository.model.*;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;

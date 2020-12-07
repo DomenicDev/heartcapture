@@ -12,7 +12,7 @@ javafx {
 }
 
 
-mainClassName = 'de.cassisi.hearth.ApplicationLauncher'
+mainClassName = 'de.cassisi.heartcapture.ApplicationLauncher'
 
 
 
