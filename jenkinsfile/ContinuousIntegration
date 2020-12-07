@@ -1,0 +1,25 @@
+pipeline {
+    agent any
+    tools {
+        jdk 'jdk-12'
+    }
+    options {
+        timestamps ()
+    }
+    triggers {
+        pollSCM('* * * * *') //polling for changes, once a minute
+    }
+    stages {
+        stage('Compile and Test') {
+            steps {
+                sh 'chmod +x ./gradlew'
+                sh './gradlew clean test'
+            }
+        }
+    }
+    post {
+        success {
+            jacoco()
+        }
+    }
+}

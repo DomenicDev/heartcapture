@@ -1,8 +1,8 @@
 package de.cassisi.hearth;
 
-import de.cassisi.hearth.port.CreateOperationJpaRepository;
-import de.cassisi.hearth.usecase.CreateOperation;
-import de.cassisi.hearth.usecase.output.OutputHandler;
+import de.cassisi.heartcapture.port.CreateOperationJpaRepository;
+import de.cassisi.heartcapture.usecase.CreateOperation;
+import de.cassisi.heartcapture.usecase.output.OutputHandler;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -40,7 +40,7 @@ public class ConsoleApplication implements CommandLineRunner {
 
 
 
-        createOperation.execute(inputData, new TestOutputHandler());
+   //     createOperation.execute(inputData, new TestOutputHandler());
 
     }
 
@@ -59,7 +59,7 @@ public class ConsoleApplication implements CommandLineRunner {
 
         @Override
         public void handle(CreateOperation.OutputData outputData) {
-            System.out.println(outputData.result);
+            System.out.println(outputData);
         }
     }
 }

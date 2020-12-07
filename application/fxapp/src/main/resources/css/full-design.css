@@ -1,0 +1,207 @@
+/**
+COLOR PALETTE
+
+    #003049
+    44633F
+    30011E
+    BFC0C0
+    FAF0CA
+
+ */
+
+.button {
+
+}
+
+label {
+    -fx-font-size: 12pt;
+}
+
+.sidebar {
+   /* -fx-background-color: #2f2a6b;*/
+    -fx-background-color: white;
+    -fx-background-radius: 0 0 0 0;
+    -fx-effect: dropshadow(two-pass-box, #05050522, 15, 0, 0, 1);
+}
+
+.sidebar-category {
+    -fx-text-fill: #9e9d9dfa;
+    -fx-font-size: 11pt;
+    -fx-padding: 25 20 0 10;
+}
+
+.main-content-title {
+    -fx-font-size: 18pt;
+    -fx-font-weight: bold;
+
+}
+
+.main-view-top-bar {
+    -fx-background-color: #536DFE;
+    -fx-effect: dropshadow(two-pass-box, #05050532, 15, 0, 0, 3);
+}
+
+.main-content-top-bar {
+   /* -fx-background-color: #93580a*/
+}
+
+.sidebar-button {
+    -fx-background-color: none;
+    -fx-text-fill: #5e5e5eee;
+    -fx-font-size: 13pt;
+    -fx-padding: 18 15;
+    -fx-font-weight: lighter;
+    -fx-graphic-text-gap: 10pt;
+}
+
+.cursor-hand {
+    -fx-cursor: hand;
+}
+
+.sidebar-button:hover {
+    -fx-background-color: #aaaaaaee;
+}
+
+.logo-container {
+    -fx-background-color: #823b3b; /*#2e2a6b;*/
+}
+
+.top-bar {
+ /*   -fx-background-color: #5c2200;*/
+}
+
+.center-main {
+    -fx-background-color:  #E8EAF6;
+}
+
+.main-content {
+
+}
+
+.button-home-quick-task {
+    -fx-background-color: #44633F;
+    -fx-text-fill: white;
+    -fx-font-size: 20pt;
+    -fx-font-family: "Arial Narrow";
+}
+
+.dashboard-title {
+    -fx-font-size: 16pt;
+    -fx-border-radius: 2px;
+}
+
+.section-title {
+    -fx-font-size: 16pt;
+}
+
+.live-capture-data-header {
+    -fx-font-size: 12pt;
+    -fx-font-weight: bold;
+}
+
+.container {
+    -fx-padding: 10px;
+    -fx-background-insets: 0px;
+    -fx-border-radius: 3;
+    -fx-background-color: white;
+    -fx-background-radius: 10pt;
+
+    -fx-effect: dropshadow(two-pass-box, #05050522, 10, 0, 0, 1);
+}
+
+.add-button {
+    -fx-background-color: #536DFE;
+    -fx-text-fill: white;
+    -fx-font-size: 12pt;
+}
+
+.dashboard_stats_title {
+    -fx-font-size: 13pt;
+    -fx-text-fill: #AFAFAFFF;
+}
+
+.dashboard_stats_number {
+    -fx-font-size: 18pt;
+    -fx-text-fill: black;
+}
+
+.operation_heart_icon {
+    -fx-icon-code: fa-heart;
+    -fx-icon-size: 40pt;
+    -fx-icon-color: #c80023;
+}
+
+.operation_document_icon {
+    -fx-icon-code: fa-book;
+    -fx-icon-size: 40pt;
+    -fx-icon-color: #f46e00;
+}
+
+.operation_lock_icon {
+    -fx-icon-size: 40pt;
+    -fx-icon-color: #2d5b9f;
+}
+
+.simple_button {
+    -fx-background-color: #536DFE;
+    -fx-text-fill: white;
+    -fx-font-size: 11pt;
+}
+
+.dialog_title_banner {
+    -fx-padding: 20 10;
+    -fx-background-color: #8C9EFF;
+    -fx-effect: dropshadow(two-pass-box, #05050532, 15, 0, 0, 1);
+}
+
+.dialog_title_banner > .label {
+    -fx-text-fill: white;
+}
+
+.operation_table_data_available_icon-available {
+    -fx-icon-code: fa-check;
+    -fx-icon-size: 12pt;
+    -fx-icon-color: #0f6114
+}
+
+.operation_table_data_available_icon-not_available {
+    -fx-icon-code: fa-close;
+    -fx-icon-size: 12pt;
+    -fx-icon-color: #601a0f;
+}
+
+/*
+OVERRIDE DEFAULT CHART STYLE
+ */
+/* LINE CHART */
+.chart-series-line {
+    -fx-stroke-width: 2px;
+    -fx-effect: null;
+}
+
+.default-color0.chart-line-symbol { -fx-background-color: #8C9EFF, white; }
+.default-color1.chart-line-symbol { -fx-background-color: #8cd7ff, white; }
+
+.default-color0.chart-series-line { -fx-stroke: #8C9EFF; }
+.default-color1.chart-series-line { -fx-stroke: #8cd7ff; }
+
+/* AREA CHART */
+.default-color0.chart-series-area-line { -fx-stroke: #536DFE; }
+
+.default-color0.chart-series-area-fill { -fx-fill: #8C9EFF77}
+
+/* PIE CHART */
+.default-color0.chart-pie { -fx-pie-color: #8C9EFF; }
+.default-color1.chart-pie { -fx-pie-color: #ffee8c; }
+.default-color2.chart-pie { -fx-pie-color: #8cd7ff; }
+.default-color3.chart-pie { -fx-pie-color: #b48cff; }
+.default-color4.chart-pie { -fx-pie-color: #ff8c9d; }
+
+/* BAR CHART */
+.default-color0.chart-bar {
+    -fx-background-color: #8C9EFF;
+}
+
+.root {
+    -fx-background-color:  #E8EAF6;
+}
