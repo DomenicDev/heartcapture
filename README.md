@@ -9,6 +9,6 @@ The main task for this application is to generate reports that will be used for 
 
 This application is the result of a cooperation between the HFU (Hoschschule Furtwangen University) and the University Hospital Freiburg.
 
-##Releases
+## Releases
 Download the latest release from the [Releases Page](https://github.com/DomenicDev/heartcapture/releases)
 
