@@ -31,12 +31,15 @@ public class GenerateReportJpaRepository implements GenerateReportRepository {
         List<NIRSData> nirsData = DBConverter.convertNIRSData(operationDB.getNirsData());
         List<InfusionData> infusionData = DBConverter.convertInfusionData(operationDB.getInfusionData());
         List<AnesthesiaData> anesthesiaData = DBConverter.convertAnesthesiaData(operationDB.getAnesthesiaData());
+        PreMedicationData preMedicationData = DBConverter.convert(operationDB.getPreMedicationData());
 
         return new ReportData(
                 operation,
                 hlmData,
                 nirsData,
                 infusionData,
-                anesthesiaData);
+                anesthesiaData,
+                preMedicationData
+        );
     }
 }

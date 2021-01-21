@@ -23,11 +23,13 @@ public class MySpringConfig {
     private final GenerateStatisticRepository generateStatisticRepository;
     private final LockOperationRepository lockOperationRepository;
     private final EditOperationInformationRepository editOperationInformationRepository;
+    private final FindMedicationDataRepository findMedicationDataRepository;
+    private final UpdatePreHlmMedicationDataRepository updatePreHlmMedicationDataRepository;
 
     private final HLMFileReader hlmFileReader = new HLMExcelFileReader();
     private final ReportFileGenerator reportFileGenerator = new ExcelReportFileGeneratorImpl();
 
-    public MySpringConfig(CreateOperationJpaRepository createOperationJpaRepository, AddInfusionDataRepository addInfusionDataRepository, AddNirsDataRepository addNirsDataRepository, ReadHLMDataFileRepository readHLMDataFileRepository, FindAllOperationsJpaRepository findAllOperationsJpaRepository, FindOperationJpaRepository findOperationJpaRepository, GenerateReportRepository generateReportRepository, AddAnesthesiaDataJpaRepository addAnesthesiaDataJpaRepository, FindFullOperationJpaRepository findFullOperationJpaRepository, GenerateStatisticRepository generateStatisticRepository, LockOperationRepository lockOperationRepository, EditOperationInformationRepository editOperationInformationRepository) {
+    public MySpringConfig(CreateOperationJpaRepository createOperationJpaRepository, AddInfusionDataRepository addInfusionDataRepository, AddNirsDataRepository addNirsDataRepository, ReadHLMDataFileRepository readHLMDataFileRepository, FindAllOperationsJpaRepository findAllOperationsJpaRepository, FindOperationJpaRepository findOperationJpaRepository, GenerateReportRepository generateReportRepository, AddAnesthesiaDataJpaRepository addAnesthesiaDataJpaRepository, FindFullOperationJpaRepository findFullOperationJpaRepository, GenerateStatisticRepository generateStatisticRepository, LockOperationRepository lockOperationRepository, EditOperationInformationRepository editOperationInformationRepository, FindMedicationDataRepository findMedicationDataRepository, UpdatePreHlmMedicationDataRepository updatePreHlmMedicationDataRepository) {
         this.createOperationJpaRepository = createOperationJpaRepository;
         this.addInfusionDataRepository = addInfusionDataRepository;
         this.addNirsDataRepository = addNirsDataRepository;
@@ -40,6 +42,8 @@ public class MySpringConfig {
         this.generateStatisticRepository = generateStatisticRepository;
         this.lockOperationRepository = lockOperationRepository;
         this.editOperationInformationRepository = editOperationInformationRepository;
+        this.findMedicationDataRepository = findMedicationDataRepository;
+        this.updatePreHlmMedicationDataRepository = updatePreHlmMedicationDataRepository;
     }
 
     @Bean
@@ -100,5 +104,15 @@ public class MySpringConfig {
     @Bean
     public EditOperationInformation editOperationInformation() {
         return new EditOperationInformationInteractor(editOperationInformationRepository);
+    }
+
+    @Bean
+    public FindMedicationData findMedicationData() {
+        return new FindMedicationDataInteractor(findMedicationDataRepository);
+    }
+
+    @Bean
+    public UpdatePreMedicationData updatePreMedicationData() {
+        return new UpdatePreMedicationDataInteractor(updatePreHlmMedicationDataRepository);
     }
 }

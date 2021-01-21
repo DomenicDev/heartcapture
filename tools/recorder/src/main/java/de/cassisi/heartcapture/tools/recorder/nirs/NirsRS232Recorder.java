@@ -27,6 +27,6 @@ public class NirsRS232Recorder extends AbstractRS232Recorder<NIRSData> {
         } else {
             throw new ConversionException(data, NIRSData.class);
         }
-
     }
+
 }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox stylesheets="@../../../../../../css/full-design.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.cassisi.heartcapture.ui.view.premedication.PreMedicationView">
+   <children>
+      <VBox prefHeight="75.0" prefWidth="100.0" styleClass="dialog_title_banner">
+         <children>
+            <Label styleClass="section-title" text="Medikamente eintragen" />
+         </children>
+      </VBox>
+      <VBox>
+         <children>
+            <VBox fx:id="container" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefWidth="600.0" styleClass="container">
+               <padding>
+                  <Insets bottom="20.0" top="20.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </VBox.margin>
+            </VBox>
+         </children>
+      </VBox>
+   </children>
+</VBox>

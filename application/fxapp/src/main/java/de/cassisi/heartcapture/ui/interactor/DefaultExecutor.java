@@ -2,6 +2,7 @@ package de.cassisi.heartcapture.ui.interactor;
 
 import de.cassisi.heartcapture.usecase.*;
 import de.cassisi.heartcapture.usecase.dto.CompleteOperationDataDTO;
+import de.cassisi.heartcapture.usecase.dto.PreMedicationDataDTO;
 import de.cassisi.heartcapture.usecase.dto.SimpleStatisticDTO;
 import de.cassisi.heartcapture.usecase.exception.InputValidationException;
 import de.cassisi.heartcapture.usecase.exception.OperationLockException;
@@ -24,8 +25,10 @@ public class DefaultExecutor implements UseCaseExecutor {
     private final GenerateStatistic generateStatistic;
     private final LockOperation lockOperation;
     private final EditOperationInformation editOperationInformation;
+    private final FindMedicationData findMedicationData;
+    private final UpdatePreMedicationData updatePreMedicationData;
 
-    public DefaultExecutor(AddNirsData addNirsData, AddAnesthesiaData addAnesthesiaData, AddInfusionData addInfusionData, CreateOperation createOperation, FindAllOperations findAllOperations, FindOperation findOperation, FindFullOperation findFullOperation, ReadHLMDataFile readHLMDataFile, GenerateReport generateReport, GenerateStatistic generateStatistic, LockOperation lockOperation, EditOperationInformation editOperationInformation) {
+    public DefaultExecutor(AddNirsData addNirsData, AddAnesthesiaData addAnesthesiaData, AddInfusionData addInfusionData, CreateOperation createOperation, FindAllOperations findAllOperations, FindOperation findOperation, FindFullOperation findFullOperation, ReadHLMDataFile readHLMDataFile, GenerateReport generateReport, GenerateStatistic generateStatistic, LockOperation lockOperation, EditOperationInformation editOperationInformation, FindMedicationData findMedicationData, UpdatePreMedicationData updatePreMedicationData) {
         this.addNirsData = addNirsData;
         this.addAnesthesiaData = addAnesthesiaData;
         this.addInfusionData = addInfusionData;
@@ -38,6 +41,8 @@ public class DefaultExecutor implements UseCaseExecutor {
         this.generateStatistic = generateStatistic;
         this.lockOperation = lockOperation;
         this.editOperationInformation = editOperationInformation;
+        this.findMedicationData = findMedicationData;
+        this.updatePreMedicationData = updatePreMedicationData;
     }
 
     @Override
@@ -98,5 +103,15 @@ public class DefaultExecutor implements UseCaseExecutor {
     @Override
     public void editOperationInformation(EditOperationInformation.InputData inputData, OutputHandler<EditOperationInformation.OutputData> outputHandler) throws InputValidationException, OperationNotFoundException, OperationLockException {
         editOperationInformation.execute(inputData, outputHandler);
+    }
+
+    @Override
+    public void findPreMedicationData(FindMedicationData.InputData inputData, OutputHandler<PreMedicationDataDTO> outputHandler) {
+        findMedicationData.execute(inputData, outputHandler);
+    }
+
+    @Override
+    public void updatePreMedicationData(UpdatePreMedicationData.InputData inputData, OutputHandler<UpdatePreMedicationData.OutputData> outputHandler) {
+        updatePreMedicationData.execute(inputData, outputHandler);
     }
 }

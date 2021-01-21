@@ -216,5 +216,27 @@ public final class DBConverter {
         return new AnesthesiaData(data.getTimestamp(), data.getDepthOfAnesthesia());
     }
 
+    public static PreMedicationDataDB convert(PreMedicationData data) {
+        return mapper.map(data, PreMedicationDataDB.class);
+    }
+
+    public static PreMedicationData convert(PreMedicationDataDB data) {
+        return new PreMedicationData(
+                data.getSuprareninPreOperation(),
+                data.getNorepinephrinPreOperation(),
+                data.getVasopressinPreOperation(),
+                data.getMilrinonPreOperation(),
+                data.getNtgPreOperation(),
+                data.getSimdaxPreOperation(),
+                data.getHeparinPreOperation(),
+                data.getSuprareninPreHlm(),
+                data.getNorepinephrinPreHlm(),
+                data.getVasopressinPreHlm(),
+                data.getMilrinonPreHlm(),
+                data.getNtgPreHlm(),
+                data.getSimdaxPreHlm()
+        );
+    }
+
 
 }

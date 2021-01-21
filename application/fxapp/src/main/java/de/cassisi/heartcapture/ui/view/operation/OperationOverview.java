@@ -57,6 +57,10 @@ public class OperationOverview extends BaseView implements FxmlView<OperationOve
     @FXML
     private FontIcon hlmDataAvailableFontIcon;
 
+    // MEDICATION BUTTON
+    @FXML
+    private Button enterMedicationButton;
+
     // HLM FILE READER BUTTON
     @FXML
     private Button readHLMFileButton;
@@ -87,6 +91,7 @@ public class OperationOverview extends BaseView implements FxmlView<OperationOve
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initOperationInformation();
+        initMedication();
         initNewRecordingButton();
         initStatusInformation();
         initFileChooser();
@@ -94,6 +99,12 @@ public class OperationOverview extends BaseView implements FxmlView<OperationOve
         initLockOperation();
         initCharts();
         initGenerateReportButton();
+    }
+
+    private void initMedication() {
+        enterMedicationButton.setOnAction(event -> {
+            post(new ShowEditMedicationDialogEvent(getWindow(), getOperationId()));
+        });
     }
 
     private void initLockOperation() {

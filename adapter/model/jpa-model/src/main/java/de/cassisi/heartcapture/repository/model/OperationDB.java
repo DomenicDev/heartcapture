@@ -53,6 +53,16 @@ public class OperationDB {
     //@JoinColumn(name = "hlm_data_id", nullable = true, unique = true)
     private HLMDataDB hlmData;
 
+    @Embedded
+    private final PreMedicationDataDB preMedicationData = new PreMedicationDataDB();
+
+
+    public PreMedicationDataDB getPreMedicationData() {
+        if (preMedicationData == null) {
+            return new PreMedicationDataDB();
+        }
+        return preMedicationData;
+    }
 
     public void addNirsData(NirsDataDB nirsDataDB) {
         nirsData.add(nirsDataDB);

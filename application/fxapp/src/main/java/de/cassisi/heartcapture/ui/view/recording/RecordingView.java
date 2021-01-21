@@ -1,11 +1,8 @@
 package de.cassisi.heartcapture.ui.view.recording;
 
 import com.jfoenix.controls.JFXTreeTableView;
-import de.cassisi.heartcapture.ui.event.AutoDetectEvent;
-import de.cassisi.heartcapture.ui.event.RefreshSerialPortEvent;
-import de.cassisi.heartcapture.ui.event.StopRecordingEvent;
+import de.cassisi.heartcapture.ui.event.*;
 import de.cassisi.heartcapture.ui.view.operation.PerfusionUIData;
-import de.cassisi.heartcapture.ui.event.StartRecordingEvent;
 import de.cassisi.heartcapture.ui.view.BaseView;
 import de.saxsys.mvvmfx.FxmlView;
 import de.saxsys.mvvmfx.InjectViewModel;
@@ -15,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
+import javafx.stage.Window;
 import javafx.stage.WindowEvent;
 import org.springframework.stereotype.Component;
 
@@ -73,6 +71,10 @@ public class RecordingView extends BaseView implements FxmlView<RecordingViewMod
     @FXML
     private ProgressBar autoDetectProgressBar;
 
+    // MEDICATION BUTTON
+    @FXML
+    private Button addMedicationButton;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initAutoDetection();
@@ -80,6 +82,11 @@ public class RecordingView extends BaseView implements FxmlView<RecordingViewMod
         initRecordingGauges();
         initRecordingSettings();
         refreshComPorts();
+        initMedication();
+    }
+
+    private void initMedication() {
+        addMedicationButton.setOnAction(event -> post(new ShowEditMedicationDialogEvent(getWindow(), getOperationId())));
     }
 
     private void initRecordingButtons() {
@@ -220,5 +227,10 @@ public class RecordingView extends BaseView implements FxmlView<RecordingViewMod
 
     private boolean isRecordingRunning() {
         return startRecordingButton.isDisabled();
+    }
+
+    @Override
+    protected Window getWindow() {
+        return addMedicationButton.getScene().getWindow();
     }
 }

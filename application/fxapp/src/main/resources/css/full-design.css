@@ -125,6 +125,12 @@ label {
     -fx-text-fill: black;
 }
 
+.operation_med_icon {
+    -fx-icon-code: fa-thermometer;
+    -fx-icon-size: 40pt;
+    -fx-icon-color: #7986CB;
+}
+
 .operation_heart_icon {
     -fx-icon-code: fa-heart;
     -fx-icon-size: 40pt;

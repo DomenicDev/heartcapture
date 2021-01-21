@@ -39,6 +39,7 @@ public class ExcelReportGenerator {
             List<InfusionData> infusionData = reportData.getInfusionData();
             List<AnesthesiaData> anesthesiaData = reportData.getAnesthesiaData();
             List<NIRSData> nirsData = reportData.getNirsData();
+            PreMedicationData preMedicationData = reportData.getPreMedicationData();
 
             Workbook template = WorkbookFactory.create(Objects.requireNonNull(ExcelReportFileGeneratorImpl.class.getClassLoader().getResourceAsStream("report_template.xlsx")));
 
@@ -72,6 +73,9 @@ public class ExcelReportGenerator {
             // PRIMING COMPOSITION
             addPrimingComposition(hlmData.getPrimingComposition());
 
+            // PRE MEDICATION DATA
+            addPreMedicationData(preMedicationData);
+
             // convert to TimeData objects and add them to the list
             convertNirsData(nirsData);
             convertAnesthesiaData(anesthesiaData);
@@ -100,6 +104,25 @@ public class ExcelReportGenerator {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void addPreMedicationData(PreMedicationData data) {
+        // pre-operation
+        setCellValue(48, 1, data.getSuprareninPreOperation());
+        setCellValue(49, 1, data.getNorepinephrinPreOperation());
+        setCellValue(50, 1, data.getVasopressinPreOperation());
+        setCellValue(51, 1, data.getMilrinonPreOperation());
+        setCellValue(52, 1, data.getNtgPreOperation());
+        setCellValue(53, 1, data.getSimdaxPreOperation());
+        setCellValue(54, 1, data.getHeparinPreOperation());
+
+        // pre-hlm
+        setCellValue(95, 1, data.getSuprareninPreHlm());
+        setCellValue(96, 1, data.getNorepinephrinPreHlm());
+        setCellValue(97, 1, data.getVasopressinPreHlm());
+        setCellValue(98, 1, data.getMilrinonPreHlm());
+        setCellValue(99, 1, data.getNtgPreHlm());
+        setCellValue(100, 1, data.getSimdaxPreHlm());
     }
 
     private TimeData createOrGetTimeData(LocalDateTime timestamp) {
@@ -157,29 +180,29 @@ public class ExcelReportGenerator {
         }
     }
 
-    private void computeDO2(List<TimeData> sortedTimeData) {
-        for (TimeData timeData : sortedTimeData) {
-            // check if this TimeData object contains a blood sample
-            BloodSampleData bloodSampleArt = timeData.getBloodDataArt();
-            if (bloodSampleArt.getHbOfl() != null) {
+private void computeDO2(List<TimeData> sortedTimeData) {
+    for (TimeData timeData : sortedTimeData) {
+        // check if this TimeData object contains a blood sample
+        BloodSampleData bloodSampleArt = timeData.getBloodDataArt();
+        if (bloodSampleArt.getHbOfl() != null) {
 
-                double bsa = reportData.getHlmData().getPatientData().getBsa();
-                double hbOfl = bloodSampleArt.getHbOfl();
-                double po2Ofl = bloodSampleArt.getPo2Ofl();
-                double so2Ofl = bloodSampleArt.getSo2Ofl();
+            double bsa = reportData.getHlmData().getPatientData().getBsa();
+            double hbOfl = bloodSampleArt.getHbOfl();
+            double po2Ofl = bloodSampleArt.getPo2Ofl();
+            double so2Ofl = bloodSampleArt.getSo2Ofl();
 
-                // we must look for the latest art flow value
-                int index = sortedTimeData.indexOf(timeData);
-                Double artFlow = searchBackwards(TimeData::getArtFlow, sortedTimeData, index);
+            // we must look for the latest art flow value
+            int index = sortedTimeData.indexOf(timeData);
+            Double artFlow = searchBackwards(TimeData::getArtFlow, sortedTimeData, index);
 
-                // compute value and update time data object
-                if (artFlow != null) {
-                    double do2 = 10 * (artFlow/bsa) * ( (hbOfl * 1.34 * so2Ofl) + ( 0.003 * po2Ofl )) / 100.0;
-                    timeData.setDo2(do2);
-                }
+            // compute value and update time data object
+            if (artFlow != null) {
+                double do2 = 10 * (artFlow/bsa) * ( (hbOfl * 1.34 * so2Ofl) + ( 0.003 * po2Ofl )) / 100.0;
+                timeData.setDo2(do2);
             }
         }
     }
+}
 
     /**
      * This method allows to search backwards for a specific value within the specified list.

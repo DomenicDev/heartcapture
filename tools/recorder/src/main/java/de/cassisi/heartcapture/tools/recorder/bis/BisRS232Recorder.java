@@ -30,7 +30,7 @@ public class BisRS232Recorder extends AbstractRS232Recorder<BISData> {
             }
 
         } catch (Exception e) {
-           return null;
+           throw new ConversionException(data, BISData.class);
         }
 
     }
