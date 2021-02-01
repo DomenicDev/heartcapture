@@ -49,7 +49,9 @@ class TestExcelReportGenerator {
         List<NIRSData> nirsData = Arrays.asList(generateNIRSData(LocalDateTime.now(), 32, 33), generateNIRSData(LocalDateTime.now().plusSeconds(6), 44, 56));
         List<InfusionData> infusionDataList = new ArrayList<>();
 
-        ReportData reportData = new ReportData(operation, hlmData, nirsData, infusionDataList, anesthesiaData);
+        PreMedicationData preMedicationData = new PreMedicationData(0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+        ReportData reportData = new ReportData(operation, hlmData, nirsData, infusionDataList, anesthesiaData, preMedicationData);
         generator.generateReport(reportData);
     }
 

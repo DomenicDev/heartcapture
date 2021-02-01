@@ -58,7 +58,6 @@ public class DashboardView extends BaseView implements FxmlView<DashboardViewMod
 
     @FXML
     private TreeTableColumn<LatestOperation, String> operationDetailsColumn;
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -72,7 +71,6 @@ public class DashboardView extends BaseView implements FxmlView<DashboardViewMod
         // init table data
         refreshTableData();
     }
-
     private void initStatisticLabels() {
         numberOfOperationsLabel.textProperty().bind(viewModel.getNumberOfOperationsProperty().asString());
         numberOfIncompleteOperationsLabel.textProperty().bind(viewModel.getNumberOfIncompleteOperationsProperty().asString());

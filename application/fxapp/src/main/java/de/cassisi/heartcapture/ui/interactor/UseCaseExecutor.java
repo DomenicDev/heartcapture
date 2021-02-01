@@ -1,6 +1,7 @@
 package de.cassisi.heartcapture.ui.interactor;
 
 import de.cassisi.heartcapture.usecase.*;
+import de.cassisi.heartcapture.usecase.dto.PreMedicationDataDTO;
 import de.cassisi.heartcapture.usecase.exception.*;
 import de.cassisi.heartcapture.usecase.dto.CompleteOperationDataDTO;
 import de.cassisi.heartcapture.usecase.dto.SimpleStatisticDTO;
@@ -32,4 +33,7 @@ public interface UseCaseExecutor {
 
     void editOperationInformation(EditOperationInformation.InputData inputData, OutputHandler<EditOperationInformation.OutputData> outputHandler) throws InputValidationException, OperationNotFoundException, OperationLockException;
 
+    void findPreMedicationData(FindMedicationData.InputData inputData, OutputHandler<PreMedicationDataDTO> outputHandler);
+
+    void updatePreMedicationData(UpdatePreMedicationData.InputData inputData, OutputHandler<UpdatePreMedicationData.OutputData> outputHandler);
 }

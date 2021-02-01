@@ -13,7 +13,7 @@ public class NirsRS232Recorder extends AbstractRS232Recorder<NIRSData> {
     private final Pattern pattern = Pattern.compile(regex);
 
     public NirsRS232Recorder(String port) {
-        super(port, new byte[] {'\r', '\n'}, true);
+        super(port, new byte[] {'\n'}, true);
     }
 
     @Override
@@ -27,6 +27,6 @@ public class NirsRS232Recorder extends AbstractRS232Recorder<NIRSData> {
         } else {
             throw new ConversionException(data, NIRSData.class);
         }
-
     }
+
 }

@@ -48,6 +48,7 @@ public class GuiEventController {
     private final LoggingPresenter loggingPresenter;
     private final LockOperationPresenter lockOperationPresenter;
     private final EditOperationInformationPresenter editOperationInformationPresenter;
+    private final FindMedicationDataPresenter findMedicationDataPresenter;
 
     private final Navigator navigator;
     private final RecordingController recordingController;
@@ -58,7 +59,7 @@ public class GuiEventController {
     private final Executor executor = new Executor();
 
 
-    public GuiEventController(UseCaseExecutor useCaseExecutor, AddNirsDataPresenter addNirsDataPresenter, AddAnesthesiaDataPresenter addAnesthesiaDataPresenter, AddInfusionDataPresenter addInfusionDataPresenter, CreateOperationPresenter createOperationPresenter, RefreshLatestOperationPresenter refreshLatestOperationPresenter1, ReadHLMDataFilePresenter hlmDataFilePresenter, GenerateReportPresenter generateReportPresenter, RecordingStatePresenter recordingStatePresenter, RefreshSerialPortPresenter refreshSerialPortPresenter, AutoDetectPortStartPresenter autoDetectPortStartPresenter, AutoDetectResultPresenter autoDetectResultPresenter, RefreshOperationViewDataPresenter refreshOperationViewDataPresenter, OperationViewPresenter operationViewPresenter, GenerateDashboardStatisticPresenter generateDashboardStatisticPresenter, LoggingPresenter loggingPresenter, LockOperationPresenter lockOperationPresenter, EditOperationInformationPresenter editOperationInformationPresenter, Navigator navigator, RecordingController recordingController, ExceptionHandler exceptionHandler) {
+    public GuiEventController(UseCaseExecutor useCaseExecutor, AddNirsDataPresenter addNirsDataPresenter, AddAnesthesiaDataPresenter addAnesthesiaDataPresenter, AddInfusionDataPresenter addInfusionDataPresenter, CreateOperationPresenter createOperationPresenter, RefreshLatestOperationPresenter refreshLatestOperationPresenter1, ReadHLMDataFilePresenter hlmDataFilePresenter, GenerateReportPresenter generateReportPresenter, RecordingStatePresenter recordingStatePresenter, RefreshSerialPortPresenter refreshSerialPortPresenter, AutoDetectPortStartPresenter autoDetectPortStartPresenter, AutoDetectResultPresenter autoDetectResultPresenter, RefreshOperationViewDataPresenter refreshOperationViewDataPresenter, OperationViewPresenter operationViewPresenter, GenerateDashboardStatisticPresenter generateDashboardStatisticPresenter, LoggingPresenter loggingPresenter, LockOperationPresenter lockOperationPresenter, EditOperationInformationPresenter editOperationInformationPresenter, FindMedicationDataPresenter findMedicationDataPresenter, Navigator navigator, RecordingController recordingController, ExceptionHandler exceptionHandler) {
         this.useCaseExecutor = useCaseExecutor;
         this.addNirsDataPresenter = addNirsDataPresenter;
         this.addAnesthesiaDataPresenter = addAnesthesiaDataPresenter;
@@ -77,6 +78,7 @@ public class GuiEventController {
         this.loggingPresenter = loggingPresenter;
         this.lockOperationPresenter = lockOperationPresenter;
         this.editOperationInformationPresenter = editOperationInformationPresenter;
+        this.findMedicationDataPresenter = findMedicationDataPresenter;
         this.navigator = navigator;
         this.recordingController = recordingController;
         this.exceptionHandler = exceptionHandler;
@@ -284,6 +286,43 @@ public class GuiEventController {
         });
     }
 
+    @Subscribe
+    public void handle(ShowEditMedicationDialogEvent event) {
+        addJob(() -> {
+                    DialogCreator.showPreHlmMedicationDataWindow(event.getOwner());
+                },
+                () -> {
+                    FindMedicationData.InputData inputData = new FindMedicationData.InputData();
+                    inputData.operationId = event.getOperationId();
+                    getUseCaseExecutor().findPreMedicationData(inputData, findMedicationDataPresenter);
+                },
+                () -> {});
+    }
+
+    @Subscribe
+    public void handle(UpdatePreMedicationDataEvent event) {
+        addJob(() -> {
+            UpdatePreMedicationData.InputData inputData = new UpdatePreMedicationData.InputData();
+            inputData.operationId = event.getOperationId();
+            inputData.suprareninPreOperation = event.getSuprareninPreOperation();
+            inputData.norepinephrinPreOperation = event.getNorepinephrinPreOperation();
+            inputData.vasopressinPreOperation = event.getVasopressinPreOperation();
+            inputData.milrinonPreOperation = event.getMilrinonPreOperation();
+            inputData.ntgPreOperation = event.getNtgPreOperation();
+            inputData.simdaxPreOperation = event.getSimdaxPreOperation();
+            inputData.heparinPreOperation = event.getHeparinPreOperation();
+
+            inputData.suprareninPreHlm = event.getSuprareninPreHlm();
+            inputData.norepinephrinPreHlm = event.getNorepinephrinPreHlm();
+            inputData.vasopressinPreHlm = event.getVasopressinPreHlm();
+            inputData.milrinonPreHlm = event.getMilrinonPreHlm();
+            inputData.ntgPreHlm = event.getNtgPreHlm();
+            inputData.simdaxPreHlm = event.getSimdaxPreHlm();
+
+            getUseCaseExecutor().updatePreMedicationData(inputData, (outputData) -> {});
+        });
+    }
+
     //-----------------------------------------
     /*
             HELPER METHODS
@@ -299,6 +338,10 @@ public class GuiEventController {
 
     private void executePresenter(FXPresenter<Void> presenter) {
         presenter.present(null);
+    }
+
+    private void executeOnUi(Runnable runnable) {
+        Platform.runLater(runnable);
     }
 
     private void addJob(Runnable preUI, Runnable task, Runnable postUI) {

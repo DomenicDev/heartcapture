@@ -1,4 +1,4 @@
-rootProject.name = 'hearthcapture'
+rootProject.name = 'heartcapture'
 include 'domain'
 include 'usecase'
 include 'standalone'

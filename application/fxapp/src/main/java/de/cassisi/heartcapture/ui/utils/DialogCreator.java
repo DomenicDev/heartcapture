@@ -8,6 +8,8 @@ import com.dlsc.formsfx.view.renderer.FormRenderer;
 import de.cassisi.heartcapture.ui.lang.LanguageResourceProvider;
 import de.cassisi.heartcapture.ui.view.help.HelpView;
 import de.cassisi.heartcapture.ui.view.help.HelpViewModel;
+import de.cassisi.heartcapture.ui.view.premedication.PreMedicationView;
+import de.cassisi.heartcapture.ui.view.premedication.PreMedicationViewModel;
 import de.cassisi.heartcapture.ui.view.recording.RecordingView;
 import de.cassisi.heartcapture.ui.view.recording.RecordingViewModel;
 import de.saxsys.mvvmfx.FluentViewLoader;
@@ -134,7 +136,7 @@ public final class DialogCreator {
             progressWindow.setResizable(false);
 
             // load view
-            Parent root = FXMLLoader.load(Objects.requireNonNull(DialogCreator.class.getClassLoader().getResource("de/cassisi/hearth/ui/view/progress/IndeterminateProgressView.fxml")));
+            Parent root = FXMLLoader.load(Objects.requireNonNull(DialogCreator.class.getClassLoader().getResource("de/cassisi/heartcapture/ui/view/progress/IndeterminateProgressView.fxml")));
             Scene scene = new Scene(root);
             progressWindow.setScene(scene);
             progressWindow.show();
@@ -144,5 +146,20 @@ public final class DialogCreator {
             throw new RuntimeException(e);
         }
     }
+
+    public static Stage showPreHlmMedicationDataWindow(Window owner) {
+        ViewTuple<PreMedicationView, PreMedicationViewModel> tuple = FluentViewLoader.fxmlView(PreMedicationView.class).load();
+        Parent view = tuple.getView();
+
+        Stage stage = new Stage();
+        Scene scene = new Scene(view);
+        stage.initOwner(owner);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(scene);
+        stage.setTitle(getString("ui.premeddata.window.title"));
+        stage.show();
+        return stage;
+    }
+
 
 }

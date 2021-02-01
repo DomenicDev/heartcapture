@@ -68,10 +68,10 @@
                               <Label styleClass="dashboard-title" text="Statusinformationen" />
                               <VBox>
                                  <children>
-                                    <GridPane>
+                                    <GridPane prefHeight="122.0" prefWidth="233.0">
                                       <columnConstraints>
                                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="198.0" minWidth="198.0" prefWidth="198.0" />
-                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="774.0" minWidth="10.0" prefWidth="758.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="300.0" minWidth="10.0" prefWidth="300.0" />
                                       </columnConstraints>
                                       <rowConstraints>
                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -100,6 +100,30 @@
             </VBox>
             <HBox maxWidth="1.7976931348623157E308" spacing="20.0" HBox.hgrow="ALWAYS">
                <children>
+                  <VBox prefHeight="220.0" prefWidth="228.0" spacing="5.0" styleClass="container" HBox.hgrow="ALWAYS">
+                     <children>
+                        <VBox alignment="CENTER">
+                           <children>
+                              <Label styleClass="dashboard-title" text="Medikamente" />
+                           </children>
+                        </VBox>
+                        <HBox alignment="CENTER">
+                           <children>
+                              <FontIcon iconLiteral="fa-heart" styleClass="operation_med_icon" />
+                           </children>
+                        </HBox>
+                        <Label prefWidth="258.0" text="Ergänzen Sie die Laufraten für prä-operative und prä-HLM-Medikamente." wrapText="true" />
+                        <VBox spacing="15.0">
+                           <children>
+                              <HBox alignment="CENTER">
+                                 <children>
+                                    <JFXButton fx:id="enterMedicationButton" styleClass="simple_button" text="Medikamente eintragen" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </VBox>
                   <VBox styleClass="container" HBox.hgrow="ALWAYS">
                      <children>
                         <VBox alignment="CENTER">
