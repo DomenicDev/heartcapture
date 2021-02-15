@@ -12,7 +12,7 @@ subprojects {
  //   apply plugin: 'jacoco'
     apply plugin: 'java'
     group = 'de.cassisi'
-    version = '1.0.0'
+    version = '1.1.1'
 
     sourceCompatibility = 11
 
